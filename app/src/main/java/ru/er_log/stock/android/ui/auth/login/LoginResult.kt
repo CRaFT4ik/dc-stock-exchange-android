@@ -7,5 +7,5 @@ import ru.er_log.stock.domain.models.LoggedInUser
  */
 data class LoginResult(
     val success: LoggedInUser? = null,
-    val failure: Int? = null
+    val failure: String? = null
 )

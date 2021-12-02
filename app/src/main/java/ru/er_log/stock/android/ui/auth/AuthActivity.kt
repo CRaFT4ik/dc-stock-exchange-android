@@ -18,7 +18,7 @@ import ru.er_log.stock.domain.models.LoggedInUser
 
 class AuthActivity : AppCompatActivity() {
 
-    private val authViewModel: AuthViewModel by viewModels { AuthViewModelFactory() }
+    private val authViewModel: AuthViewModel by viewModels()
     private lateinit var binding: ActivityLoginBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,15 +51,13 @@ class AuthActivity : AppCompatActivity() {
 
             loading.visibility = View.GONE
             if (loginResult.failure != null) {
-                showLoginFailed(loginResult.failure)
-            }
-            if (loginResult.success != null) {
+                showLoginFailed(R.string.login_failed, loginResult.failure)
+            } else if (loginResult.success != null) {
                 updateUiWithUser(loginResult.success)
-            }
-            setResult(Activity.RESULT_OK)
 
-            //Complete and destroy login activity once successful
-            finish()
+                setResult(Activity.RESULT_OK)
+                finish()
+            }
         })
 
         username.afterTextChanged {
@@ -106,8 +104,9 @@ class AuthActivity : AppCompatActivity() {
         ).show()
     }
 
-    private fun showLoginFailed(@StringRes errorString: Int) {
-        Toast.makeText(applicationContext, errorString, Toast.LENGTH_SHORT).show()
+    private fun showLoginFailed(@StringRes errorString: Int, message: String) {
+        val error = getString(errorString) + "\n" + message
+        Toast.makeText(applicationContext, error, Toast.LENGTH_SHORT).show()
     }
 }
 

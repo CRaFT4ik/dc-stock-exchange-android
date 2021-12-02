@@ -27,7 +27,7 @@ class AuthViewModel : ViewModel() {
     fun login(username: String, password: String) {
         val request = SignInRequest(username, password)
         authUseCase.signIn(request)
-            .catch { _loginResult.value = LoginResult(failure = R.string.login_failed) }
+            .catch { _loginResult.value = LoginResult(failure = it.localizedMessage) }
             .onEach { _loginResult.value = LoginResult(success = it) }
             .launchIn(viewModelScope)
     }

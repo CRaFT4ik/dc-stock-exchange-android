@@ -27,7 +27,7 @@ suspend fun <R> makeRequest(networkCall: suspend () -> R): NetworkResult<R> = wi
         if (result is Response<*> && !result.isSuccessful) throw HttpException(result)
         else NetworkResult.Success(result)
     } catch (t: IOException) {
-        NetworkResult.Failure.NetworkError(t, "Сетевая ошибка. Проверьте подключение к сети или к устройству")
+        NetworkResult.Failure.NetworkError(t, "Сетевая ошибка. Проверьте подключение к сети")
     } catch (t: HttpException) {
         val code = t.code()
         val errorRaw = t.response()?.errorBody()

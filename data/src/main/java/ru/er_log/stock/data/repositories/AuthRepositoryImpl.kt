@@ -15,8 +15,8 @@ internal class AuthRepositoryImpl(
 
     override fun login(request: SignInRequest): Flow<LoggedInUser> = flow {
         when (val response = makeRequest { api.signIn(request) }) {
-            is NetworkResult.Failure -> throw response.t
-            is NetworkResult.Success -> TODO()
+            is NetworkResult.Failure -> throw Exception(response.errorMessage, response.t)
+            is NetworkResult.Success -> emit(response.value.map())
         }
     }
 }
