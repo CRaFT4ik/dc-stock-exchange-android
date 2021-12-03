@@ -3,6 +3,7 @@ package ru.er_log.stock.android.ui.exchange.deals
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
@@ -11,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.coroutines.flow.collect
+import ru.er_log.stock.android.R
 import ru.er_log.stock.android.databinding.FragmentCompletedDealsBinding
 import java.io.IOException
 
@@ -31,7 +33,7 @@ class CompletedDealsFragment : Fragment() {
 
         _binding = FragmentCompletedDealsBinding.inflate(inflater, container, false)
         val root: View = binding.root
-//
+
         val recyclerViewPurchase = binding.recyclerViewDeals
         recyclerViewPurchase.layoutManager = LinearLayoutManager(context)
         val dealsAdapter = DealRecyclerAdapter()
@@ -47,7 +49,19 @@ class CompletedDealsFragment : Fragment() {
 
         viewModel.loadCompletedDeals()
 
+        setHasOptionsMenu(true)
         return root
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.action_sync -> {
+                viewModel.loadCompletedDeals()
+                Toast.makeText(context, "Updating...", Toast.LENGTH_SHORT).show()
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onDestroyView() {
@@ -57,6 +71,6 @@ class CompletedDealsFragment : Fragment() {
 
     private fun handleError(error: Throwable) {
         Toast.makeText(context, error.localizedMessage, Toast.LENGTH_SHORT).show()
-        Log.e("error", error.stackTraceToString())
+        Log.e(this::class.simpleName, error.stackTraceToString())
     }
 }

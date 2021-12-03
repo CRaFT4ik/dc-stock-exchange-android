@@ -17,7 +17,7 @@
     <string name="nav_header_title">Android Studio</string>
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_refresh">Refresh</string>
 
     <string name="menu_active_lots">Active lots</string>
     <string name="menu_completed_deals">Completed deals</string>
@@ -31,4 +31,9 @@
     <string name="deal_date">Deal date: %1$s</string>
     <string name="purchase_lowercase">purchase</string>
     <string name="sale_lowercase">sale</string>
+    <string name="lot_creation_title">New lot creation</string>
+    <string name="lot_creation_price">New lot price</string>
+    <string name="switch_lot_creation">Create sale lot | purchase lot</string>
+    <string name="button_submit_lot_creation">Submit new lot creation</string>
+    <string name="toast_check_filed">Check the correctness of filling in the fields</string>
 </resources>

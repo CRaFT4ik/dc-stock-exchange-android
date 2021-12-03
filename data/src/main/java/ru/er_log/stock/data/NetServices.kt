@@ -8,12 +8,12 @@ import ru.er_log.stock.data.network.AuthInterceptor
 import ru.er_log.stock.data.network.AuthService
 import ru.er_log.stock.data.network.ExchangeService
 import ru.er_log.stock.data.network.JsonHelpers
-import ru.er_log.stock.data.repositories.AuthTokenStorage
+import ru.er_log.stock.data.repositories.AuthDataStorage
 import java.net.CookieManager
 import java.net.CookiePolicy
 import java.util.concurrent.TimeUnit
 
-class NetServices(storage: AuthTokenStorage) {
+class NetServices(storage: AuthDataStorage) {
 
     private val apiDomain = "http://192.168.0.100:8080/api/"
 

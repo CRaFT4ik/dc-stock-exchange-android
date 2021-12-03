@@ -3,10 +3,14 @@ package ru.er_log.stock.android
 import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
-import ru.er_log.stock.data.repositories.AuthTokenStorage
-import ru.er_log.stock.data.repositories.AuthTokenStorage.Companion.KEY_AUTH_TOKEN
+import ru.er_log.stock.data.network.JsonHelpers
+import ru.er_log.stock.data.repositories.AuthDataStorage
+import ru.er_log.stock.data.repositories.AuthDataStorage.Companion.KEY_AUTH_TOKEN
+import ru.er_log.stock.data.repositories.AuthDataStorage.Companion.KEY_USER_PROFILE
+import ru.er_log.stock.domain.models.LoggedInUser
+import java.io.IOException
 
-object PreferencesStorage : AuthTokenStorage {
+object PreferencesStorage : AuthDataStorage {
 
     @Volatile
     private var prefs: SharedPreferences? = null
@@ -34,5 +38,27 @@ object PreferencesStorage : AuthTokenStorage {
 
     override fun fetchAuthToken(): String? = withPrefs {
         it.getString(KEY_AUTH_TOKEN, null)
+    }
+
+    override fun saveUserProfile(userInfo: LoggedInUser) {
+        withPrefs {
+            val adapter = JsonHelpers.moshiCleanInstance.adapter(LoggedInUser::class.java)
+            val json = adapter.toJson(userInfo)
+
+            val editor = it.edit()
+            editor.putString(KEY_USER_PROFILE, json)
+            editor.apply()
+        }
+    }
+
+    override fun fetchUserProfile(): LoggedInUser? = withPrefs {
+        val json = it.getString(KEY_USER_PROFILE, null)
+        val adapter = JsonHelpers.moshiCleanInstance.adapter(LoggedInUser::class.java)
+
+        if (json != null) try {
+            adapter.fromJson(json)
+        } catch (e: IOException) {
+            null
+        } else null
     }
 }

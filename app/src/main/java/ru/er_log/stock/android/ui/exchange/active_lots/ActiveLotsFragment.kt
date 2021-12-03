@@ -3,6 +3,7 @@ package ru.er_log.stock.android.ui.exchange.active_lots
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
@@ -11,7 +12,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.coroutines.flow.collect
+import ru.er_log.stock.android.R
 import ru.er_log.stock.android.databinding.FragmentActiveLotsBinding
+
 
 class ActiveLotsFragment : Fragment() {
 
@@ -55,7 +58,19 @@ class ActiveLotsFragment : Fragment() {
 
         viewModel.loadActiveLots()
 
+        setHasOptionsMenu(true)
         return root
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.action_sync -> {
+                viewModel.loadActiveLots()
+                Toast.makeText(context, "Updating...", Toast.LENGTH_SHORT).show()
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onDestroyView() {
@@ -65,6 +80,6 @@ class ActiveLotsFragment : Fragment() {
 
     private fun handleError(error: Throwable) {
         Toast.makeText(context, error.localizedMessage, Toast.LENGTH_SHORT).show()
-        Log.e("error", error.stackTraceToString())
+        Log.e(this::class.simpleName, error.stackTraceToString())
     }
 }

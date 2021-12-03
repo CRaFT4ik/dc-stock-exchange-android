@@ -95,6 +95,7 @@ class AuthActivity : AppCompatActivity() {
     }
 
     private fun processAuthData(success: LoggedInUser) {
+        PreferencesStorage.saveUserProfile(success)
         PreferencesStorage.saveAuthToken(success.token)
     }
 

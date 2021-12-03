@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="15dp"
+    tools:context=".ui.exchange.deals.CompletedDealsFragment">
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/price"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:digits="0123456789.,"
+        android:enabled="true"
+        android:hint="@string/lot_creation_price"
+        android:inputType="numberDecimal"
+        android:paddingVertical="5dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.8"
+            android:text="@string/switch_lot_creation" />
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/switchSalePurchase"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.2" />
+    </LinearLayout>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/button_submit_lot_creation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/button_submit_lot_creation"
+        android:textAllCaps="false" />
+</LinearLayout>
