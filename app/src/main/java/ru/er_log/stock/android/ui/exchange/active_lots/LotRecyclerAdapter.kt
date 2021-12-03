@@ -1,14 +1,15 @@
-package ru.er_log.stock.android.ui.exchange
+package ru.er_log.stock.android.ui.exchange.active_lots
 
 import android.os.Build
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.annotation.NonNull
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import ru.er_log.stock.android.R
+import ru.er_log.stock.android.databinding.LotItemBinding
 import ru.er_log.stock.domain.models.Lot
 import java.text.SimpleDateFormat
 import java.util.*
@@ -27,26 +28,21 @@ class LotRecyclerAdapter : ListAdapter<Lot, LotRecyclerAdapter.ViewHolder>(diffC
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.lot_item, parent, false)
-        return ViewHolder(view)
+        val binding = LotItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(currentList[position])
     }
 
-    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        private val price: TextView by lazy { itemView.findViewById(R.id.price) }
-        private val date: TextView by lazy { itemView.findViewById(R.id.created_date) }
-        private val owner: TextView by lazy { itemView.findViewById(R.id.owner) }
+    class ViewHolder(private val binding: LotItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(lot: Lot) {
             val context = itemView.context
-
-            price.text = context.getString(R.string.lot_price, lot.price)
-            date.text = context.getString(R.string.lot_date, formatDate(lot.timestampCreated))
-            owner.text = context.getString(R.string.lot_owner, lot.owner.name)
+            binding.price.text = context.getString(R.string.lot_price, lot.price)
+            binding.createdDate.text = context.getString(R.string.lot_date, formatDate(lot.timestampCreated))
+            binding.owner.text = context.getString(R.string.lot_owner, lot.owner.name)
         }
 
         private fun formatDate(timestamp: Long): String {

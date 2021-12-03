@@ -28,4 +28,7 @@
     <string name="lot_price">%1$s</string>
     <string name="lot_owner">Owner: %1$s</string>
     <string name="lot_date">Created: %1$s</string>
+    <string name="deal_date">Deal date: %1$s</string>
+    <string name="purchase_lowercase">purchase</string>
+    <string name="sale_lowercase">sale</string>
 </resources>

@@ -9,7 +9,7 @@
     <TextView
         android:id="@+id/price"
         android:layout_width="100dp"
-        android:layout_height="70dp"
+        android:layout_height="50dp"
         android:layout_margin="5dp"
         android:gravity="center"
         android:textSize="16sp"
@@ -18,7 +18,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="70dp"
+        android:layout_height="50dp"
         android:layout_margin="5dp"
         android:gravity="center_vertical"
         android:orientation="vertical">

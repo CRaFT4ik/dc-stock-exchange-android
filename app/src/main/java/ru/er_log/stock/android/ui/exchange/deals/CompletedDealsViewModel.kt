@@ -4,27 +4,24 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.*
 import ru.er_log.stock.android.UseCaseLocator
+import ru.er_log.stock.domain.models.Deal
 import ru.er_log.stock.domain.models.Lot
 
 class CompletedDealsViewModel : ViewModel() {
 
-    private val _lotsPurchase: MutableStateFlow<List<Lot>> = MutableStateFlow(listOf())
-    val lotsPurchase = _lotsPurchase.asStateFlow()
-
-    private val _lotsSale: MutableStateFlow<List<Lot>> = MutableStateFlow(listOf())
-    val lotsSale = _lotsSale.asStateFlow()
+    private val _deals: MutableStateFlow<List<Deal>> = MutableStateFlow(listOf())
+    val deals = _deals.asStateFlow()
 
     private val _errors: MutableSharedFlow<Throwable> = MutableSharedFlow()
     val errors = _errors.asSharedFlow()
 
     private val exchangeUseCase = UseCaseLocator.exchangeUseCase()
 
-    fun loadActiveLots() {
-        exchangeUseCase.activeLots()
+    fun loadCompletedDeals() {
+        exchangeUseCase.deals()
             .catch { _errors.emit(it) }
             .onEach {
-                _lotsPurchase.value = it.lotPurchases
-                _lotsSale.value = it.lotSales
+                _deals.value = it
             }
             .launchIn(viewModelScope)
     }
