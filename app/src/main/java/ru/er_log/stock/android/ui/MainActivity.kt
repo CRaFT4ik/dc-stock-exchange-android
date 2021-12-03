@@ -12,6 +12,7 @@ class MainActivity : AppCompatActivity() {
 
         // TODO: use sessions
         val intent = Intent(this, AuthActivity::class.java)
+        intent.flags = intent.flags or Intent.FLAG_ACTIVITY_NO_HISTORY
         startActivity(intent)
     }
 }

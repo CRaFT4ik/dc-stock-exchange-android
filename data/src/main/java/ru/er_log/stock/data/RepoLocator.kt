@@ -1,8 +1,11 @@
 package ru.er_log.stock.data
 
 import ru.er_log.stock.data.repositories.AuthRepositoryImpl
+import ru.er_log.stock.data.repositories.AuthTokenStorage
 import ru.er_log.stock.domain.repositories.AuthRepository
 
-object RepoLocator {
-    val authRepository: AuthRepository by lazy { AuthRepositoryImpl(NetServices.authService) }
+class RepoLocator(storage: AuthTokenStorage) {
+    private val netServices = NetServices(storage)
+
+    val authRepository: AuthRepository by lazy { AuthRepositoryImpl(netServices.authService) }
 }

@@ -4,15 +4,17 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import ru.er_log.stock.data.network.AuthInterceptor
 import ru.er_log.stock.data.network.AuthService
 import ru.er_log.stock.data.network.JsonHelpers
+import ru.er_log.stock.data.repositories.AuthTokenStorage
 import java.net.CookieManager
 import java.net.CookiePolicy
 import java.util.concurrent.TimeUnit
 
-object NetServices {
+class NetServices(storage: AuthTokenStorage) {
 
-    private const val apiDomain = "http://192.168.0.100:8080/api/"
+    private val apiDomain = "http://192.168.0.100:8080/api/"
 
     private val loggingInterceptor: HttpLoggingInterceptor
         get() = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
@@ -23,6 +25,7 @@ object NetServices {
         return@lazy OkHttpClient.Builder()
             .readTimeout(0, TimeUnit.SECONDS)
             .connectTimeout(0, TimeUnit.SECONDS)
+            .addInterceptor(AuthInterceptor(storage))
             .addInterceptor(loggingInterceptor)
             .build()
     }

@@ -1,6 +1,7 @@
 package ru.er_log.stock.android.ui.auth
 
 import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -13,7 +14,9 @@ import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import ru.er_log.stock.android.R
+import ru.er_log.stock.android.PreferencesStorage
 import ru.er_log.stock.android.databinding.ActivityLoginBinding
+import ru.er_log.stock.android.ui.account.AccountActivity
 import ru.er_log.stock.domain.models.LoggedInUser
 
 class AuthActivity : AppCompatActivity() {
@@ -53,10 +56,8 @@ class AuthActivity : AppCompatActivity() {
             if (loginResult.failure != null) {
                 showLoginFailed(R.string.login_failed, loginResult.failure)
             } else if (loginResult.success != null) {
-                updateUiWithUser(loginResult.success)
-
-                setResult(Activity.RESULT_OK)
-                finish()
+                processAuthData(loginResult.success)
+                redirectUserToAccount(loginResult.success)
             }
         })
 
@@ -93,15 +94,22 @@ class AuthActivity : AppCompatActivity() {
         }
     }
 
-    private fun updateUiWithUser(model: LoggedInUser) {
-        val welcome = getString(R.string.welcome)
-        val displayName = model.userName
-        // TODO : initiate successful logged in experience
+    private fun processAuthData(success: LoggedInUser) {
+        PreferencesStorage.saveAuthToken(success.token)
+    }
+
+    private fun redirectUserToAccount(model: LoggedInUser) {
         Toast.makeText(
             applicationContext,
-            "$welcome $displayName",
+            getString(R.string.welcome, model.userName),
             Toast.LENGTH_LONG
         ).show()
+
+        val intent = Intent(this, AccountActivity::class.java)
+        startActivity(intent)
+
+        setResult(Activity.RESULT_OK)
+        finish()
     }
 
     private fun showLoginFailed(@StringRes errorString: Int, message: String) {

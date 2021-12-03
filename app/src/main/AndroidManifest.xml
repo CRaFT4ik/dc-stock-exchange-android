@@ -2,10 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ru.er_log.stock.android">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
-    <application
+    <application android:name=".CurrentApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -13,8 +13,18 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Dcstockexchangeandroid">
         <activity
+            android:name=".ui.account.AccountActivity"
+            android:exported="false"
+            android:label="@string/title_activity_account"
+            android:theme="@style/Theme.Dcstockexchangeandroid.NoActionBar" />
+        <activity
+            android:name=".ui.auth.AuthActivity"
+            android:label="@string/title_activity_auth"
+            android:exported="false" />
+        <activity
             android:name=".ui.MainActivity"
             android:exported="true"
+            android:noHistory="true"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,9 +32,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".ui.auth.AuthActivity"
-            android:exported="false" />
     </application>
 
 </manifest>
