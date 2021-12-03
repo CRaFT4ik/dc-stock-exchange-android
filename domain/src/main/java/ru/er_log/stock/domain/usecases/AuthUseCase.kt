@@ -1,6 +1,6 @@
 package ru.er_log.stock.domain.usecases
 
-import ru.er_log.stock.domain.boundaries.SignInRequest
+import ru.er_log.stock.domain.boundaries.requests.SignInRequest
 import ru.er_log.stock.domain.repositories.AuthRepository
 
 class AuthUseCase(private val repository: AuthRepository) {

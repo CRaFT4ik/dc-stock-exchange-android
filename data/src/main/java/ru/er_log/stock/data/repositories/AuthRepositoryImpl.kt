@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.flow
 import ru.er_log.stock.data.network.AuthService
 import ru.er_log.stock.data.network.NetworkResult
 import ru.er_log.stock.data.network.makeRequest
-import ru.er_log.stock.domain.boundaries.SignInRequest
+import ru.er_log.stock.domain.boundaries.requests.SignInRequest
 import ru.er_log.stock.domain.models.LoggedInUser
 import ru.er_log.stock.domain.repositories.AuthRepository
 

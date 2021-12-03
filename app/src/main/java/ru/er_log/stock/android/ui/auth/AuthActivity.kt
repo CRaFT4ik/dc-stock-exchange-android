@@ -16,7 +16,7 @@ import androidx.lifecycle.Observer
 import ru.er_log.stock.android.R
 import ru.er_log.stock.android.PreferencesStorage
 import ru.er_log.stock.android.databinding.ActivityLoginBinding
-import ru.er_log.stock.android.ui.account.AccountActivity
+import ru.er_log.stock.android.ui.exchange.ExchangeActivity
 import ru.er_log.stock.domain.models.LoggedInUser
 
 class AuthActivity : AppCompatActivity() {
@@ -105,7 +105,7 @@ class AuthActivity : AppCompatActivity() {
             Toast.LENGTH_LONG
         ).show()
 
-        val intent = Intent(this, AccountActivity::class.java)
+        val intent = Intent(this, ExchangeActivity::class.java)
         startActivity(intent)
 
         setResult(Activity.RESULT_OK)

@@ -1,6 +1,7 @@
-package ru.er_log.stock.android
+package ru.er_log.stock.android.ui
 
 import android.app.Application
+import ru.er_log.stock.android.PreferencesStorage
 
 class CurrentApplication : Application() {
 

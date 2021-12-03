@@ -5,7 +5,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import retrofit2.Response
-import ru.er_log.stock.domain.boundaries.ErrorResponse
+import ru.er_log.stock.domain.boundaries.responses.ErrorResponse
 import java.io.IOException
 
 private val networkCoroutineContext = Dispatchers.IO + Job()

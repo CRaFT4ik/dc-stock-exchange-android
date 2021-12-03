@@ -1,6 +1,7 @@
-package ru.er_log.stock.domain.boundaries
+package ru.er_log.stock.domain.boundaries.responses
 
 import com.squareup.moshi.Json
+import ru.er_log.stock.domain.boundaries.Mappable
 import ru.er_log.stock.domain.models.LoggedInUser
 
 data class SignInResponse(
@@ -14,8 +15,8 @@ data class SignInResponse(
     val userEmail: String,
     @Json(name = "roles")
     val roles: List<String>
-) {
-    fun map(): LoggedInUser {
+) : Mappable<LoggedInUser> {
+    override fun map(): LoggedInUser {
         return LoggedInUser(token, userId, userName, userEmail, roles)
     }
 }

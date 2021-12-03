@@ -1,4 +1,4 @@
-package ru.er_log.stock.android.ui.account
+package ru.er_log.stock.android.ui.exchange
 
 import android.os.Bundle
 import android.view.Menu
@@ -12,17 +12,17 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import ru.er_log.stock.android.R
-import ru.er_log.stock.android.databinding.ActivityAccountBinding
+import ru.er_log.stock.android.databinding.ActivityExchangeBinding
 
-class AccountActivity : AppCompatActivity() {
+class ExchangeActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
-    private lateinit var binding: ActivityAccountBinding
+    private lateinit var binding: ActivityExchangeBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = ActivityAccountBinding.inflate(layoutInflater)
+        binding = ActivityExchangeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         setSupportActionBar(binding.appBarAccount.toolbar)
@@ -38,7 +38,7 @@ class AccountActivity : AppCompatActivity() {
         // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow
+                R.id.nav_home, R.id.nav_gallery
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)

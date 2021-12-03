@@ -6,6 +6,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import ru.er_log.stock.data.network.AuthInterceptor
 import ru.er_log.stock.data.network.AuthService
+import ru.er_log.stock.data.network.ExchangeService
 import ru.er_log.stock.data.network.JsonHelpers
 import ru.er_log.stock.data.repositories.AuthTokenStorage
 import java.net.CookieManager
@@ -42,4 +43,6 @@ class NetServices(storage: AuthTokenStorage) {
     }
 
     internal val authService = retrofitInstance.create(AuthService::class.java)
+
+    internal val exchangeService = retrofitInstance.create(ExchangeService::class.java)
 }
