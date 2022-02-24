@@ -1,5 +1,6 @@
 package ru.er_log.stock.data.network
 
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.withContext
@@ -8,7 +9,8 @@ import retrofit2.Response
 import ru.er_log.stock.domain.boundaries.responses.ErrorResponse
 import java.io.IOException
 
-private val networkCoroutineContext = Dispatchers.IO + Job()
+private val networkCoroutineDispatcher = Dispatchers.IO
+private val networkCoroutineContext = Job()
 
 /**
  * Выполняет сетевой вызов [networkCall] и возвращает результат [R],
@@ -21,7 +23,10 @@ private val networkCoroutineContext = Dispatchers.IO + Job()
  * @param networkCall сетевой вызов, результат которого принимает тип [R]
  * @return результат сетевого вызова
  */
-suspend fun <R> makeRequest(networkCall: suspend () -> R): NetworkResult<R> = withContext(networkCoroutineContext) {
+suspend fun <R> makeRequest(
+    dispatcher: CoroutineDispatcher = networkCoroutineDispatcher,
+    networkCall: suspend () -> R
+): NetworkResult<R> = withContext(dispatcher + networkCoroutineContext) {
     try {
         val result = networkCall.invoke()
         if (result is Response<*> && !result.isSuccessful) throw HttpException(result)

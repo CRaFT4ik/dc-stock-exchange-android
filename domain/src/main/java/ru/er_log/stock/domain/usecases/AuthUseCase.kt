@@ -1,14 +1,17 @@
 package ru.er_log.stock.domain.usecases
 
 import ru.er_log.stock.domain.boundaries.requests.SignInRequest
+import ru.er_log.stock.domain.models.LoggedInUser
 import ru.er_log.stock.domain.repositories.AuthRepository
 
-class AuthUseCase(private val repository: AuthRepository) {
+class AuthUseCase(private val authRepository: AuthRepository) {
     val signIn = SignInUseCase()
     val signUp = SignUpUseCase()
 
-    inner class SignInUseCase {
-        operator fun invoke(request: SignInRequest) = repository.login(request)
+    inner class SignInUseCase : UseCase<SignInRequest, LoggedInUser>() {
+        override suspend fun run(params: SignInRequest): Result<LoggedInUser> {
+            return authRepository.login(params)
+        }
     }
 
     inner class SignUpUseCase {
