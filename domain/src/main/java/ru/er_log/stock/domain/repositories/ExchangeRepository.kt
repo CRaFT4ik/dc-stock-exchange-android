@@ -7,11 +7,11 @@ import ru.er_log.stock.domain.models.Deal
 
 interface ExchangeRepository {
 
-    fun fetchActiveLots(): Flow<ActiveLots>
+    suspend fun fetchActiveLots(): Flow<ActiveLots>
 
-    fun fetchDeals(): Flow<List<Deal>>
+    suspend fun fetchDeals(): List<Deal>
 
-    fun createPurchaseLot(request: LotCreationRequest): Flow<Unit>
+    suspend fun createPurchaseLot(request: LotCreationRequest)
 
-    fun createSaleLot(request: LotCreationRequest): Flow<Unit>
+    suspend fun createSaleLot(request: LotCreationRequest)
 }

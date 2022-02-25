@@ -5,19 +5,17 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import ru.er_log.stock.android.R
 import ru.er_log.stock.android.UseCaseLocator
 import ru.er_log.stock.android.ui.auth.login.LoginFormState
 import ru.er_log.stock.android.ui.auth.login.LoginResult
 import ru.er_log.stock.domain.api.v1.requests.SignInRequest
+import ru.er_log.stock.domain.usecases.AuthUseCases
 
-class AuthViewModel : ViewModel() {
-
-    private val authUseCase = UseCaseLocator.authUseCase()
+class AuthViewModel(
+    private val authUseCase: AuthUseCases
+) : ViewModel() {
 
     private val _loginForm = MutableLiveData<LoginFormState>()
     val loginFormState: LiveData<LoginFormState> = _loginForm

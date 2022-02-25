@@ -5,33 +5,28 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.*
 import ru.er_log.stock.domain.api.v1.requests.LotCreationRequest
 import ru.er_log.stock.domain.usecases.ExchangeUseCases
-import ru.er_log.stock.domain.models.Deal
-import ru.er_log.stock.domain.models.Lot
 import java.math.BigDecimal
 
-class ExchangeViewModel : ViewModel() {
+class ExchangeViewModel(
+    private val exchangeUseCases: ExchangeUseCases
+) : ViewModel() {
 
-    private val _feedback: MutableStateFlow<String> = MutableStateFlow("")
-    val feedback = _feedback.asStateFlow()
+    private val _feedback: MutableSharedFlow<String> = MutableSharedFlow()
+    val feedback = _feedback.asSharedFlow()
 
     private val _errors: MutableSharedFlow<Throwable> = MutableSharedFlow()
     val errors = _errors.asSharedFlow()
 
-    private val exchangeUseCase = UseCaseLocator.exchangeUseCase()
-
     fun createLot(price: BigDecimal, isPurchase: Boolean) {
         val request = LotCreationRequest(price)
-        val useCase = if (isPurchase) {
-            exchangeUseCase.createPurchaseLot(request)
-        } else {
-            exchangeUseCase.createSaleLot(request)
+        when (isPurchase) {
+            true -> exchangeUseCases.createPurchaseLot(request, viewModelScope, ::onCreateResult)
+            else -> exchangeUseCases.createSaleLot(request, viewModelScope, ::onCreateResult)
         }
+    }
 
-        useCase
-            .catch { _errors.emit(it) }
-            .onEach {
-                _feedback.value = "Successfully created"
-            }
-            .launchIn(viewModelScope)
+    private suspend fun onCreateResult(result: Result<Unit>) {
+        result.onSuccess { _feedback.emit("Successfully created") }
+        result.onFailure { _errors.emit(it) }
     }
 }
