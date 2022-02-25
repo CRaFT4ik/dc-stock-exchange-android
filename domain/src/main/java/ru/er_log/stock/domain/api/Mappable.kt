@@ -1,4 +1,4 @@
-package ru.er_log.stock.domain.boundaries
+package ru.er_log.stock.domain.api
 
 interface Mappable<T> {
     fun map(): T

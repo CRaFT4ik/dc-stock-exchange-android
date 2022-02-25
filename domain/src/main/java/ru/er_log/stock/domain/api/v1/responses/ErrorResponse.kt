@@ -1,4 +1,4 @@
-package ru.er_log.stock.domain.boundaries.responses
+package ru.er_log.stock.domain.api.v1.responses
 
 data class ErrorResponse(
     val message: String? = null,
@@ -17,6 +17,6 @@ data class ErrorResponse(
         errors?.let { it.forEach { mes -> list.add(mes) } }
         description?.let { list.add(it) }
 
-        return@lazy list.joinToString("\n").let { if (it.isBlank()) null else it }
+        return@lazy list.joinToString("\n").let { it.ifBlank { null } }
     }
 }

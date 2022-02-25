@@ -1,4 +1,4 @@
-package ru.er_log.stock.domain.boundaries.requests
+package ru.er_log.stock.domain.api.v1.requests
 
 import com.squareup.moshi.Json
 import java.math.BigDecimal

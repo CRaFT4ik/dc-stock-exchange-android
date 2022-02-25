@@ -1,7 +1,7 @@
-package ru.er_log.stock.domain.boundaries.responses
+package ru.er_log.stock.domain.api.v1.responses
 
 import com.squareup.moshi.Json
-import ru.er_log.stock.domain.boundaries.Mappable
+import ru.er_log.stock.domain.api.Mappable
 import ru.er_log.stock.domain.models.LoggedInUser
 
 data class SignInResponse(

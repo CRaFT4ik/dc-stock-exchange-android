@@ -13,7 +13,7 @@ import ru.er_log.stock.android.R
 import ru.er_log.stock.android.UseCaseLocator
 import ru.er_log.stock.android.ui.auth.login.LoginFormState
 import ru.er_log.stock.android.ui.auth.login.LoginResult
-import ru.er_log.stock.domain.boundaries.requests.SignInRequest
+import ru.er_log.stock.domain.api.v1.requests.SignInRequest
 
 class AuthViewModel : ViewModel() {
 

@@ -4,7 +4,7 @@ import kotlinx.coroutines.*
 import ru.er_log.stock.data.network.AuthService
 import ru.er_log.stock.data.network.NetworkResult
 import ru.er_log.stock.data.network.makeRequest
-import ru.er_log.stock.domain.boundaries.requests.SignInRequest
+import ru.er_log.stock.domain.api.v1.requests.SignInRequest
 import ru.er_log.stock.domain.repositories.AuthRepository
 
 internal class AuthRepositoryImpl(
