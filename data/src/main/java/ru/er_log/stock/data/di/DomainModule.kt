@@ -1,16 +1,23 @@
 package ru.er_log.stock.data.di
 
+import org.koin.core.module.Module
 import org.koin.dsl.module
 import ru.er_log.stock.domain.usecases.AuthUseCases
 import ru.er_log.stock.domain.usecases.ExchangeUseCases
 
-val domainModule = module {
+class DomainModule : KoinModuleProvider {
 
-    factory<AuthUseCases> {
-        AuthUseCases(authRepository = get())
+    override fun module(): Module = module {
+        provideUseCases()
     }
 
-    factory<ExchangeUseCases> {
-        ExchangeUseCases(exchangeRepository = get())
+    private fun Module.provideUseCases() {
+        factory<AuthUseCases> {
+            AuthUseCases(authRepository = get())
+        }
+
+        factory<ExchangeUseCases> {
+            ExchangeUseCases(exchangeRepository = get())
+        }
     }
 }
