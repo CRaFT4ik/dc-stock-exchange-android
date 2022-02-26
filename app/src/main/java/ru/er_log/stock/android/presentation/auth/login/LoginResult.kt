@@ -1,4 +1,4 @@
-package ru.er_log.stock.android.ui.auth.login
+package ru.er_log.stock.android.presentation.auth.login
 
 import ru.er_log.stock.domain.models.LoggedInUser
 

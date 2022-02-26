@@ -1,11 +1,9 @@
-package ru.er_log.stock.android.ui.exchange.deals
+package ru.er_log.stock.android.presentation.exchange.deals
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.*
-import ru.er_log.stock.android.UseCaseLocator
 import ru.er_log.stock.domain.models.Deal
-import ru.er_log.stock.domain.models.Lot
 import ru.er_log.stock.domain.usecases.ExchangeUseCases
 
 class CompletedDealsViewModel(

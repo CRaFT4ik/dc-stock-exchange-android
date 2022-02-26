@@ -1,4 +1,4 @@
-package ru.er_log.stock.android.ui.exchange.deals
+package ru.er_log.stock.android.presentation.exchange.deals
 
 import android.os.Bundle
 import android.util.Log
@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.coroutines.flow.collect
 import ru.er_log.stock.android.R
 import ru.er_log.stock.android.databinding.FragmentCompletedDealsBinding
-import java.io.IOException
 
 class CompletedDealsFragment : Fragment() {
 

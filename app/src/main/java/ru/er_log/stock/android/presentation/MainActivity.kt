@@ -1,9 +1,9 @@
-package ru.er_log.stock.android.ui
+package ru.er_log.stock.android.presentation
 
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import ru.er_log.stock.android.ui.auth.AuthActivity
+import ru.er_log.stock.android.presentation.auth.AuthActivity
 
 class MainActivity : AppCompatActivity() {
 

@@ -1,4 +1,4 @@
-package ru.er_log.stock.android.ui.exchange.lot_creation
+package ru.er_log.stock.android.presentation.exchange.lot_creation
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

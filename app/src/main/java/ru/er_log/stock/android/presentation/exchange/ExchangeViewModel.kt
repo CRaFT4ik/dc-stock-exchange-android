@@ -1,4 +1,4 @@
-package ru.er_log.stock.android.ui.exchange
+package ru.er_log.stock.android.presentation.exchange
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

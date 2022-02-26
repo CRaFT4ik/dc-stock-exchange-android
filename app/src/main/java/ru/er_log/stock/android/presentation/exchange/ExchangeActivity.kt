@@ -1,4 +1,4 @@
-package ru.er_log.stock.android.ui.exchange
+package ru.er_log.stock.android.presentation.exchange
 
 import android.os.Bundle
 import android.util.Log
@@ -6,7 +6,6 @@ import android.view.Menu
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
@@ -19,18 +18,18 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.navigation.NavigationView
 import kotlinx.coroutines.flow.collect
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.er_log.stock.android.PreferencesStorage
 import ru.er_log.stock.android.R
 import ru.er_log.stock.android.databinding.ActivityExchangeBinding
 import ru.er_log.stock.android.databinding.DialogLotCreationBinding
-import ru.er_log.stock.domain.models.LoggedInUser
 import java.math.BigDecimal
 
 class ExchangeActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityExchangeBinding
-    private val viewModel: ExchangeViewModel by viewModels()
+    private val viewModel: ExchangeViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -82,10 +81,11 @@ class ExchangeActivity : AppCompatActivity() {
         val headerView = navView.getHeaderView(0)
         val headerUsername: TextView = headerView.findViewById(R.id.username)
         val headerEmail: TextView = headerView.findViewById(R.id.userEmail)
-        PreferencesStorage.fetchUserProfile()?.let {
-            headerUsername.text = it.userName
-            headerEmail.text = it.userEmail
-        }
+        TODO()
+//        PreferencesStorage.fetchUserProfile()?.let {
+//            headerUsername.text = it.userName
+//            headerEmail.text = it.userEmail
+//        }
     }
 
     private fun handleError(error: Throwable) {

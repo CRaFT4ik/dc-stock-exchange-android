@@ -7,13 +7,13 @@
 
     <fragment
         android:id="@+id/nav_active_lots"
-        android:name="ru.er_log.stock.android.ui.exchange.active_lots.ActiveLotsFragment"
+        android:name="ru.er_log.stock.android.presentation.exchange.active_lots.ActiveLotsFragment"
         android:label="@string/menu_active_lots"
         tools:layout="@layout/fragment_active_lots" />
 
     <fragment
         android:id="@+id/nav_completed_deals"
-        android:name="ru.er_log.stock.android.ui.exchange.deals.CompletedDealsFragment"
+        android:name="ru.er_log.stock.android.presentation.exchange.deals.CompletedDealsFragment"
         android:label="@string/menu_completed_deals"
         tools:layout="@layout/fragment_completed_deals" />
 </navigation>

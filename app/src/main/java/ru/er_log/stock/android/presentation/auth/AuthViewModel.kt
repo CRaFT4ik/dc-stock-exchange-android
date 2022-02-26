@@ -1,4 +1,4 @@
-package ru.er_log.stock.android.ui.auth
+package ru.er_log.stock.android.presentation.auth
 
 import android.util.Patterns
 import androidx.lifecycle.LiveData
@@ -7,9 +7,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.er_log.stock.android.R
-import ru.er_log.stock.android.UseCaseLocator
-import ru.er_log.stock.android.ui.auth.login.LoginFormState
-import ru.er_log.stock.android.ui.auth.login.LoginResult
+import ru.er_log.stock.android.presentation.auth.login.LoginFormState
+import ru.er_log.stock.android.presentation.auth.login.LoginResult
 import ru.er_log.stock.domain.api.v1.requests.SignInRequest
 import ru.er_log.stock.domain.usecases.AuthUseCases
 

@@ -1,4 +1,4 @@
-package ru.er_log.stock.android.ui.exchange.deals
+package ru.er_log.stock.android.presentation.exchange.deals
 
 import android.os.Build
 import android.view.LayoutInflater

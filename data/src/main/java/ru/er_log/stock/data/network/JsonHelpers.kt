@@ -19,10 +19,8 @@ object JsonHelpers {
 
     class PlatformJsonHelpers {
         object BigDecimalJsonAdapter {
-            @FromJson
-            fun fromJson(string: String) = string.toBigDecimal()
-            @ToJson
-            fun toJson(value: BigDecimal) = value.toString()
+            @FromJson fun fromJson(string: String) = string.toBigDecimal()
+            @ToJson fun toJson(value: BigDecimal) = value.toString()
         }
 
         object BigIntegerJsonAdapter {

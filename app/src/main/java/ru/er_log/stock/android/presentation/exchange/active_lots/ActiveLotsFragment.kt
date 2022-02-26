@@ -1,4 +1,4 @@
-package ru.er_log.stock.android.ui.exchange.active_lots
+package ru.er_log.stock.android.presentation.exchange.active_lots
 
 import android.os.Bundle
 import android.util.Log

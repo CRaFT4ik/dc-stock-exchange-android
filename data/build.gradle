@@ -23,4 +23,8 @@ dependencies {
     implementation "com.squareup.retrofit2:converter-moshi:2.9.0"
     implementation "com.squareup.okhttp3:okhttp-urlconnection:4.9.1"
     implementation "com.squareup.okhttp3:logging-interceptor:4.9.1"
+
+    // Koin for Kotlin apps
+    api "io.insert-koin:koin-core:3.1.5"
+    testApi "io.insert-koin:koin-test:3.1.5"
 }

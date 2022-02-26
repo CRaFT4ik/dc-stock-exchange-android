@@ -1,10 +1,8 @@
-package ru.er_log.stock.android.ui.exchange.active_lots
+package ru.er_log.stock.android.presentation.exchange.active_lots
 
 import android.os.Build
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.TextView
-import androidx.annotation.NonNull
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView

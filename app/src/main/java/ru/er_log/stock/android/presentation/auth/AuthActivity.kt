@@ -1,4 +1,4 @@
-package ru.er_log.stock.android.ui.auth
+package ru.er_log.stock.android.presentation.auth
 
 import android.app.Activity
 import android.content.Intent
@@ -9,19 +9,19 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import ru.er_log.stock.android.R
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.er_log.stock.android.PreferencesStorage
+import ru.er_log.stock.android.R
 import ru.er_log.stock.android.databinding.ActivityLoginBinding
-import ru.er_log.stock.android.ui.exchange.ExchangeActivity
+import ru.er_log.stock.android.presentation.exchange.ExchangeActivity
 import ru.er_log.stock.domain.models.LoggedInUser
 
 class AuthActivity : AppCompatActivity() {
 
-    private val authViewModel: AuthViewModel by viewModels()
+    private val authViewModel: AuthViewModel by viewModel()
     private lateinit var binding: ActivityLoginBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -95,8 +95,9 @@ class AuthActivity : AppCompatActivity() {
     }
 
     private fun processAuthData(success: LoggedInUser) {
-        PreferencesStorage.saveUserProfile(success)
-        PreferencesStorage.saveAuthToken(success.token)
+        TODO()
+//        PreferencesStorage.saveUserProfile(success)
+//        PreferencesStorage.saveAuthToken(success.token)
     }
 
     private fun redirectUserToAccount(model: LoggedInUser) {
