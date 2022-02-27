@@ -1,7 +1,7 @@
 package ru.er_log.stock.domain.usecases
 
-import ru.er_log.stock.domain.api.v1.requests.SignInRequest
-import ru.er_log.stock.domain.models.LoggedInUser
+import ru.er_log.stock.domain.api.v1.auth.SignInRequest
+import ru.er_log.stock.domain.models.auth.LoggedInUser
 import ru.er_log.stock.domain.repositories.AuthRepository
 
 class AuthUseCases(private val authRepository: AuthRepository) {

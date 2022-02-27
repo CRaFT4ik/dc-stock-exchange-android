@@ -3,9 +3,9 @@ package ru.er_log.stock.data.network
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
-import ru.er_log.stock.domain.api.v1.requests.LotCreationRequest
-import ru.er_log.stock.domain.api.v1.responses.ActiveLotsResponse
-import ru.er_log.stock.domain.api.v1.responses.DealsResponse
+import ru.er_log.stock.domain.api.v1.exchange.LotCreationRequest
+import ru.er_log.stock.domain.api.v1.exchange.ActiveLotsResponse
+import ru.er_log.stock.domain.api.v1.exchange.DealsResponse
 
 internal interface ExchangeService {
 

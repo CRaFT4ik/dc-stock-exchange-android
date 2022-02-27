@@ -5,7 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
-    <application android:name=".app.StockExchangeApplication"
+    <application android:name=".base.StockExchangeApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -13,16 +13,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Dcstockexchangeandroid">
         <activity
-            android:name=".presentation.exchange.ExchangeActivity"
+            android:name="ru.er_log.stock.android.features.exchange.ExchangeActivity"
             android:exported="false"
             android:label="@string/title_activity_account"
             android:theme="@style/Theme.Dcstockexchangeandroid.NoActionBar" />
         <activity
-            android:name=".presentation.auth.AuthActivity"
+            android:name="ru.er_log.stock.android.features.auth.AuthActivity"
             android:label="@string/title_activity_auth"
             android:exported="false" />
         <activity
-            android:name=".presentation.MainActivity"
+            android:name=".features.MainActivity"
             android:exported="true"
             android:noHistory="true"
             android:label="@string/app_name">

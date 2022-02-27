@@ -1,6 +1,6 @@
 package ru.er_log.stock.data.repositories
 
-import ru.er_log.stock.domain.models.LoggedInUser
+import ru.er_log.stock.domain.models.auth.LoggedInUser
 
 interface AuthDataStorage {
 

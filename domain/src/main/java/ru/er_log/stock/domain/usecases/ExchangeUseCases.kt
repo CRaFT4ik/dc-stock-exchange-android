@@ -2,9 +2,9 @@ package ru.er_log.stock.domain.usecases
 
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
-import ru.er_log.stock.domain.api.v1.requests.LotCreationRequest
-import ru.er_log.stock.domain.models.ActiveLots
-import ru.er_log.stock.domain.models.Deal
+import ru.er_log.stock.domain.api.v1.exchange.LotCreationRequest
+import ru.er_log.stock.domain.models.exchange.ActiveLots
+import ru.er_log.stock.domain.models.exchange.Deal
 import ru.er_log.stock.domain.repositories.ExchangeRepository
 
 class ExchangeUseCases(private val exchangeRepository: ExchangeRepository) {

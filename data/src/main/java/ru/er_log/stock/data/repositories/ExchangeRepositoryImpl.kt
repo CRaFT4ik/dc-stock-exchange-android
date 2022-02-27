@@ -8,9 +8,9 @@ import kotlinx.coroutines.withContext
 import ru.er_log.stock.data.network.ExchangeService
 import ru.er_log.stock.data.network.NetworkResult
 import ru.er_log.stock.data.network.makeRequest
-import ru.er_log.stock.domain.api.v1.requests.LotCreationRequest
-import ru.er_log.stock.domain.models.ActiveLots
-import ru.er_log.stock.domain.models.Deal
+import ru.er_log.stock.domain.api.v1.exchange.LotCreationRequest
+import ru.er_log.stock.domain.models.exchange.ActiveLots
+import ru.er_log.stock.domain.models.exchange.Deal
 import ru.er_log.stock.domain.repositories.ExchangeRepository
 
 internal class ExchangeRepositoryImpl(
