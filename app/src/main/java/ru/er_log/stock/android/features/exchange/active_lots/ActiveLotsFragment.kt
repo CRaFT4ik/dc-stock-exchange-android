@@ -16,7 +16,7 @@ import ru.er_log.stock.android.R
 import ru.er_log.stock.android.databinding.FragmentActiveLotsBinding
 
 
-class ActiveLotsFragment : Fragment() {
+class ActiveLotsFragment : Fragment(R.layout.fragment_active_lots) {
 
     private lateinit var viewModel: ActiveLotsViewModel
     private var _binding: FragmentActiveLotsBinding? = null
