@@ -36,4 +36,6 @@
     <string name="switch_lot_creation">Create sale lot | purchase lot</string>
     <string name="button_submit_lot_creation">Submit new lot creation</string>
     <string name="toast_check_filed">Check the correctness of filling in the fields</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

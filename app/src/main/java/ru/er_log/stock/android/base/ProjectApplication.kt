@@ -11,14 +11,14 @@ import ru.er_log.stock.data.di.DataModule
 import ru.er_log.stock.data.di.DomainModule
 import ru.er_log.stock.data.di.modules
 
-class StockExchangeApplication : Application() {
+class ProjectApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
 
         startKoin {
             androidLogger(if (BuildConfig.DEBUG) Level.ERROR else Level.NONE)
-            androidContext(this@StockExchangeApplication)
+            androidContext(this@ProjectApplication)
             modules(listOf(AppModule(), DomainModule(), DataModule()).modules())
         }
     }

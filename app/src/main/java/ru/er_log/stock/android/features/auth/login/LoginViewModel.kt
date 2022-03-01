@@ -1,4 +1,4 @@
-package ru.er_log.stock.android.features.auth
+package ru.er_log.stock.android.features.auth.login
 
 import android.util.Patterns
 import androidx.lifecycle.LiveData
@@ -7,12 +7,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.er_log.stock.android.R
-import ru.er_log.stock.android.features.auth.login.LoginFormState
-import ru.er_log.stock.android.features.auth.login.LoginResult
+import ru.er_log.stock.android.features.auth.login.model.LoginFormState
+import ru.er_log.stock.android.features.auth.login.model.LoginResult
 import ru.er_log.stock.domain.api.v1.auth.SignInRequest
 import ru.er_log.stock.domain.usecases.AuthUseCases
 
-class AuthViewModel(
+class LoginViewModel(
     private val authUseCase: AuthUseCases
 ) : ViewModel() {
 

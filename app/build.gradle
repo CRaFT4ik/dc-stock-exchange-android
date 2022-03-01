@@ -34,26 +34,73 @@ android {
     }
 }
 
+ext.versions = [
+        koin_android       : "3.1.5",
+        androidx_core      : "1.7.0",
+        androidx_appcompat : "1.4.1",
+        androidx_activity  : "1.4.0",
+        androidx_compose   : "1.1.1",
+        androidx_lifecycle : "2.4.1",
+        androidx_navigation: "2.4.1",
+        androidx_annotation: "1.3.0"
+]
+
 dependencies {
     implementation project(":data")
-    implementation 'androidx.core:core-ktx:1.7.0'
-    implementation "androidx.activity:activity-ktx:1.4.0"
-    implementation 'androidx.appcompat:appcompat:1.4.1'
-    implementation 'com.google.android.material:material:1.5.0'
-    implementation 'androidx.annotation:annotation:1.3.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.3'
-    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.4.1'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1'
 
+    implementation "androidx.core:core-ktx:$versions.androidx_core"
+    implementation "androidx.activity:activity-ktx:$versions.androidx_activity"
+    implementation "androidx.appcompat:appcompat:$versions.androidx_appcompat"
+    implementation "androidx.annotation:annotation:$versions.androidx_annotation"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$versions.androidx_lifecycle"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$versions.androidx_lifecycle"
+
+    // -----------------------------------
     // Koin for Android
-    implementation "io.insert-koin:koin-android:3.1.5"
+    // -----------------------------------
 
+    implementation "io.insert-koin:koin-android:$versions.koin_android"
+
+    // -----------------------------------
     // Navigation component
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.4.1'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.4.1'
-//    androidTestImplementation "androidx.navigation:navigation-testing:2.4.1"
+    // -----------------------------------
 
-    testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+    implementation "androidx.navigation:navigation-fragment-ktx:$versions.androidx_navigation"
+    implementation "androidx.navigation:navigation-ui-ktx:$versions.androidx_navigation"
+
+    // -----------------------------------
+    // Jetpack Compose
+    // -----------------------------------
+
+    implementation "androidx.compose.ui:ui:$versions.androidx_compose"
+    // Tooling support  Previews, etc.
+    implementation "androidx.compose.ui:ui-tooling:$versions.androidx_compose"
+    // Foundation  Border, Background, Box, Image, Scroll, shapes, animations, etc.
+    implementation "androidx.compose.foundation:foundation:$versions.androidx_compose"
+    // Compose Material Design
+    implementation "androidx.compose.material:material:$versions.androidx_compose"
+    // Material design icons
+    implementation "androidx.compose.material:material-icons-core:$versions.androidx_compose"
+    implementation "androidx.compose.material:material-icons-extended:$versions.androidx_compose"
+    // Integration with observables
+    implementation "androidx.compose.runtime:runtime-livedata:$versions.androidx_compose"
+    // Animations
+    implementation "androidx.compose.animation:animation:$versions.androidx_compose"
+    // Integration with activities
+    implementation "androidx.activity:activity-compose:$versions.androidx_activity"
+    // Integration with ViewModels
+    implementation "androidx.lifecycle:lifecycle-viewmodel-compose:$versions.androidx_lifecycle"
+    // Integration with Navigation component
+    implementation "androidx.navigation:navigation-compose:$versions.androidx_navigation"
+    // UI Tests
+    androidTestImplementation "androidx.compose.ui:ui-test-junit4:$versions.androidx_compose"
+    androidTestImplementation "androidx.navigation:navigation-testing:$versions.androidx_navigation"
+
+    // -----------------------------------
+    // Testing
+    // -----------------------------------
+
+    testImplementation "junit:junit:4.13.2"
+    androidTestImplementation "androidx.test.ext:junit:1.1.3"
+    androidTestImplementation "androidx.test.espresso:espresso-core:3.4.0"
 }

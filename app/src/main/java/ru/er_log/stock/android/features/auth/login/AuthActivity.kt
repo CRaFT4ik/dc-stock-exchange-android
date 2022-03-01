@@ -1,4 +1,4 @@
-package ru.er_log.stock.android.features.auth
+package ru.er_log.stock.android.features.auth.login
 
 import android.app.Activity
 import android.content.Intent
@@ -20,7 +20,7 @@ import ru.er_log.stock.domain.models.auth.LoggedInUser
 
 class AuthActivity : AppCompatActivity() {
 
-    private val authViewModel: AuthViewModel by viewModel()
+    private val loginViewModel: LoginViewModel by viewModel()
     private lateinit var binding: ActivityLoginBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,7 +34,7 @@ class AuthActivity : AppCompatActivity() {
         val login = binding.login
         val loading = binding.loading
 
-        authViewModel.loginFormState.observe(this@AuthActivity, Observer {
+        loginViewModel.loginFormState.observe(this@AuthActivity, Observer {
             val loginState = it ?: return@Observer
 
             // disable login button unless both username / password is valid
@@ -48,7 +48,7 @@ class AuthActivity : AppCompatActivity() {
             }
         })
 
-        authViewModel.loginResult.observe(this@AuthActivity, Observer {
+        loginViewModel.loginResult.observe(this@AuthActivity, Observer {
             val loginResult = it ?: return@Observer
 
             loading.visibility = View.GONE
@@ -61,7 +61,7 @@ class AuthActivity : AppCompatActivity() {
         })
 
         username.afterTextChanged {
-            authViewModel.loginDataChanged(
+            loginViewModel.loginDataChanged(
                 username.text.toString(),
                 password.text.toString()
             )
@@ -69,7 +69,7 @@ class AuthActivity : AppCompatActivity() {
 
         password.apply {
             afterTextChanged {
-                authViewModel.loginDataChanged(
+                loginViewModel.loginDataChanged(
                     username.text.toString(),
                     password.text.toString()
                 )
@@ -78,7 +78,7 @@ class AuthActivity : AppCompatActivity() {
             setOnEditorActionListener { _, actionId, _ ->
                 when (actionId) {
                     EditorInfo.IME_ACTION_DONE ->
-                        authViewModel.login(
+                        loginViewModel.login(
                             username.text.toString(),
                             password.text.toString()
                         )
@@ -88,7 +88,7 @@ class AuthActivity : AppCompatActivity() {
 
             login.setOnClickListener {
                 loading.visibility = View.VISIBLE
-                authViewModel.login(username.text.toString(), password.text.toString())
+                loginViewModel.login(username.text.toString(), password.text.toString())
             }
         }
     }

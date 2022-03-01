@@ -1,4 +1,4 @@
-package ru.er_log.stock.android.features.auth.login
+package ru.er_log.stock.android.features.auth.login.model
 
 /**
  * Data validation state of the login form.
