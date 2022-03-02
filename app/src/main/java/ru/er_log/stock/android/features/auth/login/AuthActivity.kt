@@ -16,7 +16,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.er_log.stock.android.R
 import ru.er_log.stock.android.databinding.ActivityLoginBinding
 import ru.er_log.stock.android.features.exchange.ExchangeActivity
-import ru.er_log.stock.domain.models.auth.LoggedInUser
+import ru.er_log.stock.domain.models.auth.UserProfile
 
 class AuthActivity : AppCompatActivity() {
 
@@ -55,7 +55,6 @@ class AuthActivity : AppCompatActivity() {
             if (loginResult.failure != null) {
                 showLoginFailed(R.string.login_failed, loginResult.failure)
             } else if (loginResult.success != null) {
-                processAuthData(loginResult.success)
                 redirectUserToAccount(loginResult.success)
             }
         })
@@ -93,16 +92,10 @@ class AuthActivity : AppCompatActivity() {
         }
     }
 
-    private fun processAuthData(success: LoggedInUser) {
-        TODO()
-//        PreferencesStorage.saveUserProfile(success)
-//        PreferencesStorage.saveAuthToken(success.token)
-    }
-
-    private fun redirectUserToAccount(model: LoggedInUser) {
+    private fun redirectUserToAccount(profile: UserProfile) {
         Toast.makeText(
             applicationContext,
-            getString(R.string.welcome, model.userName),
+            getString(R.string.welcome, profile.userName),
             Toast.LENGTH_LONG
         ).show()
 

@@ -1,19 +1,40 @@
 package ru.er_log.stock.android.base
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.NavController
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import ru.er_log.stock.android.AppGlobalNavigationDirections
 import ru.er_log.stock.android.R
-import ru.er_log.stock.android.features.auth.login.AuthActivity
+import ru.er_log.stock.android.features.auth.ProfileViewModel
 
-class MainActivity : AppCompatActivity(R.layout.activity_exchange) {
+class MainActivity : AppCompatActivity() {
+
+    private val profileViewModel: ProfileViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
 
-        // TODO: use sessions
-        val intent = Intent(this, AuthActivity::class.java)
-        intent.flags = intent.flags or Intent.FLAG_ACTIVITY_NO_HISTORY
-        startActivity(intent)
+        observerAuthenticationState()
+    }
+
+    private fun observerAuthenticationState() {
+        profileViewModel.profile.observe(this) {
+            if (it == null) {
+                findNavController().navigate(AppGlobalNavigationDirections.actionToNavAuthLogin())
+            }
+        }
+    }
+
+    /**
+     * See https://issuetracker.google.com/142847973
+     */
+    private fun findNavController(): NavController {
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        return navHostFragment.navController
     }
 }

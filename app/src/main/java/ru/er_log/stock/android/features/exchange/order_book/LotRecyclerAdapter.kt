@@ -1,4 +1,4 @@
-package ru.er_log.stock.android.features.exchange.active_lots
+package ru.er_log.stock.android.features.exchange.order_book
 
 import android.os.Build
 import android.view.LayoutInflater

@@ -30,7 +30,8 @@ abstract class UseCaseValue<in Params, out Value>(
                     run(params)
                 } catch (t: Throwable) {
                     Result.failure(t)
-                }}
+                }
+            }
             onResult(result)
         }
     }

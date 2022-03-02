@@ -1,4 +1,4 @@
-package ru.er_log.stock.android.features.exchange.active_lots
+package ru.er_log.stock.android.features.exchange.order_book
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.*
 import ru.er_log.stock.domain.models.exchange.Lot
 import ru.er_log.stock.domain.usecases.ExchangeUseCases
 
-class ActiveLotsViewModel(
+class OrderBookViewModel(
     private val exchangeUseCases: ExchangeUseCases
 ) : ViewModel() {
 

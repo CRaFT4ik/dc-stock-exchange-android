@@ -2,15 +2,19 @@ package ru.er_log.stock.android.base.storages
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.squareup.moshi.Moshi
 import ru.er_log.stock.android.R
 import ru.er_log.stock.data.network.JsonHelpers
 import ru.er_log.stock.data.repositories.AuthDataStorage
 import ru.er_log.stock.data.repositories.AuthDataStorage.Companion.KEY_AUTH_TOKEN
 import ru.er_log.stock.data.repositories.AuthDataStorage.Companion.KEY_USER_PROFILE
-import ru.er_log.stock.domain.models.auth.LoggedInUser
+import ru.er_log.stock.domain.models.auth.UserProfile
 import java.io.IOException
 
-class PreferencesStorage(context: Context) : AuthDataStorage {
+class PreferencesStorage(
+    context: Context,
+    private val moshi: Moshi
+) : AuthDataStorage {
 
     private val prefs: SharedPreferences =
         context.getSharedPreferences(context.getString(R.string.app_name), Context.MODE_PRIVATE)
@@ -25,9 +29,9 @@ class PreferencesStorage(context: Context) : AuthDataStorage {
         return prefs.getString(KEY_AUTH_TOKEN, null)
     }
 
-    override fun saveUserProfile(userInfo: LoggedInUser) {
+    override fun saveUserProfile(userInfo: UserProfile) {
         prefs.apply {
-            val adapter = JsonHelpers.moshiCleanInstance.adapter(LoggedInUser::class.java)
+            val adapter = moshi.adapter(UserProfile::class.java)
             val json = adapter.toJson(userInfo)
 
             val editor = edit()
@@ -36,9 +40,9 @@ class PreferencesStorage(context: Context) : AuthDataStorage {
         }
     }
 
-    override fun fetchUserProfile(): LoggedInUser? = prefs.run {
+    override fun fetchUserProfile(): UserProfile? = prefs.run {
         val json = getString(KEY_USER_PROFILE, null)
-        val adapter = JsonHelpers.moshiCleanInstance.adapter(LoggedInUser::class.java)
+        val adapter = moshi.adapter(UserProfile::class.java)
 
         if (json != null) try {
             adapter.fromJson(json)

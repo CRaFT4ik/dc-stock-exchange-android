@@ -7,7 +7,8 @@ class DataModule : KoinModuleProvider {
 
     private val components: List<KoinModuleComponent> = listOf(
         RepositoriesComponent(),
-        NetworkComponent()
+        NetworkComponent(),
+        SerializerComponent()
     )
 
     override fun module(): Module = module {

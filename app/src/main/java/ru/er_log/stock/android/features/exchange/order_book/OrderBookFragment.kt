@@ -1,4 +1,4 @@
-package ru.er_log.stock.android.features.exchange.active_lots
+package ru.er_log.stock.android.features.exchange.order_book
 
 import android.os.Bundle
 import android.util.Log
@@ -8,18 +8,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.coroutines.flow.collect
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.er_log.stock.android.R
-import ru.er_log.stock.android.databinding.FragmentActiveLotsBinding
+import ru.er_log.stock.android.databinding.FragmentOrderBookBinding
 
 
-class ActiveLotsFragment : Fragment(R.layout.fragment_active_lots) {
+class OrderBookFragment : Fragment(R.layout.fragment_order_book) {
 
-    private lateinit var viewModel: ActiveLotsViewModel
-    private var _binding: FragmentActiveLotsBinding? = null
+    private val viewModel: OrderBookViewModel by viewModel()
+    private var _binding: FragmentOrderBookBinding? = null
 
     // This property is only valid between onCreateView and onDestroyView.
     private val binding get() = _binding!!
@@ -29,9 +29,7 @@ class ActiveLotsFragment : Fragment(R.layout.fragment_active_lots) {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        viewModel = ViewModelProvider(this)[ActiveLotsViewModel::class.java]
-
-        _binding = FragmentActiveLotsBinding.inflate(inflater, container, false)
+        _binding = FragmentOrderBookBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
         val recyclerViewPurchase = binding.recyclerViewPurchase

@@ -13,11 +13,15 @@ internal class RepositoriesComponent : KoinModuleComponent() {
         val reposDispatcher = Dispatchers.IO
 
         single<AuthRepository> {
-            AuthRepositoryImpl(authService = get(), reposDispatcher)
+            AuthRepositoryImpl(
+                authService = get(),
+                authStorage = get(),
+                dispatcher = reposDispatcher
+            )
         }
 
         single<ExchangeRepository> {
-            ExchangeRepositoryImpl(exchangeService = get(), reposDispatcher)
+            ExchangeRepositoryImpl(exchangeService = get(), dispatcher = reposDispatcher)
         }
     }
 }

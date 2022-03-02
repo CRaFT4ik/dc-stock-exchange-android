@@ -1,11 +1,13 @@
 package ru.er_log.stock.data.network
 
+import com.squareup.moshi.Moshi
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import retrofit2.Response
+import ru.er_log.stock.data.di.inject
 import ru.er_log.stock.domain.api.ErrorResponse
 import java.io.IOException
 
@@ -21,10 +23,12 @@ private val networkCoroutineContext = Job()
  *
  * @param R тип результата в случае успешного выполнения сетевого запроса
  * @param networkCall сетевой вызов, результат которого принимает тип [R]
+ * @param moshi десериализатор
  * @return результат сетевого вызова
  */
 suspend fun <R> makeRequest(
     dispatcher: CoroutineDispatcher = networkCoroutineDispatcher,
+    moshi: Moshi = inject(),
     networkCall: suspend () -> R
 ): NetworkResult<R> = withContext(dispatcher + networkCoroutineContext) {
     try {
@@ -38,7 +42,7 @@ suspend fun <R> makeRequest(
         val errorRaw = t.response()?.errorBody()
         val errorRawText = (try { errorRaw?.string() } catch (_: IOException) { null }) ?: "Неизвестная ошибка: " + t.localizedMessage
 
-        val adapter = JsonHelpers.moshiCleanInstance.adapter(ErrorResponse::class.java)
+        val adapter = moshi.adapter(ErrorResponse::class.java)
         val errorResponse = try { adapter.fromJson(errorRawText) } catch (_: IOException) { null }
 
         NetworkResult.Failure.GenericError(t, code, errorResponse?.parsed ?: errorRawText)

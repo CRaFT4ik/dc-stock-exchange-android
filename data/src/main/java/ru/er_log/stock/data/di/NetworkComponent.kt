@@ -8,7 +8,6 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import ru.er_log.stock.data.network.AuthInterceptor
 import ru.er_log.stock.data.network.AuthService
 import ru.er_log.stock.data.network.ExchangeService
-import ru.er_log.stock.data.network.JsonHelpers
 import java.util.concurrent.TimeUnit
 
 internal class NetworkComponent : KoinModuleComponent() {
@@ -35,12 +34,11 @@ internal class NetworkComponent : KoinModuleComponent() {
 
     private fun Module.provideRetrofit() {
         factory<Retrofit> {
-            val moshi = MoshiConverterFactory.create(JsonHelpers.moshiCleanInstance)
-                .asLenient()
+            val moshiConverterFactory = MoshiConverterFactory.create(get()).asLenient()
 
             Retrofit.Builder()
-                .addConverterFactory(moshi)
-                .baseUrl("https://192.168.0.100:8080/api/")
+                .addConverterFactory(moshiConverterFactory)
+                .baseUrl("https://er-log.ru:2053/api/")
                 .client(get())
                 .build()
         }

@@ -5,15 +5,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.launch
 import ru.er_log.stock.android.R
+import ru.er_log.stock.android.base.util.scoped
 import ru.er_log.stock.android.features.auth.login.model.LoginFormState
 import ru.er_log.stock.android.features.auth.login.model.LoginResult
 import ru.er_log.stock.domain.api.v1.auth.SignInRequest
 import ru.er_log.stock.domain.usecases.AuthUseCases
 
 class LoginViewModel(
-    private val authUseCase: AuthUseCases
+    private val authUseCases: AuthUseCases
 ) : ViewModel() {
 
     private val _loginForm = MutableLiveData<LoginFormState>()
@@ -22,13 +22,16 @@ class LoginViewModel(
     private val _loginResult = MutableLiveData<LoginResult>()
     val loginResult: LiveData<LoginResult> = _loginResult
 
-    fun login(username: String, password: String) = scoped {
-        val request = SignInRequest(username, password)
+    fun login(username: String, password: String): LiveData<LoginResult> {
+        scoped {
+            val request = SignInRequest(username, password)
 
-        authUseCase.signIn(request, viewModelScope) {
-            it.onSuccess { v -> _loginResult.value = LoginResult(success = v) }
-            it.onFailure { v -> _loginResult.value = LoginResult(failure = v.localizedMessage) }
+            authUseCases.signIn(request, viewModelScope) {
+                it.onSuccess { v -> _loginResult.value = LoginResult(success = v) }
+                it.onFailure { v -> _loginResult.value = LoginResult(failure = v.localizedMessage) }
+            }
         }
+        return loginResult
     }
 
     fun loginDataChanged(username: String, password: String) {
@@ -54,8 +57,4 @@ class LoginViewModel(
     private fun isPasswordValid(password: String): Boolean {
         return password.length > 4
     }
-}
-
-fun ViewModel.scoped(action: () -> Unit) {
-    viewModelScope.launch { action() }
 }
