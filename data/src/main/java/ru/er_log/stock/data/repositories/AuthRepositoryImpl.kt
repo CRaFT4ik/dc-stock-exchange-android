@@ -2,6 +2,7 @@ package ru.er_log.stock.data.repositories
 
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import ru.er_log.stock.data.network.AuthService
 import ru.er_log.stock.data.network.NetworkResult
 import ru.er_log.stock.data.network.makeRequest
@@ -23,6 +24,10 @@ internal class AuthRepositoryImpl(
     }
 
     override suspend fun fetchUserProfile(): Flow<UserProfile?> = withContext(dispatcher) {
-        TODO("LiveData from Room")
+        //TODO("LiveData from Room")
+        return@withContext flow {
+            UserProfile("TEST USER", "todo@user.ru",
+                UserProfile.AuthData("123", 1, emptyList()))
+        }
     }
 }
