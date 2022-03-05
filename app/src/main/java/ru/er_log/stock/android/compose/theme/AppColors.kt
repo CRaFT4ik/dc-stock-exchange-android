@@ -104,7 +104,7 @@ fun darkColors(
     textPrimary: Color = Color(0xFFFCFCFC),
     textSecondary: Color = Color(0x4CFCFCFC),
     surface: Color = Color(0x194C81BD),
-    surfaceSecondary: Color = Color(0x194C81BD),
+    surfaceSecondary: Color = Color(0x324C81BD),
     background: Color = Color(0xFF131E2A),
     backgroundSecondary: Color = Color(0xFF0C151D),
     error: Color = Color(0xFFD62222)

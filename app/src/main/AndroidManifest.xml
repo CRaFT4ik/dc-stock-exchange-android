@@ -5,7 +5,8 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
-    <application android:name=".base.ProjectApplication"
+    <application
+        android:name=".base.ProjectApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -13,15 +14,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppTheme">
         <activity
-            android:name="ru.er_log.stock.android.features.exchange.ExchangeActivity"
-            android:exported="false"
-            android:label="@string/title_activity_account"
-            android:theme="@style/Theme.AppTheme.NoActionBar" />
-        <activity
             android:name=".base.MainActivity"
             android:exported="true"
             android:noHistory="true"
-            android:label="@string/app_name">
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
