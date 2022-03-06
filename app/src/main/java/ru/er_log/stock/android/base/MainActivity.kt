@@ -3,7 +3,6 @@ package ru.er_log.stock.android.base
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.er_log.stock.android.AppGlobalNavigationDirections

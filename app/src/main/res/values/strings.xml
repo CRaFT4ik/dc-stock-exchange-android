@@ -9,12 +9,13 @@
     <string name="auth_action_sign_in">Sign In</string>
     <string name="auth_action_register">Register</string>
     <string name="auth_login_error_wrong_password">Invalid password</string>
-    <string name="auth_register_error_wrong_login">Login must contain more than 5 characters</string>
+    <string name="auth_login_greetings">Welcome back, %1$s!</string>
+    <string name="auth_register_error_wrong_login">Login must contain more than 3 characters</string>
     <string name="auth_register_error_wrong_password">Password must contain more than 7 characters, at least one letter, one number and one special character</string>
 
     <string name="welcome">Welcome back, %1$s!</string>
     <string name="invalid_username">Not a valid username</string>
-    <string name="invalid_password">Password must be >4 characters</string>
+    <string name="invalid_password">Password must be more than 4 characters</string>
     <string name="login_failed">Login failed</string>
     <string name="title_activity_account">Account</string>
     <string name="title_activity_auth">Authorization</string>

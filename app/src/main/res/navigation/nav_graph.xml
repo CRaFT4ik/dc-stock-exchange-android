@@ -5,14 +5,15 @@
     android:id="@+id/app_global_navigation"
     app:startDestination="@id/auth_login">
 
-    <action android:id="@+id/action_to_nav_auth_login"
-        app:destination="@id/auth_login"/>
+    <action
+        android:id="@+id/action_to_nav_auth_login"
+        app:destination="@id/auth_login"
+        app:popUpToInclusive="true" />
 
     <fragment
         android:id="@+id/auth_login"
         android:name="ru.er_log.stock.android.features.auth.login.LoginFragment"
-        android:label="@string/title_activity_auth"
-        tools:layout="@layout/fragment_login">
+        android:label="@string/title_activity_auth">
         <action
             android:id="@+id/action_auth_login_to_active_lots"
             app:destination="@id/active_lots"

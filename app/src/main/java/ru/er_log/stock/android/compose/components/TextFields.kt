@@ -1,16 +1,15 @@
 package ru.er_log.stock.android.compose.components
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.Resources
+import android.os.Parcel
+import android.os.Parcelable
 import android.view.KeyEvent
 import androidx.annotation.StringRes
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.focusable
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -18,9 +17,12 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.onKeyEvent
@@ -32,9 +34,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
@@ -42,17 +42,19 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import ru.er_log.stock.android.R
 import ru.er_log.stock.android.compose.theme.AppTheme
-import java.util.regex.Pattern
 
 @Composable
 internal fun AppTextField(
     modifier: Modifier = Modifier,
-    state: AppTextFieldState = AppTextFieldState(),
+    inputState: InputState = InputState(),
+    inputValidator: AppInputValidator? = null,
+    inputFilter: InputFilter? = InputFilter.WhitespaceInputFilter(),
     @StringRes label: Int? = null,
     isPasswordField: Boolean = false,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions()
 ) {
+    val stateField = rememberSaveable { inputState }
     val hidePassword = remember { mutableStateOf(true) }
 
     val composableScope = rememberCoroutineScope()
@@ -86,9 +88,13 @@ internal fun AppTextField(
                 return@onKeyEvent false
             }
             .then(modifier),
-        value = state.field.value,
-        isError = state.error.value != null,
-        onValueChange = { state.onValueChange(it, localContext, composableScope) },
+        value = stateField.input.value,
+        isError = stateField.error.value != null,
+        onValueChange = { raw ->
+            val filtered = inputFilter?.filter(raw) ?: raw
+            stateField.input.value = filtered
+            inputValidator?.validateDelayed(stateField, localContext, composableScope)
+        },
         label = { if (label != null) Text(stringResource(label)) },
         colors = TextFieldDefaults.textFieldColors(
             textColor = AppTheme.colors.textPrimary,
@@ -133,7 +139,7 @@ internal fun AppTextField(
         }
     )
 
-    state.error.value?.let { errorText ->
+    stateField.error.value?.let { errorText ->
         Text(
             modifier = Modifier
                 .fillMaxWidth()
@@ -147,66 +153,68 @@ internal fun AppTextField(
     }
 }
 
-open class AppTextFieldState {
-
-    val field = mutableStateOf(TextFieldValue())
+open class InputState : Parcelable {
+    val input = mutableStateOf("")
     val error = mutableStateOf<String?>(null)
 
-    private val textWatcher = TextWatcher()
-
-    open fun validateInput(input: String): Boolean = true
-    open fun formErrorMessage(resources: Resources, input: String): String = ""
-
-    fun onValueChange(changedValue: TextFieldValue, context: Context, scope: CoroutineScope) {
-        val input = changedValue.text
-        field.apply { value = changedValue }
-
-        textWatcher.update(input.length, scope) {
-            if (!validateInput(input)) {
-                error.value = formErrorMessage(context.resources, input)
-            } else {
-                error.value = null
+    @SuppressLint("ParcelCreator")
+    companion object CREATOR : Parcelable.Creator<InputState> {
+        override fun createFromParcel(parcel: Parcel): InputState {
+            return InputState().apply {
+                parcel.readString()?.let { input.value = it }
+                parcel.readString()?.let { error.value = it }
             }
         }
+
+        override fun newArray(size: Int): Array<InputState?> = arrayOfNulls(size)
     }
 
-    private class TextWatcher(
-        private val delay: Long = 600
+    override fun writeToParcel(dest: Parcel?, flags: Int) {
+        dest?.writeString(input.value)
+        dest?.writeString(error.value)
+    }
+
+    override fun describeContents(): Int = 0
+}
+
+abstract class InputFilter {
+    abstract fun filter(input: String): String
+
+    class WhitespaceInputFilter : InputFilter() {
+        override fun filter(input: String): String {
+            return input.filter { !it.isWhitespace() }
+        }
+    }
+}
+
+abstract class AppInputValidator {
+
+    private var updateErrorJob: Job? = null
+
+    abstract fun validateInput(input: String): Boolean
+    abstract fun formErrorMessage(resources: Resources, input: String): String
+
+    fun validate(inputState: InputState, context: Context): Boolean {
+        val input = inputState.input.value
+        if (!validateInput(input)) {
+            inputState.error.value = formErrorMessage(context.resources, input)
+            return false
+        }
+
+        inputState.error.value = null
+        return true
+    }
+
+    fun validateDelayed(
+        inputState: InputState,
+        context: Context,
+        scope: CoroutineScope,
+        delayMs: Long = 450
     ) {
-        private var currentJob: Job = Job()
-
-        fun update(inputLength: Int, scope: CoroutineScope, updateAction: () -> Unit) {
-            currentJob.cancel()
-            currentJob = scope.launch {
-                delay(delay)
-                updateAction()
-            }
+        updateErrorJob?.cancel()
+        updateErrorJob = scope.launch {
+            delay(delayMs)
+            validate(inputState, context)
         }
-    }
-}
-
-internal class AppPasswordTextFieldState : AppTextFieldState() {
-
-    // Minimum eight characters, at least one letter, one number and one special character.
-    private val passwordRequiredPattern =
-        "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$"
-
-    override fun validateInput(input: String): Boolean {
-        return Pattern.matches(passwordRequiredPattern, input)
-    }
-
-    override fun formErrorMessage(resources: Resources, input: String): String {
-        return resources.getString(R.string.auth_register_error_wrong_password)
-    }
-}
-
-internal class AppLoginTextFieldState : AppTextFieldState() {
-
-    override fun validateInput(input: String): Boolean {
-        return input.length > 5
-    }
-
-    override fun formErrorMessage(resources: Resources, input: String): String {
-        return resources.getString(R.string.auth_register_error_wrong_login)
     }
 }
