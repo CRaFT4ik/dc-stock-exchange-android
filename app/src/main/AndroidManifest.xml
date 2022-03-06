@@ -17,7 +17,8 @@
             android:name=".base.MainActivity"
             android:exported="true"
             android:noHistory="true"
-            android:windowSoftInputMode="adjustResize">
+            android:theme="@style/Theme.AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -27,6 +27,8 @@ import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.er_log.stock.android.R
+import ru.er_log.stock.android.compose.components.*
+import ru.er_log.stock.android.compose.components.AppPasswordTextFieldState
 import ru.er_log.stock.android.compose.components.AppTextField
 import ru.er_log.stock.android.compose.components.appMainBackground
 import ru.er_log.stock.android.compose.theme.AppTheme
@@ -50,29 +52,36 @@ class LoginFragment : Fragment() {
         }
     }
 
+    @Preview
+    @Composable
+    private fun Preview() {
+        AppTheme(colors = darkColors()) {
+            ScreenLogin()
+        }
+    }
+
     @Composable
     private fun ScreenLogin() {
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .appMainBackground()
-                .padding(32.dp)
+                .padding(24.dp)
         ) {
-            LogoBox(heightFraction = 0.55f)
-            InputBox()
+            LogoBox(Modifier.weight(0.5f))
+            InputBox(Modifier.weight(0.5f))
         }
     }
 
     @Composable
     private fun LogoBox(
         modifier: Modifier = Modifier,
-        heightFraction: Float,
         @DrawableRes logoResId: Int = R.drawable.ic_launcher_foreground
     ) {
         Box(
             modifier = modifier
                 .fillMaxWidth()
-                .fillMaxHeight(heightFraction),
+                .fillMaxHeight(),
             contentAlignment = Alignment.Center
         ) {
             Image(painter = painterResource(logoResId), contentDescription = "Logo")
@@ -83,62 +92,57 @@ class LoginFragment : Fragment() {
     private fun InputBox(
         modifier: Modifier = Modifier,
     ) {
-        Box(
-            modifier
+        Column(
+            modifier = modifier
                 .fillMaxWidth()
                 .fillMaxHeight()
         ) {
-            Column {
-                val localFocusManager = LocalFocusManager.current
+            val localFocusManager = LocalFocusManager.current
 
-                AppTextField(
-                    label = R.string.prompt_username,
-                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
-                    keyboardActions = KeyboardActions(
-                        onNext = { localFocusManager.moveFocus(FocusDirection.Down) }
-                    )
-                ) {
-                    loginViewModel.loginDataChanged(username = it)
-                }
-
-                Box(Modifier.height(16.dp))
-                AppTextField(
-                    label = R.string.prompt_password,
-                    isPasswordField = true,
-                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-                    keyboardActions = KeyboardActions(
-                        onDone = { localFocusManager.clearFocus() }
-                    )
-                ) {
-                    loginViewModel.loginDataChanged(password = it)
-                }
-
-                Box(Modifier.height(16.dp))
-                Text(
-                    modifier = Modifier
-                        .align(Alignment.CenterHorizontally)
-                        .clickable {
-                            Toast
-                                .makeText(
-                                    requireContext(),
-                                    R.string.action_forgot_the_password_unsupported,
-                                    Toast.LENGTH_SHORT
-                                )
-                                .show()
-                        },
-                    color = AppTheme.colors.textSecondary,
-                    text = stringResource(R.string.action_forgot_the_password),
-                    textAlign = TextAlign.Center
+            AppTextField(
+                state = AppLoginTextFieldState(),
+                label = R.string.auth_prompt_username,
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+                keyboardActions = KeyboardActions(
+                    onNext = { localFocusManager.moveFocus(FocusDirection.Down) }
                 )
-            }
-        }
-    }
+            )
 
-    @Preview
-    @Composable
-    private fun Preview() {
-        AppTheme(colors = darkColors()) {
-            ScreenLogin()
+            Box(Modifier.height(16.dp))
+            AppTextField(
+                state = AppPasswordTextFieldState(),
+                label = R.string.auth_prompt_password,
+                isPasswordField = true,
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                keyboardActions = KeyboardActions(
+                    onDone = { localFocusManager.clearFocus() }
+                )
+            )
+
+            Box(Modifier.height(32.dp))
+            AppButton(
+                onClick = {}
+            ) {
+                Text(stringResource(R.string.auth_action_sign_in))
+            }
+
+            Box(Modifier.height(16.dp))
+            Text(
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .clickable {
+                        Toast
+                            .makeText(
+                                requireContext(),
+                                R.string.auth_action_forgot_the_password_unsupported,
+                                Toast.LENGTH_SHORT
+                            )
+                            .show()
+                    },
+                color = AppTheme.colors.textSecondary,
+                text = stringResource(R.string.auth_action_forgot_the_password),
+                textAlign = TextAlign.Center
+            )
         }
     }
 }

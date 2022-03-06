@@ -10,8 +10,8 @@ internal fun Modifier.appMainBackground() = composed {
     this.background(
         brush = Brush.verticalGradient(
             colors = listOf(
-                AppTheme.colors.background,
-                AppTheme.colors.backgroundSecondary
+                AppTheme.colors.backgroundSecondary,
+                AppTheme.colors.background
             )
         )
     )

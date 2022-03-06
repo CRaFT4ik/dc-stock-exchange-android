@@ -84,7 +84,7 @@ fun lightColors(
     surfaceSecondary: Color = Color(0xFF000000),
     background: Color = Color(0xFFFFFFFF),
     backgroundSecondary: Color = Color(0xFFFFFFFF),
-    error: Color = Color(0xFFD62222)
+    error: Color = Color(0xFFCF6679)
 ): AppColors = AppColors(
     primary = primary,
     secondary = secondary,
@@ -103,11 +103,11 @@ fun darkColors(
     secondary: Color = Color(0xFFF15033),
     textPrimary: Color = Color(0xFFFCFCFC),
     textSecondary: Color = Color(0x4CFCFCFC),
-    surface: Color = Color(0x194C81BD),
-    surfaceSecondary: Color = Color(0x324C81BD),
-    background: Color = Color(0xFF131E2A),
-    backgroundSecondary: Color = Color(0xFF0C151D),
-    error: Color = Color(0xFFD62222)
+    surface: Color = Color(0xFF192839),
+    surfaceSecondary: Color = Color(0xFF243a53),
+    background: Color = Color(0xFF131e2a),
+    backgroundSecondary: Color = Color(0xFF0c151d),
+    error: Color = Color(0xFFdf6060)
 ): AppColors = AppColors(
     primary = primary,
     secondary = secondary,
