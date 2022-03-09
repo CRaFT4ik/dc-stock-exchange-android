@@ -21,17 +21,13 @@ data class OrderBookState(
     private val orders: SortedSet<OrderBookItem> get() = ordersState.value
     private val offers: SortedSet<OrderBookItem> get() = offersState.value
 
-    private val ordersMin: BigDecimal
-        get() = (orders.firstOrNull()?.price ?: BigDecimal.ZERO).autoScale()
-    private val ordersMax: BigDecimal
-        get() = (orders.lastOrNull()?.price ?: BigDecimal.ZERO).autoScale()
-    private val offersMin: BigDecimal
-        get() = (offers.firstOrNull()?.price ?: BigDecimal.ZERO).autoScale()
-    private val offersMax: BigDecimal
-        get() = (offers.lastOrNull()?.price ?: BigDecimal.ZERO).autoScale()
+    private val ordersMin: BigDecimal get() = orders.firstOrNull()?.price ?: BigDecimal.ZERO
+    private val ordersMax: BigDecimal get() = orders.lastOrNull()?.price ?: BigDecimal.ZERO
+    private val offersMin: BigDecimal get() = offers.firstOrNull()?.price ?: BigDecimal.ZERO
+    private val offersMax: BigDecimal get() = offers.lastOrNull()?.price ?: BigDecimal.ZERO
 
-    val priceMin: BigDecimal get() = ordersMin
-    val priceMax: BigDecimal get() = offersMax
+    val priceMin: BigDecimal get() = ordersMin.autoScale()
+    val priceMax: BigDecimal get() = offersMax.autoScale()
     val priceAvg: BigDecimal get() = ((ordersMax + offersMin) / BigDecimal.valueOf(2)).autoScale()
 
     private val maxAmount by derivedStateOf {
@@ -41,6 +37,19 @@ data class OrderBookState(
             offers.fold(BigDecimal.ZERO) { acc, item -> acc + (item.amount * item.price) }
         maxOf(ordersMax, offersMax)
     }
+
+    val amountLines by derivedStateOf {
+        val amountStep = maxAmount / BigDecimal.valueOf(6)
+        mutableListOf<BigDecimal>().apply {
+            for (i in 1..6) {
+                val value = (amountStep * i.toBigDecimal()).autoScale()
+                add(value)
+            }
+        }
+    }
+
+    fun amountYOffset(chartHeight: Float, amount: BigDecimal): Float =
+        (chartHeight.toBigDecimal() * amount / maxAmount).toFloat()
 
     fun chartOrders(
         chartWidth: Int,
@@ -83,7 +92,7 @@ data class OrderBookState(
     ): List<Offset> {
         val result = mutableListOf<Offset>()
 
-        val range = if (reversed) chartWidth downTo 0 else 0 until chartWidth
+        val range = if (reversed) chartWidth downTo 1 else 0 until chartWidth
         var yAccAmount: BigDecimal = BigDecimal.ZERO
 
         var prevItem = when (reversed) {
@@ -103,14 +112,21 @@ data class OrderBookState(
                 else -> items.subSet(prevItem, nextItem)
             }
 
-            yAccAmount = (nextItem.price * nextItem.amount) +
-                    amountPartSet.fold(yAccAmount) { acc, item -> acc + (item.amount * item.price) }
+            yAccAmount = amountPartSet.fold(yAccAmount) { acc, item -> acc + (item.amount * item.price) }
+            // Because SortedList.subSet excludes second value.
+            if (x == range.last) {
+                when (reversed) {
+                    true -> items.firstOrNull()?.let { yAccAmount += it.price * it.amount }
+                    else -> items.lastOrNull()?.let { yAccAmount += it.price * it.amount }
+                }
+            }
 
             val y = chartHeight.toBigDecimal() * yAccAmount / maxAmount
             result.add(Offset(xOffset + x.toFloat(), yOffset + chartHeight - y.toFloat()))
 
             prevItem = nextItem
         }
+
         return result
     }
 

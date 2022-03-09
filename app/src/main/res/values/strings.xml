@@ -17,6 +17,10 @@
     <string name="nav_title_auth">Authorization</string>
     <string name="nav_title_order_book">Order book</string>
 
+    <!-- Orders book widget legend -->
+    <string name="widget_order_book_legend_orders">Orders (buy)</string>
+    <string name="widget_order_book_legend_offers">Offers (sell)</string>
+
     <string name="nav_title_activity_account">Account</string>
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be more than 4 characters</string>

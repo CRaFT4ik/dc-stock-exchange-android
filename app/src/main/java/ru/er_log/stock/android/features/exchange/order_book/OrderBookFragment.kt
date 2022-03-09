@@ -32,10 +32,7 @@ import ru.er_log.stock.android.databinding.FragmentOrderBookBinding
 import ru.er_log.stock.android.features.exchange.order_book.widget.OrderBookChart
 import ru.er_log.stock.android.features.exchange.order_book.widget.OrderBookState
 import ru.er_log.stock.android.features.exchange.order_book.widget.OrderBookTable
-import ru.er_log.stock.domain.models.exchange.OrderBookItem
-import java.math.BigDecimal
-import java.util.*
-import kotlin.random.Random
+import ru.er_log.stock.android.features.exchange.order_book.widget.lotsProvider
 
 
 class OrderBookFragment : Fragment(R.layout.fragment_order_book) {
@@ -134,19 +131,6 @@ fun OrderBookScreen(
     orderBookState: OrderBookState
 ) {
     OrderBook(orderBookState)
-}
-
-val lotsProvider: (Int, Int) -> SortedSet<OrderBookItem> = { min, max ->
-    val lots = sortedSetOf(OrderBookItem.PriceComparator)
-    repeat(20) {
-        lots.add(
-            OrderBookItem(
-                price = BigDecimal.valueOf(Random.nextDouble(min.toDouble(), max.toDouble())),
-                amount = BigDecimal.valueOf(Random.nextDouble(0.1, 50.0))
-            )
-        )
-    }
-    lots
 }
 
 @Preview
