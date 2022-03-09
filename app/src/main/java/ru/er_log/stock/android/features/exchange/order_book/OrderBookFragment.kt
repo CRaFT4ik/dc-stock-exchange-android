@@ -130,7 +130,7 @@ class OrderBookFragment : Fragment(R.layout.fragment_order_book) {
 fun OrderBookScreen(
     orderBookState: OrderBookState
 ) {
-    OrderBook(orderBookState)
+    OrderBook(state = orderBookState)
 }
 
 @Preview
@@ -150,21 +150,17 @@ fun OrderBookScreenPreview() {
 
 @Composable
 fun OrderBook(
-    orderBookState: OrderBookState
+    modifier: Modifier = Modifier,
+    state: OrderBookState
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(260.dp)
-            .background(AppTheme.colors.background)
-    ) {
+    Column {
         OrderBookChart(
-            modifier = Modifier.weight(0.5f),
-            state = orderBookState
+            modifier = modifier.weight(0.4f),
+            state = state
         )
         OrderBookTable(
-            modifier = Modifier.weight(0.5f),
-            state = orderBookState
+            modifier = modifier.weight(0.6f),
+            state = state
         )
     }
 }

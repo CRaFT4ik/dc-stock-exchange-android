@@ -26,25 +26,24 @@ data class OrderBookState(
     private val offersMin: BigDecimal get() = offers.firstOrNull()?.price ?: BigDecimal.ZERO
     private val offersMax: BigDecimal get() = offers.lastOrNull()?.price ?: BigDecimal.ZERO
 
-    val priceMin: BigDecimal get() = ordersMin.autoScale()
-    val priceMax: BigDecimal get() = offersMax.autoScale()
-    val priceAvg: BigDecimal get() = ((ordersMax + offersMin) / BigDecimal.valueOf(2)).autoScale()
+    val priceMin: BigDecimal get() = ordersMin
+    val priceMax: BigDecimal get() = offersMax
+    val priceAvg: BigDecimal get() = (ordersMax + offersMin) / BigDecimal.valueOf(2)
 
-    private val maxAmount by derivedStateOf {
-        val ordersMax =
-            orders.fold(BigDecimal.ZERO) { acc, item -> acc + (item.amount * item.price) }
-        val offersMax =
-            offers.fold(BigDecimal.ZERO) { acc, item -> acc + (item.amount * item.price) }
-        maxOf(ordersMax, offersMax)
+    private val maxAmount get() = maxOf(ordersMaxAmount, offersMaxAmount)
+
+    val offersMaxAmount by derivedStateOf {
+        offers.fold(BigDecimal.ZERO) { acc, item -> acc + (item.amount * item.price) }
+    }
+
+    val ordersMaxAmount by derivedStateOf {
+        orders.fold(BigDecimal.ZERO) { acc, item -> acc + (item.amount * item.price) }
     }
 
     val amountLines by derivedStateOf {
         val amountStep = maxAmount / BigDecimal.valueOf(6)
         mutableListOf<BigDecimal>().apply {
-            for (i in 1..6) {
-                val value = (amountStep * i.toBigDecimal()).autoScale()
-                add(value)
-            }
+            for (i in 1..6) add(amountStep * i.toBigDecimal())
         }
     }
 
@@ -128,14 +127,5 @@ data class OrderBookState(
         }
 
         return result
-    }
-
-    private fun BigDecimal.autoScale(): BigDecimal {
-        val scale = when {
-            setScale(0, RoundingMode.DOWN).compareTo(BigDecimal.ZERO) == 0 -> 5
-            compareTo(BigDecimal.TEN) < 0 -> 3
-            else -> 2
-        }
-        return setScale(scale, RoundingMode.HALF_EVEN)
     }
 }

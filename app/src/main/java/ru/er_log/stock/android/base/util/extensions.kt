@@ -1,10 +1,14 @@
 package ru.er_log.stock.android.base.util
 
+import android.content.Context
+import android.util.TypedValue
+import androidx.compose.ui.unit.TextUnit
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
+import java.math.RoundingMode
 import java.text.DecimalFormat
 
 
@@ -41,4 +45,20 @@ fun BigDecimal.toHumanFormat(): String {
 
     val decimalFormat = DecimalFormat("#.##")
     return decimalFormat.format(result) + postfix
+}
+
+fun BigDecimal.autoScale(): BigDecimal {
+    val scale = when {
+        setScale(0, RoundingMode.DOWN).compareTo(BigDecimal.ZERO) == 0 -> 5
+        compareTo(BigDecimal.TEN) < 0 -> 3
+        else -> 2
+    }
+    return setScale(scale, RoundingMode.HALF_EVEN)
+}
+
+fun TextUnit.spToPx(context: Context): Float {
+    if (!this.isSp) throw IllegalStateException()
+    return TypedValue.applyDimension(
+        TypedValue.COMPLEX_UNIT_SP, this.value, context.resources.displayMetrics
+    )
 }

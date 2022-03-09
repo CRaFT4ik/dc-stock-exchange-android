@@ -13,15 +13,18 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ru.er_log.stock.android.R
+import ru.er_log.stock.android.base.util.autoScale
+import ru.er_log.stock.android.base.util.spToPx
 import ru.er_log.stock.android.base.util.toHumanFormat
 import ru.er_log.stock.android.compose.theme.AppTheme
 import ru.er_log.stock.android.compose.theme.darkColors
-import ru.er_log.stock.android.features.exchange.order_book.OrderBookScreen
 import ru.er_log.stock.domain.models.exchange.OrderBookItem
 import java.math.BigDecimal
 import java.util.*
@@ -30,13 +33,14 @@ import kotlin.random.Random
 @Composable
 internal fun OrderBookChart(
     modifier: Modifier = Modifier,
-    state: OrderBookState
+    state: OrderBookState,
+    style: OrderBookStyle = OrderBookStyle()
 ) {
     val bounds = Rect()
     val textPaint = Paint().asFrameworkPaint().apply {
         isAntiAlias = true
-        textSize = 32.sp.value
-        color = AppTheme.colors.textPrimary.copy(alpha = 0.6f).toArgb()
+        textSize = style.textSize.spToPx(LocalContext.current)
+        color = style.secondaryColor.toArgb()
     }
 
     fun Canvas.drawText(text: String, x: (Rect) -> Float, y: (Rect) -> Float) {
@@ -46,9 +50,6 @@ internal fun OrderBookChart(
 
     val ordersLegendText = stringResource(R.string.widget_order_book_legend_orders)
     val offersLegendText = stringResource(R.string.widget_order_book_legend_offers)
-
-    val ordersColor = Color(0x4D00965A)
-    val offersColor = Color(0x4DC74848)
 
     val chartMargin = 64.dp.value
     val priceBarHeight = 64.dp.value
@@ -71,7 +72,7 @@ internal fun OrderBookChart(
         state.amountLines.forEach { amount ->
             val yOffset = chartYOffset - state.amountYOffset(chartHeight, amount)
             drawLine(
-                color = Color.Gray.copy(alpha = 0.3f),
+                color = style.secondaryColor.copy(alpha = 0.3f),
                 strokeWidth = 1.dp.value,
                 start = Offset(0f, yOffset),
                 end = Offset(chartWidth, yOffset),
@@ -106,11 +107,11 @@ internal fun OrderBookChart(
 
         val pointsOrders =
             state.chartOrders(chartWidth.toInt(), chartHeight.toInt(), yOffset = chartMargin)
-        drawChart(pointsOrders, color = ordersColor)
+        drawChart(pointsOrders, color = style.ordersColor)
 
         val pointsOffers =
             state.chartOffers(chartWidth.toInt(), chartHeight.toInt(), yOffset = chartMargin)
-        drawChart(pointsOffers, color = offersColor)
+        drawChart(pointsOffers, color = style.offersColor)
 
         // Drawing amount text.
 
@@ -129,17 +130,17 @@ internal fun OrderBookChart(
 
         drawIntoCanvas {
             it.drawText(
-                state.priceMin.toString(),
+                state.priceMin.autoScale().toString(),
                 { 6.dp.value },
                 { b -> priceYOffset + (b.height() / 2f) }
             )
             it.drawText(
-                state.priceAvg.toString(),
+                state.priceAvg.autoScale().toString(),
                 { b -> (chartWidth / 2f) - (b.width() / 2f) },
                 { b -> priceYOffset + (b.height() / 2f) }
             )
             it.drawText(
-                state.priceMax.toString(),
+                state.priceMax.autoScale().toString(),
                 { b -> chartWidth - b.width() - 6.dp.value },
                 { b -> priceYOffset + (b.height() / 2f) }
             )
@@ -150,7 +151,7 @@ internal fun OrderBookChart(
         drawLegend(
             chartWidth, legendYOffset,
             ordersLegendText, offersLegendText,
-            ordersColor, offersColor,
+            style.ordersColor, style.offersColor,
             textPaint
         )
     }
@@ -219,13 +220,23 @@ fun OrderBookChartPreview() {
     }
 
     AppTheme(colors = darkColors()) {
-        OrderBookScreen(orderBookState)
+        OrderBookChart(state = orderBookState)
     }
 }
 
+data class OrderBookStyle(
+    val ordersColor: Color = Color(0x4D00965A),
+    val ordersSecondaryColor: Color = Color(0x7200965A),
+    val offersColor: Color = Color(0x4DC74848),
+    val offersSecondaryColor: Color = Color(0x72C74848),
+    val primaryColor: Color = Color(0x8FFCFCFC),
+    val secondaryColor: Color = Color(0x4CFCFCFC),
+    val textSize: TextUnit = 13.sp
+)
+
 val lotsProvider: (Int, Int) -> SortedSet<OrderBookItem> = { min, max ->
     val lots = sortedSetOf(OrderBookItem.PriceComparator)
-    repeat(20) {
+    repeat(100) {
         lots.add(
             OrderBookItem(
                 price = BigDecimal.valueOf(Random.nextDouble(min.toDouble(), max.toDouble())),
