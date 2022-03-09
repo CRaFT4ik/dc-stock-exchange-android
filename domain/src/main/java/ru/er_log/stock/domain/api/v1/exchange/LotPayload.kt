@@ -8,12 +8,14 @@ import java.math.BigDecimal
 data class LotPayload(
     @Json(name = "price")
     val price: BigDecimal,
+    @Json(name = "amount")
+    val amount: BigDecimal,
     @Json(name = "timestampCreated")
     val timestampCreated: Long,
     @Json(name = "owner")
     val owner: Owner
 ) : Mappable<Lot> {
-    override fun map() = Lot(price, timestampCreated, owner.map())
+    override fun map() = Lot(price, amount, timestampCreated, owner.map())
 
     data class Owner(
         @Json(name = "name")

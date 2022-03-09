@@ -7,16 +7,15 @@ import android.os.Parcel
 import android.os.Parcelable
 import android.view.KeyEvent
 import androidx.annotation.StringRes
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
-import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -29,7 +28,6 @@ import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalTextInputService
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
@@ -40,7 +38,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import ru.er_log.stock.android.R
 import ru.er_log.stock.android.compose.theme.AppTheme
 
 @Composable
@@ -55,7 +52,7 @@ internal fun AppTextField(
     keyboardActions: KeyboardActions = KeyboardActions()
 ) {
     val stateField = rememberSaveable { inputState }
-    val hidePassword = remember { mutableStateOf(true) }
+    val isPasswordHidden = remember { mutableStateOf(true) }
 
     val composableScope = rememberCoroutineScope()
     val localContext = LocalContext.current
@@ -110,17 +107,13 @@ internal fun AppTextField(
         ),
         trailingIcon = {
             if (isPasswordField) {
-                Icon(
-                    modifier = Modifier
-                        .clickable { hidePassword.value = !hidePassword.value },
-                    painter = if (hidePassword.value) {
-                        painterResource(R.drawable.ic_baseline_visibility_24)
-                    } else {
-                        painterResource(R.drawable.ic_baseline_visibility_off_24)
-                    },
-                    contentDescription = "Show/Hide password",
-                    tint = AppTheme.colors.surfaceSecondary
-                )
+                IconButton(onClick = { isPasswordHidden.value = !isPasswordHidden.value }) {
+                    Icon(
+                        imageVector = if (!isPasswordHidden.value) Icons.Default.Visibility else Icons.Default.VisibilityOff,
+                        contentDescription = "Show/Hide password",
+                        tint = AppTheme.colors.surfaceSecondary
+                    )
+                }
             }
         },
         singleLine = true,
@@ -132,7 +125,7 @@ internal fun AppTextField(
         },
         keyboardActions = keyboardActions,
         shape = RoundedCornerShape(4.dp),
-        visualTransformation = if (isPasswordField && hidePassword.value) {
+        visualTransformation = if (isPasswordField && isPasswordHidden.value) {
             PasswordVisualTransformation()
         } else {
             VisualTransformation.None

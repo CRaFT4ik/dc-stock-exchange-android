@@ -13,12 +13,14 @@
     <string name="auth_register_error_wrong_login">Login must contain more than 3 characters</string>
     <string name="auth_register_error_wrong_password">Password must contain more than 7 characters, at least one letter, one number and one special character</string>
 
-    <string name="welcome">Welcome back, %1$s!</string>
+    <!-- Navigation labels -->
+    <string name="nav_title_auth">Authorization</string>
+    <string name="nav_title_order_book">Order book</string>
+
+    <string name="nav_title_activity_account">Account</string>
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be more than 4 characters</string>
     <string name="login_failed">Login failed</string>
-    <string name="title_activity_account">Account</string>
-    <string name="title_activity_auth">Authorization</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Android Studio</string>
@@ -26,7 +28,6 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_refresh">Refresh</string>
 
-    <string name="menu_active_lots">Active lots</string>
     <string name="menu_completed_deals">Completed deals</string>
     <string name="button_create_a_lot">Create a lot</string>
     <string name="textview_lots_for_sale">Lots for sale</string>

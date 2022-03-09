@@ -36,6 +36,8 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavController
+import androidx.navigation.NavDestination
 import androidx.navigation.fragment.findNavController
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -156,10 +158,10 @@ class LoginFragment : Fragment() {
                         color = AppTheme.colors.textPrimary,
                         fontSize = AppTheme.typography.h6.fontSize
                     )
-                    LaunchedEffect(key1 = "auth") {
+                    LaunchedEffect(key1 = loginViewModel) {
                         launch {
-                            delay(2000)
-                            findNavController().navigate(LoginFragmentDirections.actionAuthLoginToActiveLots())
+                            delay(1500)
+                            loginViewModel.successLoginNavigate(findNavController())
                         }
                     }
                 }

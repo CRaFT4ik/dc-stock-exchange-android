@@ -5,6 +5,8 @@ import android.content.res.Resources
 import android.util.Patterns
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavController
+import androidx.navigation.NavOptionsBuilder
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import ru.er_log.stock.android.R
@@ -49,6 +51,12 @@ class LoginViewModel(
 
     fun setInitialUIState() {
         _loginUIState.value = LoginUIState.Idle
+    }
+
+    fun successLoginNavigate(navController: NavController) {
+//        if (!navController.popBackStack()) {
+            navController.navigate(LoginFragmentDirections.actionAuthLoginToActiveLots())
+//        }
     }
 }
 

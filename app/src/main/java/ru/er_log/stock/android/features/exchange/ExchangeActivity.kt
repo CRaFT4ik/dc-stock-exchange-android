@@ -45,7 +45,7 @@ class ExchangeActivity : AppCompatActivity() {
         // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.active_lots, R.id.completed_deals
+                R.id.order_book, R.id.completed_deals
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
