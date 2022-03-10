@@ -1,4 +1,4 @@
-package ru.er_log.stock.android.features.exchange.deals
+package ru.er_log.stock.android.features.home.exchange.deals
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

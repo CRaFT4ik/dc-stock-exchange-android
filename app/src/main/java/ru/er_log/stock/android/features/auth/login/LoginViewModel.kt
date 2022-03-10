@@ -2,23 +2,19 @@ package ru.er_log.stock.android.features.auth.login
 
 import android.content.Context
 import android.content.res.Resources
-import android.util.Patterns
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
-import androidx.navigation.NavOptionsBuilder
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import ru.er_log.stock.android.R
-import ru.er_log.stock.android.base.util.scoped
+import ru.er_log.stock.android.base.utils.scoped
 import ru.er_log.stock.android.compose.components.AppInputValidator
 import ru.er_log.stock.android.compose.components.InputState
-import ru.er_log.stock.android.features.auth.login.model.LoginFormState
 import ru.er_log.stock.android.features.auth.login.model.LoginUIState
 import ru.er_log.stock.data.di.inject
 import ru.er_log.stock.domain.api.v1.auth.SignInRequest
 import ru.er_log.stock.domain.usecases.AuthUseCases
-import java.util.regex.Pattern
 
 class LoginViewModel(
     private val authUseCases: AuthUseCases
@@ -28,9 +24,14 @@ class LoginViewModel(
     val loginUIState = _loginUIState.asStateFlow()
 
     fun login(
-        username: InputState, usernameValidator: AppInputValidator,
-        password: InputState, passwordValidator: AppInputValidator
+        usernamePair: Pair<InputState, AppInputValidator>,
+        passwordPair: Pair<InputState, AppInputValidator>
     ) {
+        val username = usernamePair.first
+        val usernameValidator = usernamePair.second
+        val password = passwordPair.first
+        val passwordValidator = passwordPair.second
+
         scoped {
             val context: Context = inject()
             val loginValidate = usernameValidator.validate(username, context)
@@ -51,12 +52,6 @@ class LoginViewModel(
 
     fun setInitialUIState() {
         _loginUIState.value = LoginUIState.Idle
-    }
-
-    fun successLoginNavigate(navController: NavController) {
-//        if (!navController.popBackStack()) {
-            navController.navigate(LoginFragmentDirections.actionAuthLoginToActiveLots())
-//        }
     }
 }
 

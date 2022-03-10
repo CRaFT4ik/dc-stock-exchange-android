@@ -1,4 +1,4 @@
-package ru.er_log.stock.android.features.exchange.order_book.widget
+package ru.er_log.stock.android.features.home.exchange.order_book.widget
 
 import android.graphics.Rect
 import androidx.compose.foundation.Canvas
@@ -20,9 +20,9 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import ru.er_log.stock.android.R
-import ru.er_log.stock.android.base.util.autoScale
-import ru.er_log.stock.android.base.util.spToPx
-import ru.er_log.stock.android.base.util.toHumanFormat
+import ru.er_log.stock.android.base.utils.autoScale
+import ru.er_log.stock.android.base.utils.spToPx
+import ru.er_log.stock.android.base.utils.toHumanFormat
 import ru.er_log.stock.android.compose.theme.AppTheme
 import ru.er_log.stock.android.compose.theme.darkColors
 import ru.er_log.stock.domain.models.exchange.OrderBookItem

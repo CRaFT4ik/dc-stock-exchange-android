@@ -1,14 +1,13 @@
 package ru.er_log.stock.android.base.di
 
-import androidx.lifecycle.ViewModelProvider
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.module.Module
 import org.koin.dsl.module
 import ru.er_log.stock.android.base.storages.PreferencesStorage
 import ru.er_log.stock.android.features.auth.ProfileViewModel
 import ru.er_log.stock.android.features.auth.login.LoginViewModel
-import ru.er_log.stock.android.features.exchange.ExchangeViewModel
-import ru.er_log.stock.android.features.exchange.order_book.OrderBookViewModel
+import ru.er_log.stock.android.features.home.exchange.ExchangeViewModel
+import ru.er_log.stock.android.features.home.exchange.order_book.OrderBookViewModel
 import ru.er_log.stock.data.di.KoinModuleProvider
 import ru.er_log.stock.data.repositories.AuthDataStorage
 

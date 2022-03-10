@@ -66,7 +66,7 @@ dependencies {
     // -----------------------------------
 
     implementation "io.insert-koin:koin-android:$versions.koin_android"
-
+    implementation "io.insert-koin:koin-androidx-compose:$versions.koin_android"
     // -----------------------------------
     // Navigation component
     // -----------------------------------

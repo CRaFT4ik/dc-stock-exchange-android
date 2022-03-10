@@ -10,7 +10,7 @@ class AuthUseCases(private val authRepository: AuthRepository) {
 
     val signUp: UseCase<Unit, Unit> by lazy { SignUpUseCase() }
     val signIn: UseCase<SignInRequest, UserProfile> by lazy { SignInUseCase() }
-    val fetchUser: UseCase<Unit, UserProfile?> by lazy { FetchUserProfile() }
+    val observeUser: UseCase<Unit, UserProfile?> by lazy { ObserveUserProfile() }
 
     private inner class SignUpUseCase : UseCaseValue<Unit, Unit>() {
         override suspend fun run(params: Unit): Result<Unit> {
@@ -26,9 +26,9 @@ class AuthUseCases(private val authRepository: AuthRepository) {
         }
     }
 
-    private inner class FetchUserProfile : UseCaseFlow<Unit, UserProfile?>() {
+    private inner class ObserveUserProfile : UseCaseFlow<Unit, UserProfile?>() {
         override suspend fun run(params: Unit, onEach: suspend (Result<UserProfile?>) -> Unit) {
-            authRepository.fetchUserProfile()
+            authRepository.observeUserProfile()
                 .catch { onEach(Result.failure(it)) }
                 .collect { onEach(Result.success(it)) }
         }

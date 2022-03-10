@@ -1,4 +1,4 @@
-package ru.er_log.stock.android.base.util
+package ru.er_log.stock.android.base.utils
 
 import android.content.Context
 import android.util.TypedValue

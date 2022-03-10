@@ -11,7 +11,7 @@
 
     <fragment
         android:id="@+id/auth_login"
-        android:name="ru.er_log.stock.android.features.auth.login.LoginFragment"
+        android:name="ru.er_log.stock.android.features.auth.login.LoginScreen"
         android:label="@string/nav_title_auth">
         <action
             android:id="@+id/action_auth_login_to_active_lots"
@@ -22,13 +22,13 @@
 
     <fragment
         android:id="@+id/order_book"
-        android:name="ru.er_log.stock.android.features.exchange.order_book.OrderBookFragment"
+        android:name="ru.er_log.stock.android.features.home.exchange.order_book.OrderBookFragment"
         android:label="@string/nav_title_order_book"
         tools:layout="@layout/fragment_order_book" />
 
     <fragment
         android:id="@+id/completed_deals"
-        android:name="ru.er_log.stock.android.features.exchange.deals.CompletedDealsFragment"
+        android:name="ru.er_log.stock.android.features.home.exchange.deals.CompletedDealsFragment"
         android:label="@string/menu_completed_deals"
         tools:layout="@layout/fragment_completed_deals" />
 </navigation>

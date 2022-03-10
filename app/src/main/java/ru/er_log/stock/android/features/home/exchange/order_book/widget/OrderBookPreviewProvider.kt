@@ -1,4 +1,4 @@
-package ru.er_log.stock.android.features.exchange.order_book.widget
+package ru.er_log.stock.android.features.home.exchange.order_book.widget
 
 import ru.er_log.stock.domain.models.exchange.OrderBookItem
 import java.math.BigDecimal

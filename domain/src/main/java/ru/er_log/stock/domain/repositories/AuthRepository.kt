@@ -7,5 +7,5 @@ import ru.er_log.stock.domain.models.auth.UserProfile
 interface AuthRepository {
     suspend fun login(request: SignInRequest): Result<UserProfile>
 
-    suspend fun fetchUserProfile(): Flow<UserProfile?>
+    suspend fun observeUserProfile(): Flow<UserProfile?>
 }

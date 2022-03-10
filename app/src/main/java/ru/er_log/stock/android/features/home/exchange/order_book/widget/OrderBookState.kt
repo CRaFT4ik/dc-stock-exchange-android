@@ -1,4 +1,4 @@
-package ru.er_log.stock.android.features.exchange.order_book.widget
+package ru.er_log.stock.android.features.home.exchange.order_book.widget
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.derivedStateOf
@@ -6,7 +6,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.geometry.Offset
 import ru.er_log.stock.domain.models.exchange.OrderBookItem
 import java.math.BigDecimal
-import java.math.RoundingMode
 import java.util.*
 
 /**
