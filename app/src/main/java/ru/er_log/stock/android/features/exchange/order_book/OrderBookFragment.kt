@@ -7,10 +7,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
@@ -19,7 +16,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.delay
@@ -30,9 +26,9 @@ import ru.er_log.stock.android.compose.theme.AppTheme
 import ru.er_log.stock.android.compose.theme.darkColors
 import ru.er_log.stock.android.databinding.FragmentOrderBookBinding
 import ru.er_log.stock.android.features.exchange.order_book.widget.OrderBookChart
+import ru.er_log.stock.android.features.exchange.order_book.widget.OrderBookPreviewProvider
 import ru.er_log.stock.android.features.exchange.order_book.widget.OrderBookState
 import ru.er_log.stock.android.features.exchange.order_book.widget.OrderBookTable
-import ru.er_log.stock.android.features.exchange.order_book.widget.lotsProvider
 
 
 class OrderBookFragment : Fragment(R.layout.fragment_order_book) {
@@ -52,19 +48,21 @@ class OrderBookFragment : Fragment(R.layout.fragment_order_book) {
             setContent {
                 AppTheme(colors = darkColors()) { // FIXME: remove colors
                     val orderBookState = remember {
+                        val previewProvider = OrderBookPreviewProvider()
                         OrderBookState(
-                            ordersState = mutableStateOf(lotsProvider(20000, 30000)),
-                            offersState = mutableStateOf(lotsProvider(30000, 40000))
+                            ordersState = mutableStateOf(previewProvider.provide(20000, 30000)),
+                            offersState = mutableStateOf(previewProvider.provide(30000, 40000))
                         )
                     }
 
                     val scope = LocalLifecycleOwner.current.lifecycleScope
                     LaunchedEffect(key1 = scope) {
                         scope.launch {
+                            val previewProvider = OrderBookPreviewProvider()
                             repeat(10) {
                                 delay(2000)
-                                orderBookState.ordersState.value = lotsProvider(20000, 30000)
-                                orderBookState.offersState.value = lotsProvider(30000, 40000)
+                                orderBookState.ordersState.value = previewProvider.provide(20000, 30000)
+                                orderBookState.offersState.value = previewProvider.provide(30000, 40000)
                             }
                         }
                     }
@@ -137,9 +135,10 @@ fun OrderBookScreen(
 @Composable
 fun OrderBookScreenPreview() {
     val orderBookState = remember {
+        val previewProvider = OrderBookPreviewProvider()
         OrderBookState(
-            ordersState = mutableStateOf(lotsProvider(20000, 30000)),
-            offersState = mutableStateOf(lotsProvider(30000, 40000))
+            ordersState = mutableStateOf(previewProvider.provide(20000, 30000)),
+            offersState = mutableStateOf(previewProvider.provide(30000, 40000))
         )
     }
 

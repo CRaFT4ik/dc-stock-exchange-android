@@ -25,10 +25,23 @@ import ru.er_log.stock.android.base.util.spToPx
 import ru.er_log.stock.android.base.util.toHumanFormat
 import ru.er_log.stock.android.compose.theme.AppTheme
 import ru.er_log.stock.android.compose.theme.darkColors
-import ru.er_log.stock.domain.models.exchange.OrderBookItem
-import java.math.BigDecimal
-import java.util.*
-import kotlin.random.Random
+
+
+@Preview
+@Composable
+private fun OrderBookChartPreview() {
+    val orderBookState = remember {
+        val previewProvider = OrderBookPreviewProvider()
+        OrderBookState(
+            ordersState = mutableStateOf(previewProvider.provide(20000, 30000)),
+            offersState = mutableStateOf(previewProvider.provide(30000, 40000))
+        )
+    }
+
+    AppTheme(colors = darkColors()) {
+        OrderBookChart(state = orderBookState)
+    }
+}
 
 @Composable
 internal fun OrderBookChart(
@@ -209,21 +222,6 @@ private fun DrawScope.drawLegend(
     }
 }
 
-@Preview
-@Composable
-fun OrderBookChartPreview() {
-    val orderBookState = remember {
-        OrderBookState(
-            ordersState = mutableStateOf(lotsProvider(20000, 30000)),
-            offersState = mutableStateOf(lotsProvider(30000, 40000))
-        )
-    }
-
-    AppTheme(colors = darkColors()) {
-        OrderBookChart(state = orderBookState)
-    }
-}
-
 data class OrderBookStyle(
     val ordersColor: Color = Color(0x4D00965A),
     val ordersSecondaryColor: Color = Color(0x7200965A),
@@ -234,15 +232,3 @@ data class OrderBookStyle(
     val textSize: TextUnit = 13.sp
 )
 
-val lotsProvider: (Int, Int) -> SortedSet<OrderBookItem> = { min, max ->
-    val lots = sortedSetOf(OrderBookItem.PriceComparator)
-    repeat(100) {
-        lots.add(
-            OrderBookItem(
-                price = BigDecimal.valueOf(Random.nextDouble(min.toDouble(), max.toDouble())),
-                amount = BigDecimal.valueOf(Random.nextDouble(0.01, 50.0))
-            )
-        )
-    }
-    lots
-}
