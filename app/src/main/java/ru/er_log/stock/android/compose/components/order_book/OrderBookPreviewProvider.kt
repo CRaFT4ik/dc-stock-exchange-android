@@ -1,4 +1,4 @@
-package ru.er_log.stock.android.features.home.exchange.order_book.widget
+package ru.er_log.stock.android.compose.components.order_book
 
 import ru.er_log.stock.domain.models.exchange.OrderBookItem
 import java.math.BigDecimal
@@ -8,7 +8,7 @@ import kotlin.random.Random
 internal class OrderBookPreviewProvider {
 
     fun provide(minPrice: Int, maxPrice: Int): SortedSet<OrderBookItem> {
-        val lots = sortedSetOf(OrderBookItem.PriceComparator)
+        val lots = sortedSetOf(OrderBookItem.PriceAscComparator)
         repeat(100) {
             lots.add(
                 OrderBookItem(

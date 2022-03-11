@@ -1,4 +1,4 @@
-package ru.er_log.stock.android.features.home.exchange.order_book.widget
+package ru.er_log.stock.android.compose.components.order_book
 
 import android.graphics.Rect
 import androidx.compose.foundation.Canvas
@@ -8,7 +8,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.LocalTextStyle
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
@@ -57,68 +60,74 @@ internal fun OrderBookTable(
             .fillMaxSize()
             .background(AppTheme.colors.background)
     ) {
-        Row(
-            modifier = Modifier
-                .wrapContentHeight()
-                .fillMaxWidth()
-                .padding(horizontal = 8.dp, vertical = 4.dp),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            CompositionLocalProvider(
-                LocalTextStyle provides TextStyle.Default.copy(
-                    color = style.secondaryColor,
-                    fontSize = style.textSize
-                )
-            ) {
-                Text(text = stringResource(R.string.widget_order_book_table_total))
-                Text(text = stringResource(R.string.widget_order_book_table_price))
-                Text(text = stringResource(R.string.widget_order_book_table_total))
-            }
-        }
-
-        Canvas(modifier = Modifier.fillMaxWidth()) {
-            drawLine(
-                color = style.secondaryColor.copy(alpha = 0.3f),
-                strokeWidth = 1.dp.value,
-                start = Offset(0f, 0f),
-                end = Offset(size.width, 0f)
-            )
-        }
-
-        Row(modifier = Modifier.fillMaxSize()) {
-            OrderBookColumn(
-                modifier = Modifier.weight(0.5f),
-                state.ordersMaxAmount,
-                items = state.ordersState.value,
-                chartColor = style.ordersColor to style.ordersSecondaryColor,
-                style = style
-            )
-            OrderBookColumn(
-                modifier = Modifier.weight(0.5f),
-                state.offersMaxAmount,
-                items = state.offersState.value,
-                chartColor = style.offersColor to style.offersSecondaryColor,
-                style = style,
-                reversed = true
-            )
-        }
+        OrderBookTableHeader(style = style)
+        OrderBookTableColumns(
+            ordersItems = remember {
+                state.ordersState.value.toSortedSet(OrderBookItem.PriceDescComparator)
+            },
+            ordersMaxAmount = state.ordersMaxAmount,
+            offersItems = state.offersState.value,
+            offersMaxAmount = state.offersMaxAmount,
+            style = style
+        )
     }
 }
 
 @Composable
-private fun OrderBookColumn(
+private fun OrderBookTableHeader(style: OrderBookStyle) {
+    Row(
+        modifier = Modifier
+            .wrapContentHeight()
+            .fillMaxWidth()
+            .padding(horizontal = 8.dp, vertical = 4.dp),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        CompositionLocalProvider(
+            LocalTextStyle provides TextStyle.Default.copy(
+                color = style.secondaryColor,
+                fontSize = style.textSize
+            )
+        ) {
+            Text(text = stringResource(R.string.widget_order_book_table_total))
+            Text(text = stringResource(R.string.widget_order_book_table_price))
+            Text(text = stringResource(R.string.widget_order_book_table_total))
+        }
+    }
+
+    Canvas(modifier = Modifier.fillMaxWidth()) {
+        drawLine(
+            color = style.secondaryColor.copy(alpha = 0.3f),
+            strokeWidth = 1.dp.value,
+            start = Offset(0f, 0f),
+            end = Offset(size.width, 0f)
+        )
+    }
+}
+
+@Composable
+private fun OrderBookTableColumns(
     modifier: Modifier = Modifier,
-    maxAmount: BigDecimal,
-    items: SortedSet<OrderBookItem>,
-    chartColor: Pair<Color, Color>,
-    style: OrderBookStyle,
-    reversed: Boolean = false
+    ordersItems: SortedSet<OrderBookItem>,
+    ordersMaxAmount: BigDecimal,
+    offersItems: SortedSet<OrderBookItem>,
+    offersMaxAmount: BigDecimal,
+    style: OrderBookStyle
 ) {
-    val itemsList = remember {
-        mutableListOf<OrderBookCountedItem>().apply {
-            items.fold(BigDecimal.ZERO) { acc, item ->
-                val countedItem = OrderBookCountedItem(acc, item).also { add(it) }
+    fun SortedSet<OrderBookItem>.toCountedList(): List<OrderBookCountedItem> {
+        return mutableListOf<OrderBookCountedItem>().also { list ->
+            fold(BigDecimal.ZERO) { acc, item ->
+                val countedItem = OrderBookCountedItem(acc, item).also { list.add(it) }
                 countedItem.totalAmount
+            }
+        }
+    }
+
+    val itemsList = remember {
+        val ordersIterator = ordersItems.toCountedList().iterator()
+        val offersIterator = offersItems.toCountedList().iterator()
+        mutableListOf<Pair<OrderBookCountedItem, OrderBookCountedItem>>().apply {
+            while (ordersIterator.hasNext() && offersIterator.hasNext()) {
+                add(ordersIterator.next() to offersIterator.next())
             }
         }
     }
@@ -131,20 +140,32 @@ private fun OrderBookColumn(
         items(
             items = itemsList,
             itemContent = {
-                OrderBookColumnListItem(
-                    maxAmount,
-                    item = it,
-                    chartColor = chartColor,
-                    style = style,
-                    reversed = reversed
-                )
+                Row {
+                    OrderBookTableListItem(
+                        modifier = Modifier.weight(0.5f),
+                        maxAmount = ordersMaxAmount,
+                        item = it.first,
+                        chartColor = style.ordersColor to style.ordersSecondaryColor,
+                        style = style,
+                        reversed = false
+                    )
+                    OrderBookTableListItem(
+                        modifier = Modifier.weight(0.5f),
+                        maxAmount = offersMaxAmount,
+                        item = it.second,
+                        chartColor = style.offersColor to style.offersSecondaryColor,
+                        style = style,
+                        reversed = true
+                    )
+                }
             }
         )
     }
 }
 
 @Composable
-private fun OrderBookColumnListItem(
+private fun OrderBookTableListItem(
+    modifier: Modifier = Modifier,
     maxAmount: BigDecimal,
     item: OrderBookCountedItem,
     chartColor: Pair<Color, Color>,
@@ -159,7 +180,7 @@ private fun OrderBookColumnListItem(
     }
 
     Canvas(
-        modifier = Modifier
+        modifier = modifier
             .height(20.dp)
             .fillMaxWidth()
     ) {

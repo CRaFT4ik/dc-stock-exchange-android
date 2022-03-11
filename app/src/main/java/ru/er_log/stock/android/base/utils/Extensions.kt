@@ -43,7 +43,7 @@ fun BigDecimal.toHumanFormat(): String {
         else -> postfix = arr[index]
     }
 
-    val decimalFormat = DecimalFormat("#.##")
+    val decimalFormat = DecimalFormat("#.00")
     return decimalFormat.format(result) + postfix
 }
 

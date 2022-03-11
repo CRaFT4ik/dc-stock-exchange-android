@@ -6,12 +6,21 @@ data class OrderBookItem(
     val price: BigDecimal,
     val amount: BigDecimal
 ) {
-    object PriceComparator : Comparator<OrderBookItem> {
+    object PriceAscComparator : Comparator<OrderBookItem> {
         override fun compare(lot1: OrderBookItem?, lot2: OrderBookItem?): Int {
             if (lot1 == null || lot2 == null) {
                 throw NullPointerException()
             }
             return lot1.price.compareTo(lot2.price)
+        }
+    }
+
+    object PriceDescComparator : Comparator<OrderBookItem> {
+        override fun compare(lot1: OrderBookItem?, lot2: OrderBookItem?): Int {
+            if (lot1 == null || lot2 == null) {
+                throw NullPointerException()
+            }
+            return lot2.price.compareTo(lot1.price)
         }
     }
 

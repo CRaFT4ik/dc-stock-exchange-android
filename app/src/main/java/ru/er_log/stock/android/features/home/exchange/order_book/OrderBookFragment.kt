@@ -8,10 +8,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import ru.er_log.stock.android.compose.theme.AppTheme
 import ru.er_log.stock.android.compose.theme.darkColors
-import ru.er_log.stock.android.features.home.exchange.order_book.widget.OrderBookChart
-import ru.er_log.stock.android.features.home.exchange.order_book.widget.OrderBookPreviewProvider
-import ru.er_log.stock.android.features.home.exchange.order_book.widget.OrderBookState
-import ru.er_log.stock.android.features.home.exchange.order_book.widget.OrderBookTable
+import ru.er_log.stock.android.compose.components.order_book.OrderBookChart
+import ru.er_log.stock.android.compose.components.order_book.OrderBookPreviewProvider
+import ru.er_log.stock.android.compose.components.order_book.OrderBookState
+import ru.er_log.stock.android.compose.components.order_book.OrderBookTable
 
 @Composable
 fun OrderBookScreen(

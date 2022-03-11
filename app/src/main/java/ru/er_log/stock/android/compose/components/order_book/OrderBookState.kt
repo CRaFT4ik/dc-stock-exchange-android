@@ -1,4 +1,4 @@
-package ru.er_log.stock.android.features.home.exchange.order_book.widget
+package ru.er_log.stock.android.compose.components.order_book
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.derivedStateOf
