@@ -34,12 +34,7 @@ internal class AuthRepositoryImpl(
                 UserProfile.AuthData("123", 1, emptyList())
             )
 
-            delay(1000)
-            if (Random.nextBoolean()) {
-                emit(testUser)
-            } else {
-                emit(null)
-            }
+            emit(testUser)
         }
     }
 }

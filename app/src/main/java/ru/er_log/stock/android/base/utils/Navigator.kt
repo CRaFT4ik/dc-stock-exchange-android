@@ -1,20 +1,21 @@
 package ru.er_log.stock.android.base.utils
 
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.navigation.NavHostController
 import androidx.navigation.NavOptionsBuilder
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
+import androidx.navigation.compose.currentBackStackEntryAsState
 
-class Navigator {
-
-    private val _sharedFlow = MutableSharedFlow<NavTarget>(extraBufferCapacity = 1)
-    val sharedFlow = _sharedFlow.asSharedFlow()
+class Navigator(
+    private val navController: NavHostController
+) {
+    val currentTarget: NavTarget?
+        @Composable get() = navController.currentBackStackEntryAsState().value?.destination?.let {
+            NavTarget.values().firstOrNull { t -> it.route?.contains(t.route) ?: false }
+        }
 
     fun navigateTo(navTarget: NavTarget) {
-        _sharedFlow.tryEmit(navTarget)
-    }
-
-    val builder = NavOptionsBuilder().apply {
-        this.launchSingleTop
+        navController.navigate(navTarget.route, navTarget.navOptions)
     }
 
     enum class NavTarget(
@@ -25,13 +26,17 @@ class Navigator {
             route = MainDestinations.AUTH_ROUTE + "/home",
             navOptions = { launchSingleTop = true }
         ),
-
         AuthLogin(
             route = MainDestinations.AUTH_ROUTE + "/login"
         ),
-
         HomeFeed(
             route = MainDestinations.HOME_ROUTE + "/feed"
+        ),
+        OrderBook(
+            route = MainDestinations.HOME_ROUTE + "/order_book"
+        ),
+        Profile(
+            route = MainDestinations.HOME_ROUTE + "/profile"
         )
     }
 
@@ -39,4 +44,21 @@ class Navigator {
         const val AUTH_ROUTE = "auth"
         const val HOME_ROUTE = "home"
     }
+}
+
+/**
+ * Sets up navigation events handling.
+ */
+@Composable
+fun Navigator.observe(navController: NavHostController) {
+//    LaunchedEffect("navigation") {
+//        this@observe.sharedFlow.onEach {
+//            navController.navigate(it.route, it.navOptions)
+//        }.launchIn(this)
+//    }
+}
+
+@Composable
+fun rememberNavigator(navController: NavHostController): Navigator {
+    return remember { Navigator(navController) }
 }

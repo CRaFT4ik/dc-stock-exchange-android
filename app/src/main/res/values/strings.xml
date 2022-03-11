@@ -9,47 +9,22 @@
     <string name="auth_action_sign_in">Sign In</string>
     <string name="auth_action_register">Register</string>
     <string name="auth_login_error_wrong_password">Invalid password</string>
+    <string name="auth_login_error_login_failed">Login failed</string>
     <string name="auth_login_greetings">Welcome back, %1$s!</string>
     <string name="auth_register_error_wrong_login">Login must contain more than 3 characters</string>
     <string name="auth_register_error_wrong_password">Password must contain more than 7 characters, at least one letter, one number and one special character</string>
 
     <!-- Navigation labels -->
-    <string name="nav_title_auth">Authorization</string>
-    <string name="nav_title_order_book">Order book</string>
+    <string name="nav_home_feed">Home</string>
+    <string name="nav_home_order_book">Order book</string>
+    <string name="nav_home_profile">Profile</string>
+
+    <!-- Common -->
+    <string name="ok">Ok</string>
 
     <!-- Orders book widget -->
     <string name="widget_order_book_legend_orders">Orders (buy)</string>
     <string name="widget_order_book_legend_offers">Offers (sell)</string>
     <string name="widget_order_book_table_total">Total</string>
     <string name="widget_order_book_table_price">Price</string>
-
-    <string name="nav_title_activity_account">Account</string>
-    <string name="invalid_username">Not a valid username</string>
-    <string name="invalid_password">Password must be more than 4 characters</string>
-    <string name="login_failed">Login failed</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
-    <string name="nav_header_desc">Navigation header</string>
-    <string name="action_refresh">Refresh</string>
-
-    <string name="menu_completed_deals">Completed deals</string>
-    <string name="button_create_a_lot">Create a lot</string>
-    <string name="textview_lots_for_sale">Lots for sale</string>
-    <string name="textview_lots_for_purchase">Lots for purchase</string>
-
-    <string name="lot_price">%1$s</string>
-    <string name="lot_owner">Owner: %1$s</string>
-    <string name="lot_date">Created: %1$s</string>
-    <string name="deal_date">Deal date: %1$s</string>
-    <string name="purchase_lowercase">purchase</string>
-    <string name="sale_lowercase">sale</string>
-    <string name="lot_creation_title">New lot creation</string>
-    <string name="lot_creation_price">New lot price</string>
-    <string name="switch_lot_creation">Create sale lot | purchase lot</string>
-    <string name="button_submit_lot_creation">Submit new lot creation</string>
-    <string name="toast_check_filed">Check the correctness of filling in the fields</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

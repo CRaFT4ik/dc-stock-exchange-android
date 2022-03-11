@@ -202,7 +202,7 @@ abstract class AppInputValidator {
         inputState: InputState,
         context: Context,
         scope: CoroutineScope,
-        delayMs: Long = 450
+        delayMs: Long = 650
     ) {
         updateErrorJob?.cancel()
         updateErrorJob = scope.launch {

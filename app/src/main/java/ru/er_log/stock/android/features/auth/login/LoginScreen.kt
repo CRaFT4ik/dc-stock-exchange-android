@@ -5,10 +5,8 @@ import androidx.annotation.DrawableRes
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.AlertDialog
@@ -18,9 +16,10 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusDirection
-import androidx.compose.ui.platform.*
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalTextInputService
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -28,8 +27,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
-import androidx.compose.ui.window.DialogProperties
+import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.getViewModel
@@ -44,7 +42,7 @@ import ru.er_log.stock.android.features.auth.login.model.LoginUIState
 @Composable
 private fun Preview() {
     AppTheme(colors = darkColors()) {
-        ScreenLogin(navigator = Navigator())
+        ScreenLogin(navigator = Navigator(rememberNavController()))
     }
 }
 
@@ -107,7 +105,7 @@ private fun Result(
                         onDismissRequest = {},
                         title = {
                             Text(
-                                text = stringResource(R.string.login_failed),
+                                text = stringResource(R.string.auth_login_error_login_failed),
                                 fontWeight = FontWeight.Bold
                             )
                         },
@@ -121,7 +119,7 @@ private fun Result(
                                     actionBackToLogin()
                                 }
                             ) {
-                                Text("Ok")
+                                Text(stringResource(R.string.ok))
                             }
                         },
                         contentColor = AppTheme.colors.textPrimary,
@@ -253,25 +251,5 @@ private fun InputBox(
             text = stringResource(R.string.auth_action_forgot_the_password),
             textAlign = TextAlign.Center
         )
-    }
-}
-
-@Composable
-private fun ProgressIndicatorDialog() {
-    Dialog(
-        onDismissRequest = {},
-        properties = DialogProperties(
-            dismissOnBackPress = false,
-            dismissOnClickOutside = false
-        )
-    ) {
-        Box(
-            modifier = Modifier
-                .clip(shape = RoundedCornerShape(4.dp))
-                .background(AppTheme.colors.background)
-                .padding(10.dp)
-        ) {
-            CircularProgressIndicator(color = AppTheme.colors.primary)
-        }
     }
 }
