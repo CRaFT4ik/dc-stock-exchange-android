@@ -2,7 +2,6 @@ package ru.er_log.stock.android.compose.components.order_book
 
 import android.graphics.Rect
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -13,7 +12,7 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
@@ -21,11 +20,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ru.er_log.stock.android.R
 import ru.er_log.stock.android.base.utils.autoScale
-import ru.er_log.stock.android.base.utils.spToPx
 import ru.er_log.stock.android.base.utils.toHumanFormat
+import ru.er_log.stock.android.compose.theme.AppColors
 import ru.er_log.stock.android.compose.theme.AppTheme
 import ru.er_log.stock.android.compose.theme.darkColors
-
 
 @Preview
 @Composable
@@ -52,7 +50,7 @@ internal fun OrderBookChart(
     val bounds = Rect()
     val textPaint = Paint().asFrameworkPaint().apply {
         isAntiAlias = true
-        textSize = style.textSize.spToPx(LocalContext.current)
+        textSize = with(LocalDensity.current) { style.textSize.toPx() }
         color = style.secondaryColor.toArgb()
     }
 
@@ -68,10 +66,9 @@ internal fun OrderBookChart(
     val priceBarHeight = 64.dp.value
     val legendBarHeight = 64.dp.value
 
+    val lineColor = style.secondaryColor
     Canvas(
-        modifier = modifier
-            .fillMaxSize()
-            .background(AppTheme.colors.background)
+        modifier = modifier.fillMaxSize()
     ) {
         val chartWidth = size.width
         val chartHeight = size.height - (chartMargin + priceBarHeight + legendBarHeight)
@@ -85,7 +82,7 @@ internal fun OrderBookChart(
         state.amountLines.forEach { amount ->
             val yOffset = chartYOffset - state.amountYOffset(chartHeight, amount)
             drawLine(
-                color = style.secondaryColor.copy(alpha = 0.3f),
+                color = lineColor.copy(alpha = 0.3f),
                 strokeWidth = 1.dp.value,
                 start = Offset(0f, yOffset),
                 end = Offset(chartWidth, yOffset),
@@ -222,13 +219,13 @@ private fun DrawScope.drawLegend(
     }
 }
 
-data class OrderBookStyle(
-    val ordersColor: Color = Color(0x4D00965A),
-    val ordersSecondaryColor: Color = Color(0x7200965A),
-    val offersColor: Color = Color(0x4DC74848),
-    val offersSecondaryColor: Color = Color(0x72C74848),
-    val primaryColor: Color = Color(0x8FFCFCFC),
-    val secondaryColor: Color = Color(0x4CFCFCFC),
+class OrderBookStyle {
+    val ordersColor: Color = AppColors.ordersColor.copy(alpha = 0.3f)
+    val ordersSecondaryColor: Color = AppColors.ordersSecondaryColor.copy(alpha = 0.45f)
+    val offersColor: Color = AppColors.offersColor.copy(alpha = 0.3f)
+    val offersSecondaryColor: Color = AppColors.offersSecondaryColor.copy(alpha = 0.45f)
+    val primaryColor: Color = Color(0x8FFCFCFC)
+    val secondaryColor: Color = Color(0x4CFCFCFC)
     val textSize: TextUnit = 13.sp
-)
+}
 

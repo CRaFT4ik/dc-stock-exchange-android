@@ -1,6 +1,10 @@
 <resources>
     <string name="app_name">Stock exchange client</string>
 
+    <!-- Navigation labels -->
+    <string name="nav_home_order_book">Order book</string>
+    <string name="nav_home_account">Account</string>
+
     <!-- Login screen -->
     <string name="auth_prompt_username">Username</string>
     <string name="auth_prompt_password">Password</string>
@@ -14,17 +18,21 @@
     <string name="auth_register_error_wrong_login">Login must contain more than 3 characters</string>
     <string name="auth_register_error_wrong_password">Password must contain more than 7 characters, at least one letter, one number and one special character</string>
 
-    <!-- Navigation labels -->
-    <string name="nav_home_feed">Home</string>
-    <string name="nav_home_order_book">Order book</string>
-    <string name="nav_home_profile">Profile</string>
-
-    <!-- Common -->
-    <string name="ok">Ok</string>
+    <!-- Profile screen -->
+    <string name="account_profile_statistic_section_title">Account statistics</string>
+    <string name="account_profile_statistic_balance_caption">"Current balance of transactions for all time"</string>
+    <string name="account_profile_statistic_balance_completed_orders">completed / active orders</string>
+    <string name="account_profile_statistic_balance_completed_offers">offers</string>
+    <string name="account_transactions_list_title">Transactions list</string>
+    <string name="account_transactions_list_empty">You have not made any trades yet</string>
 
     <!-- Orders book widget -->
     <string name="widget_order_book_legend_orders">Orders (buy)</string>
     <string name="widget_order_book_legend_offers">Offers (sell)</string>
     <string name="widget_order_book_table_total">Total</string>
     <string name="widget_order_book_table_price">Price</string>
+
+    <!-- Common -->
+    <string name="ok">Ok</string>
+    <string name="abstract_currency">%1$s c.u.</string>
 </resources>

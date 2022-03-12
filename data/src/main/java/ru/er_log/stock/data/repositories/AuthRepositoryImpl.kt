@@ -30,7 +30,7 @@ internal class AuthRepositoryImpl(
     override suspend fun observeUserProfile(): Flow<UserProfile?> = withContext(dispatcher) {
         return@withContext flow {
             val testUser = UserProfile(
-                "TEST USER", "todo@user.ru",
+                "Test User", "todo@user.ru",
                 UserProfile.AuthData("123", 1, emptyList())
             )
 

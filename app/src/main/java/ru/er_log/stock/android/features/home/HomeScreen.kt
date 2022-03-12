@@ -3,7 +3,6 @@ package ru.er_log.stock.android.features.home
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.PermIdentity
 import androidx.compose.material.icons.outlined.TrendingUp
 import androidx.compose.runtime.Composable
@@ -24,7 +23,8 @@ import ru.er_log.stock.android.compose.components.AppBottomBarTab
 import ru.er_log.stock.android.compose.components.AppScaffold
 import ru.er_log.stock.android.compose.components.order_book.OrderBookPreviewProvider
 import ru.er_log.stock.android.compose.components.order_book.OrderBookState
-import ru.er_log.stock.android.features.home.exchange.order_book.OrderBookScreen
+import ru.er_log.stock.android.features.home.order_book.OrderBookScreen
+import ru.er_log.stock.android.features.home.profile.ProfileScreen
 
 @Composable
 fun HomeScreen() {
@@ -58,13 +58,9 @@ fun HomeScreen() {
 fun NavGraphBuilder.homeNavGraph(navigator: Navigator) {
     navigation(
         route = Navigator.MainDestinations.HOME_ROUTE,
-        startDestination = Navigator.NavTarget.OrderBook.route
+        startDestination = Navigator.NavTarget.HomeOrderBook.route
     ) {
-        composable(Navigator.NavTarget.HomeFeed.route) {
-            //OrderBookScreen(orderBookState)
-        }
-
-        composable(Navigator.NavTarget.OrderBook.route) {
+        composable(Navigator.NavTarget.HomeOrderBook.route) {
             val orderBookState = remember {
                 val provider = OrderBookPreviewProvider()
                 OrderBookState(
@@ -76,7 +72,7 @@ fun NavGraphBuilder.homeNavGraph(navigator: Navigator) {
             OrderBookScreen(orderBookState)
         }
 
-        composable(Navigator.NavTarget.Profile.route) {
+        composable(Navigator.NavTarget.HomeAccount.route) {
             ProfileScreen()
         }
     }
@@ -84,18 +80,13 @@ fun NavGraphBuilder.homeNavGraph(navigator: Navigator) {
 
 val homeButtonBar = arrayOf(
     AppBottomBarTab(
-        R.string.nav_home_feed,
-        Icons.Outlined.Home,
-        Navigator.NavTarget.HomeFeed
-    ),
-    AppBottomBarTab(
         R.string.nav_home_order_book,
         Icons.Outlined.TrendingUp,
-        Navigator.NavTarget.OrderBook
+        Navigator.NavTarget.HomeOrderBook
     ),
     AppBottomBarTab(
-        R.string.nav_home_profile,
+        R.string.nav_home_account,
         Icons.Outlined.PermIdentity,
-        Navigator.NavTarget.Profile
+        Navigator.NavTarget.HomeAccount
     )
 )

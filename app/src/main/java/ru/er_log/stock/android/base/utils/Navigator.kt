@@ -29,13 +29,10 @@ class Navigator(
         AuthLogin(
             route = MainDestinations.AUTH_ROUTE + "/login"
         ),
-        HomeFeed(
-            route = MainDestinations.HOME_ROUTE + "/feed"
-        ),
-        OrderBook(
+        HomeOrderBook(
             route = MainDestinations.HOME_ROUTE + "/order_book"
         ),
-        Profile(
+        HomeAccount(
             route = MainDestinations.HOME_ROUTE + "/profile"
         )
     }
@@ -44,18 +41,6 @@ class Navigator(
         const val AUTH_ROUTE = "auth"
         const val HOME_ROUTE = "home"
     }
-}
-
-/**
- * Sets up navigation events handling.
- */
-@Composable
-fun Navigator.observe(navController: NavHostController) {
-//    LaunchedEffect("navigation") {
-//        this@observe.sharedFlow.onEach {
-//            navController.navigate(it.route, it.navOptions)
-//        }.launchIn(this)
-//    }
 }
 
 @Composable

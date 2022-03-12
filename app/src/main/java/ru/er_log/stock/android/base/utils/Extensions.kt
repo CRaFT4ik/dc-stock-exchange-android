@@ -10,6 +10,8 @@ import kotlinx.coroutines.launch
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.text.DecimalFormat
+import java.text.NumberFormat
+import java.util.*
 
 
 fun ViewModel.scoped(action: () -> Unit) {
@@ -56,9 +58,7 @@ fun BigDecimal.autoScale(): BigDecimal {
     return setScale(scale, RoundingMode.HALF_EVEN)
 }
 
-fun TextUnit.spToPx(context: Context): Float {
-    if (!this.isSp) throw IllegalStateException()
-    return TypedValue.applyDimension(
-        TypedValue.COMPLEX_UNIT_SP, this.value, context.resources.displayMetrics
-    )
+fun BigDecimal.toHumanCurrencyFormat(): String {
+    val decimalFormat = DecimalFormat("###,###,###,##0.00")
+    return decimalFormat.format(this).replace(',', ' ')
 }

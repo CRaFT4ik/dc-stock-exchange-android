@@ -1,4 +1,4 @@
-package ru.er_log.stock.android.features.home.exchange.order_book
+package ru.er_log.stock.android.features.home.order_book
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

@@ -73,18 +73,26 @@ class AppColors(
         error,
         isLight
     )
+
+    companion object TradingColors {
+        val ordersColor: Color = Color(0x4D00965A)
+        val ordersSecondaryColor: Color = Color(0x7200965A)
+        val offersColor: Color = Color(0x4DC74848)
+        val offersSecondaryColor: Color = Color(0x72C74848)
+        val progressColor: Color = Color(0xFFFF9800)
+    }
 }
 
 fun lightColors(
-    primary: Color = Color(0xFFFFB400),
-    secondary: Color = Color(0xFFFFB400),
-    textPrimary: Color = Color(0xFF000000),
-    textSecondary: Color = Color(0xFF6C727A),
-    surface: Color = Color(0xFF000000),
-    surfaceSecondary: Color = Color(0xFF000000),
-    background: Color = Color(0xFFFFFFFF),
-    backgroundSecondary: Color = Color(0xFFFFFFFF),
-    error: Color = Color(0xFFCF6679)
+    primary: Color = Color(0xFF0B66AC),
+    secondary: Color = Color(0xFFF15033),
+    textPrimary: Color = Color(0xFFFCFCFC),
+    textSecondary: Color = Color(0x4DC4C4C4),
+    surface: Color = Color(0xFF192839),
+    surfaceSecondary: Color = Color(0xFF243a53),
+    background: Color = Color(0xFF131e2a),
+    backgroundSecondary: Color = Color(0xFF0c151d),
+    error: Color = Color(0xFFdf6060)
 ): AppColors = AppColors(
     primary = primary,
     secondary = secondary,
@@ -101,8 +109,8 @@ fun lightColors(
 fun darkColors(
     primary: Color = Color(0xFF0B66AC),
     secondary: Color = Color(0xFFF15033),
-    textPrimary: Color = Color(0xFFFCFCFC),
-    textSecondary: Color = Color(0x4CFCFCFC),
+    textPrimary: Color = Color(0xFFABBDD1),
+    textSecondary: Color = Color(0xFF29425F),
     surface: Color = Color(0xFF192839),
     surfaceSecondary: Color = Color(0xFF243a53),
     background: Color = Color(0xFF131e2a),

@@ -78,7 +78,7 @@ fun ScreenLogin(
                 is LoginUIState.Result -> Result(
                     result = state,
                     actionBackToLogin = loginViewModel::setInitialUIState,
-                    actionLoginSuccess = { navigator.navigateTo(Navigator.NavTarget.HomeFeed) }
+                    actionLoginSuccess = { navigator.navigateTo(Navigator.NavTarget.HomeAccount) }
                 )
             }
         }
