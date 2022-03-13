@@ -1,17 +1,18 @@
 package ru.er_log.stock.android.base.utils
 
-import android.content.Context
-import android.util.TypedValue
-import androidx.compose.ui.unit.TextUnit
+import android.util.Log
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.remember
+import androidx.compose.ui.node.Ref
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import ru.er_log.stock.android.BuildConfig
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.text.DecimalFormat
-import java.text.NumberFormat
-import java.util.*
 
 
 fun ViewModel.scoped(action: () -> Unit) {
@@ -62,3 +63,16 @@ fun BigDecimal.toHumanCurrencyFormat(): String {
     val decimalFormat = DecimalFormat("###,###,###,##0.00")
     return decimalFormat.format(this).replace(',', ' ')
 }
+
+@Composable
+inline fun LogCompositions(tag: String) {
+    if (BuildConfig.DEBUG) {
+        val ref = remember { Ref<Int>().apply { value = 0 } }
+        SideEffect { ref.value?.apply { inc() }}
+        Log.d(tag, "Compositions: ${ref.value}")
+    }
+}
+
+fun Boolean?.onlyFalse(): Boolean = this != null && !this
+
+fun Boolean?.falseOrNull(): Boolean = this == null || !this

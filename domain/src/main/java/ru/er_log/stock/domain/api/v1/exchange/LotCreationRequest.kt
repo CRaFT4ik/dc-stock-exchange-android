@@ -5,5 +5,7 @@ import java.math.BigDecimal
 
 data class LotCreationRequest(
     @Json(name = "price")
-    val price: BigDecimal
+    val price: BigDecimal,
+    @Json(name = "amount")
+    val amount: BigDecimal
 )

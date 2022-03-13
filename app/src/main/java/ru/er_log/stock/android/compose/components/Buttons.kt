@@ -24,9 +24,10 @@ fun AppButton(
             contentColor = AppTheme.colors.textPrimary,
             backgroundColor = AppTheme.colors.surface,
             disabledContentColor = AppTheme.colors.textSecondary,
-            disabledBackgroundColor = AppTheme.colors.surfaceSecondary
+            disabledBackgroundColor = AppTheme.colors.background
         ),
         shape = RoundedCornerShape(4.dp),
+        border = if (!enabled) BorderStroke(1.dp, color = AppTheme.colors.surface) else null,
         contentPadding = PaddingValues(16.dp),
         enabled = enabled
     ) {
@@ -50,11 +51,33 @@ fun AppOutlinedButton(
             disabledContentColor = AppTheme.colors.textSecondary,
         ),
         border = BorderStroke(
-            ButtonDefaults.OutlinedBorderSize, AppTheme.colors.primary
+            ButtonDefaults.OutlinedBorderSize,
+            if (enabled) AppTheme.colors.primary else AppTheme.colors.textSecondary
         ),
         shape = RoundedCornerShape(4.dp),
         enabled = enabled
     ) {
         content()
     }
+}
+
+@Composable
+fun AppTextButton(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    content: @Composable RowScope.() -> Unit
+) {
+    TextButton(
+        modifier = modifier,
+        onClick = onClick,
+        enabled = enabled,
+        content = content,
+        colors = ButtonDefaults.buttonColors(
+            contentColor = AppTheme.colors.textPrimary,
+            backgroundColor = AppTheme.colors.surface,
+            disabledContentColor = AppTheme.colors.textSecondary,
+            disabledBackgroundColor = AppTheme.colors.surfaceSecondary
+        )
+    )
 }

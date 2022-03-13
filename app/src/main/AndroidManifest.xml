@@ -18,7 +18,7 @@
             android:exported="true"
             android:noHistory="true"
             android:theme="@style/Theme.AppTheme.NoActionBar"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustResize">
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

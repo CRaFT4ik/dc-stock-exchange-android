@@ -23,23 +23,13 @@ class LoginViewModel(
     private val _loginUIState = MutableStateFlow<LoginUIState>(LoginUIState.Idle)
     val loginUIState = _loginUIState.asStateFlow()
 
-    fun login(
-        usernamePair: Pair<InputState, AppInputValidator>,
-        passwordPair: Pair<InputState, AppInputValidator>
-    ) {
-        val username = usernamePair.first
-        val usernameValidator = usernamePair.second
-        val password = passwordPair.first
-        val passwordValidator = passwordPair.second
+    fun login(usernameState: InputState, passwordState: InputState) {
+        val username = usernameState.input.value
+        val password = passwordState.input.value
 
         scoped {
-            val context: Context = inject()
-            val loginValidate = usernameValidator.validate(username, context)
-            val passwordValidate = passwordValidator.validate(password, context)
-            if (!loginValidate || !passwordValidate) return@scoped
-
             _loginUIState.value = LoginUIState.Loading
-            val request = SignInRequest(username.input.value, password.input.value)
+            val request = SignInRequest(username, password)
 
             authUseCases.signIn(request, viewModelScope) {
                 it.onSuccess { v -> _loginUIState.value = LoginUIState.Result.Success(v) }
@@ -61,22 +51,18 @@ internal class AppPasswordInputValidator : AppInputValidator() {
     private val passwordRequiredPattern =
         "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$"
 
-    override fun validateInput(input: String): Boolean {
-        return true // Pattern.matches(passwordRequiredPattern, input)
-    }
-
-    override fun formErrorMessage(resources: Resources, input: String): String {
-        return resources.getString(R.string.auth_register_error_wrong_password)
+    override fun validateInput(input: String, resources: Resources): String? {
+        // resources.getString(R.string.auth_register_error_wrong_password)
+        return null // Pattern.matches(passwordRequiredPattern, input)
     }
 }
 
 internal class AppLoginInputValidator : AppInputValidator() {
 
-    override fun validateInput(input: String): Boolean {
-        return input.length > 3
-    }
-
-    override fun formErrorMessage(resources: Resources, input: String): String {
-        return resources.getString(R.string.auth_register_error_wrong_login)
+    override fun validateInput(input: String, resources: Resources): String? {
+        if (input.length <= 3) {
+            return resources.getString(R.string.auth_register_error_wrong_login)
+        }
+        return null
     }
 }

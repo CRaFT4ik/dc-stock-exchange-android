@@ -26,6 +26,12 @@
     <string name="account_transactions_list_title">Transactions list</string>
     <string name="account_transactions_list_empty">You have not made any trades yet</string>
 
+    <!-- Lot creation form -->
+    <string name="lot_creation_form_price">Price</string>
+    <string name="lot_creation_form_amount">Amount</string>
+    <string name="lot_creation_form_error_use_only_positive_digits">Please, use only positive numbers</string>
+    <string name="lot_creation_form_error_number_must_be_positive">Number must be positive</string>
+
     <!-- Orders book widget -->
     <string name="widget_order_book_legend_orders">Orders (buy)</string>
     <string name="widget_order_book_legend_offers">Offers (sell)</string>
@@ -34,5 +40,7 @@
 
     <!-- Common -->
     <string name="ok">Ok</string>
+    <string name="submit">Submit</string>
+    <string name="cancel">Cancel</string>
     <string name="abstract_currency">%1$s c.u.</string>
 </resources>

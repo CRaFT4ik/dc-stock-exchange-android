@@ -11,6 +11,8 @@ class AppColors(
     textSecondary: Color,
     surface: Color,
     surfaceSecondary: Color,
+    onSurface: Color,
+    onSurfaceSecondary: Color,
     background: Color,
     backgroundSecondary: Color,
     error: Color,
@@ -28,6 +30,10 @@ class AppColors(
         private set
     var surfaceSecondary by mutableStateOf(surfaceSecondary)
         private set
+    var onSurface by mutableStateOf(surfaceSecondary)
+        private set
+    var onSurfaceSecondary by mutableStateOf(surfaceSecondary)
+        private set
     var background by mutableStateOf(background)
         private set
     var backgroundSecondary by mutableStateOf(backgroundSecondary)
@@ -44,6 +50,8 @@ class AppColors(
         textSecondary = other.textSecondary
         surface = other.surface
         surfaceSecondary = other.surfaceSecondary
+        onSurface = other.onSurface
+        onSurfaceSecondary = other.onSurfaceSecondary
         background = other.background
         backgroundSecondary = other.backgroundSecondary
         error = other.error
@@ -57,6 +65,8 @@ class AppColors(
         textSecondary: Color = this.textSecondary,
         surface: Color = this.surface,
         surfaceSecondary: Color = this.surfaceSecondary,
+        onSurface: Color = this.onSurface,
+        onSurfaceSecondary: Color = this.onSurfaceSecondary,
         background: Color = this.background,
         backgroundSecondary: Color = this.backgroundSecondary,
         error: Color = this.error,
@@ -68,6 +78,8 @@ class AppColors(
         textSecondary = textSecondary,
         surface = surface,
         surfaceSecondary = surfaceSecondary,
+        onSurface = onSurface,
+        onSurfaceSecondary = onSurfaceSecondary,
         background,
         backgroundSecondary,
         error,
@@ -86,10 +98,12 @@ class AppColors(
 fun lightColors(
     primary: Color = Color(0xFF0B66AC),
     secondary: Color = Color(0xFFF15033),
-    textPrimary: Color = Color(0xFFFCFCFC),
+    textPrimary: Color = Color(0xFFC5C5C5),
     textSecondary: Color = Color(0x4DC4C4C4),
     surface: Color = Color(0xFF192839),
-    surfaceSecondary: Color = Color(0xFF243a53),
+    surfaceSecondary: Color = Color(0xFF243A53),
+    onSurface: Color = Color(0xFF345479),
+    onSurfaceSecondary: Color = Color(0xFF29425F),
     background: Color = Color(0xFF131e2a),
     backgroundSecondary: Color = Color(0xFF0c151d),
     error: Color = Color(0xFFdf6060)
@@ -100,6 +114,8 @@ fun lightColors(
     textSecondary = textSecondary,
     surface = surface,
     surfaceSecondary = surfaceSecondary,
+    onSurface = onSurface,
+    onSurfaceSecondary = onSurfaceSecondary,
     background = background,
     backgroundSecondary = backgroundSecondary,
     error = error,
@@ -109,10 +125,12 @@ fun lightColors(
 fun darkColors(
     primary: Color = Color(0xFF0B66AC),
     secondary: Color = Color(0xFFF15033),
-    textPrimary: Color = Color(0xFFABBDD1),
+    textPrimary: Color = Color(0xFFC5C5C5),
     textSecondary: Color = Color(0xFF29425F),
     surface: Color = Color(0xFF192839),
     surfaceSecondary: Color = Color(0xFF243a53),
+    onSurface: Color = Color(0xFF345479),
+    onSurfaceSecondary: Color = Color(0xFF29425F),
     background: Color = Color(0xFF131e2a),
     backgroundSecondary: Color = Color(0xFF0c151d),
     error: Color = Color(0xFFdf6060)
@@ -123,6 +141,8 @@ fun darkColors(
     textSecondary = textSecondary,
     surface = surface,
     surfaceSecondary = surfaceSecondary,
+    onSurface = onSurface,
+    onSurfaceSecondary = onSurfaceSecondary,
     background = background,
     backgroundSecondary = backgroundSecondary,
     error = error,

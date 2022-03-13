@@ -18,7 +18,7 @@ class ExchangeViewModel(
     val errors = _errors.asSharedFlow()
 
     fun createLot(price: BigDecimal, isPurchase: Boolean) {
-        val request = LotCreationRequest(price)
+        val request = LotCreationRequest(price, BigDecimal.ONE)
         when (isPurchase) {
             true -> exchangeUseCases.createPurchaseLot(request, viewModelScope, ::onCreateResult)
             else -> exchangeUseCases.createSaleLot(request, viewModelScope, ::onCreateResult)

@@ -24,15 +24,16 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.getViewModel
 import ru.er_log.stock.android.R
 import ru.er_log.stock.android.base.utils.Navigator
+import ru.er_log.stock.android.base.utils.onlyFalse
 import ru.er_log.stock.android.compose.components.*
 import ru.er_log.stock.android.compose.theme.AppTheme
 import ru.er_log.stock.android.compose.theme.darkColors
@@ -42,7 +43,11 @@ import ru.er_log.stock.android.features.auth.login.model.LoginUIState
 @Composable
 private fun Preview() {
     AppTheme(colors = darkColors()) {
-        ScreenLogin(navigator = Navigator(rememberNavController()))
+        InputBox(
+            loginState = InputState(),
+            passwordState = InputState(),
+            actionLogin = { _, _ -> }
+        )
     }
 }
 
@@ -184,10 +189,7 @@ private fun InputBox(
     modifier: Modifier = Modifier,
     loginState: InputState,
     passwordState: InputState,
-    actionLogin: (
-        Pair<InputState, AppInputValidator>,
-        Pair<InputState, AppInputValidator>
-    ) -> Unit
+    actionLogin: (InputState, InputState) -> Unit
 ) {
     Column(
         modifier = modifier
@@ -201,13 +203,17 @@ private fun InputBox(
         val loginValidator = remember { AppLoginInputValidator() }
         val passwordValidator = remember { AppPasswordInputValidator() }
 
+        val isFieldsOkay = derivedStateOf {
+            loginState.hasError.onlyFalse() && passwordState.hasError.onlyFalse()
+        }
+
         AppTextField(
             inputState = loginState,
             inputValidator = loginValidator,
             label = R.string.auth_prompt_username,
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
             keyboardActions = KeyboardActions(
-                onNext = { localFocusManager.moveFocus(FocusDirection.Down) }
+                onNext = { localFocusManager.moveFocus(FocusDirection.Next) }
             )
         )
 
@@ -216,8 +222,10 @@ private fun InputBox(
             inputState = passwordState,
             inputValidator = passwordValidator,
             label = R.string.auth_prompt_password,
-            isPasswordField = true,
-            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+            keyboardOptions = KeyboardOptions(
+                imeAction = ImeAction.Done,
+                keyboardType = KeyboardType.Password
+            ),
             keyboardActions = KeyboardActions(
                 onDone = { localFocusManager.clearFocus() }
             )
@@ -225,10 +233,11 @@ private fun InputBox(
 
         Spacer(Modifier.size(32.dp))
         AppButton(
+            enabled = isFieldsOkay.value,
             modifier = Modifier.fillMaxWidth(),
             onClick = {
                 localTextInputService?.hideSoftwareKeyboard()
-                actionLogin(loginState to loginValidator, passwordState to passwordValidator)
+                actionLogin(loginState, passwordState)
             }
         ) {
             Text(stringResource(R.string.auth_action_sign_in))

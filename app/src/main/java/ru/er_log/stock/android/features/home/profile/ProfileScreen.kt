@@ -1,5 +1,6 @@
 package ru.er_log.stock.android.features.home.profile
 
+import android.util.Log
 import androidx.annotation.DrawableRes
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
@@ -22,6 +23,7 @@ import androidx.compose.ui.Alignment.Companion.TopCenter
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.node.Ref
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -31,9 +33,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.zIndex
 import org.koin.androidx.compose.getViewModel
+import ru.er_log.stock.android.BuildConfig
 import ru.er_log.stock.android.R
 import ru.er_log.stock.android.base.utils.toHumanCurrencyFormat
 import ru.er_log.stock.android.base.utils.toHumanFormat
@@ -43,9 +45,9 @@ import ru.er_log.stock.android.compose.components.AppCard
 import ru.er_log.stock.android.compose.components.AppSurface
 import ru.er_log.stock.android.compose.theme.AppColors
 import ru.er_log.stock.android.compose.theme.AppTheme
+import ru.er_log.stock.domain.api.v1.exchange.LotCreationRequest
 import ru.er_log.stock.domain.models.auth.UserProfile
 import ru.er_log.stock.domain.models.exchange.Lot
-import ru.er_log.stock.domain.models.exchange.OrderBookItem
 import java.math.BigDecimal
 import java.text.SimpleDateFormat
 import kotlin.random.Random
@@ -261,18 +263,28 @@ private fun ColumnScope.TransactionStatisticBar(
 
 @Composable
 private fun ColumnScope.AccountLayerOperationButtons(
-    onCreateOrder: (Lot) -> Unit = {},
-    onCreateOffer: (Lot) -> Unit = {}
+    onCreateOrder: (LotCreationRequest) -> Unit = {},
+    onCreateOffer: (LotCreationRequest) -> Unit = {},
+    orderCreationState: LotCreationState = rememberLotCreationDialogState(),
+    offerCreationState: LotCreationState = rememberLotCreationDialogState()
 ) {
-    val shouldShowDialog = remember { mutableStateOf(false) }
-    lateinit var onCreateAction: (Lot) -> Unit
+    val (dialogVisible, shouldShowDialog) = remember { mutableStateOf(false) }
+    val onCreateAction = remember { mutableStateOf<(LotCreationRequest) -> Unit>({}) }
+    val creationState = remember { mutableStateOf(orderCreationState) }
 
     Row(
         modifier = Modifier.padding(12.dp)
     ) {
         AppButton(
             modifier = Modifier.weight(100f),
-            onClick = { onCreateAction = onCreateOrder }
+            onClick = {
+                creationState.value = orderCreationState
+                onCreateAction.value = {
+                    shouldShowDialog(false)
+                    onCreateOrder(it)
+                }
+                shouldShowDialog(true)
+            }
         ) {
             Text("Create order")
         }
@@ -281,14 +293,25 @@ private fun ColumnScope.AccountLayerOperationButtons(
 
         AppButton(
             modifier = Modifier.weight(100f),
-            onClick = { onCreateAction = onCreateOffer }
+            onClick = {
+                creationState.value = offerCreationState
+                onCreateAction.value = {
+                    shouldShowDialog(false)
+                    onCreateOffer(it)
+                }
+                shouldShowDialog(true)
+            }
         ) {
             Text("Make offer")
         }
     }
 
-    if (shouldShowDialog.value) {
-        LotCreationDialog(onCreateAction)
+    if (dialogVisible) {
+        LotCreationDialog(
+            state = creationState.value,
+            onDismissRequest = { shouldShowDialog(false) },
+            onCreateAction = onCreateAction.value
+        )
     }
 }
 
@@ -390,7 +413,9 @@ private fun TransactionListItem(
                 }.copy(alpha = 0.65f)
 
                 Icon(
-                    modifier = Modifier.padding(start = 4.dp).size(16.dp),
+                    modifier = Modifier
+                        .padding(start = 4.dp)
+                        .size(16.dp),
                     imageVector = icon, tint = tint, contentDescription = "Operation type"
                 )
 
