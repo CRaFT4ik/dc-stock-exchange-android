@@ -35,14 +35,14 @@ import ru.er_log.stock.android.R
 import ru.er_log.stock.android.base.utils.Navigator
 import ru.er_log.stock.android.base.utils.onlyFalse
 import ru.er_log.stock.android.compose.components.*
-import ru.er_log.stock.android.compose.theme.AppTheme
+import ru.er_log.stock.android.compose.theme.StockTheme
 import ru.er_log.stock.android.compose.theme.darkColors
 import ru.er_log.stock.android.features.auth.login.model.LoginUIState
 
 @Preview
 @Composable
 private fun Preview() {
-    AppTheme(colors = darkColors()) {
+    StockTheme(colors = darkColors()) {
         InputBox(
             loginState = InputState(),
             passwordState = InputState(),
@@ -62,7 +62,7 @@ fun ScreenLogin(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .appMainBackground()
+            .stockMainBackground()
             .padding(24.dp)
 
     ) {
@@ -118,7 +118,7 @@ private fun Result(
                             Text(result.message ?: "")
                         },
                         confirmButton = {
-                            AppOutlinedButton(
+                            StockOutlinedButton(
                                 onClick = {
                                     showDialog.value = false
                                     actionBackToLogin()
@@ -127,8 +127,8 @@ private fun Result(
                                 Text(stringResource(R.string.ok))
                             }
                         },
-                        contentColor = AppTheme.colors.textPrimary,
-                        backgroundColor = AppTheme.colors.background
+                        contentColor = StockTheme.colors.textPrimary,
+                        backgroundColor = StockTheme.colors.background
                     )
                 }
             }
@@ -139,8 +139,8 @@ private fun Result(
                         R.string.auth_login_greetings,
                         result.userProfile.userName
                     ),
-                    color = AppTheme.colors.textPrimary,
-                    fontSize = AppTheme.typography.h6.fontSize
+                    color = StockTheme.colors.textPrimary,
+                    fontSize = StockTheme.typography.h6.fontSize
                 )
                 LaunchedEffect("login success") {
                     launch {
@@ -164,7 +164,7 @@ private fun Progress(
     ) {
         CircularProgressIndicator(
             modifier = modifier.align(Alignment.Center),
-            color = AppTheme.colors.primary,
+            color = StockTheme.colors.primary,
         )
     }
 }
@@ -200,14 +200,14 @@ private fun InputBox(
         val localTextInputService = LocalTextInputService.current
         val localContext = LocalContext.current
 
-        val loginValidator = remember { AppLoginInputValidator() }
-        val passwordValidator = remember { AppPasswordInputValidator() }
+        val loginValidator = remember { StockLoginInputValidator() }
+        val passwordValidator = remember { StockPasswordInputValidator() }
 
         val isFieldsOkay = derivedStateOf {
             loginState.hasError.onlyFalse() && passwordState.hasError.onlyFalse()
         }
 
-        AppTextField(
+        StockTextField(
             inputState = loginState,
             inputValidator = loginValidator,
             label = R.string.auth_prompt_username,
@@ -218,7 +218,7 @@ private fun InputBox(
         )
 
         Spacer(Modifier.size(16.dp))
-        AppTextField(
+        StockTextField(
             inputState = passwordState,
             inputValidator = passwordValidator,
             label = R.string.auth_prompt_password,
@@ -232,7 +232,7 @@ private fun InputBox(
         )
 
         Spacer(Modifier.size(32.dp))
-        AppButton(
+        StockButton(
             enabled = isFieldsOkay.value,
             modifier = Modifier.fillMaxWidth(),
             onClick = {
@@ -256,7 +256,7 @@ private fun InputBox(
                         )
                         .show()
                 },
-            color = AppTheme.colors.textSecondary,
+            color = StockTheme.colors.textSecondary,
             text = stringResource(R.string.auth_action_forgot_the_password),
             textAlign = TextAlign.Center
         )

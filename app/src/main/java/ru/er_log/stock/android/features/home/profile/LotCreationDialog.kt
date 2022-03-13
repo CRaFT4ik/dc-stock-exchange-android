@@ -26,7 +26,7 @@ import androidx.compose.ui.window.DialogProperties
 import ru.er_log.stock.android.R
 import ru.er_log.stock.android.base.utils.onlyFalse
 import ru.er_log.stock.android.compose.components.*
-import ru.er_log.stock.android.compose.theme.AppTheme
+import ru.er_log.stock.android.compose.theme.StockTheme
 import ru.er_log.stock.domain.api.v1.exchange.LotCreationRequest
 import java.math.BigDecimal
 
@@ -59,9 +59,9 @@ private fun DialogContent(
     onDismissRequest: () -> Unit,
     onCreateAction: (LotCreationRequest) -> Unit
 ) {
-    AppSurface(
+    StockSurface(
         modifier = Modifier.padding(24.dp),
-        color = AppTheme.colors.surface,
+        color = StockTheme.colors.surface,
         shape = RoundedCornerShape(6.dp)
     ) {
         val elemModifier = Modifier.padding(horizontal = 6.dp, vertical = 3.dp)
@@ -76,7 +76,7 @@ private fun DialogContent(
                 .padding(horizontal = 8.dp)
                 .verticalScroll(rememberScrollState())
         ) {
-            AppTextField(
+            StockTextField(
                 isOutlined = true,
                 inputState = state.priceInputState,
                 inputValidator = inputValidator,
@@ -88,7 +88,7 @@ private fun DialogContent(
                 ),
             )
 
-            AppTextField(
+            StockTextField(
                 isOutlined = true,
                 inputState = state.amountInputState,
                 inputValidator = inputValidator,
@@ -104,7 +104,7 @@ private fun DialogContent(
                 modifier = elemModifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                AppOutlinedButton(
+                StockOutlinedButton(
                     enabled = isFieldsOkay.value,
                     modifier = Modifier.weight(6f),
                     onClick = {
@@ -120,7 +120,7 @@ private fun DialogContent(
 
                 Spacer(modifier = Modifier.weight(5f))
 
-                AppTextButton(
+                StockTextButton(
                     onClick = { onDismissRequest() }
                 ) {
                     Text(stringResource(R.string.cancel))
@@ -130,7 +130,7 @@ private fun DialogContent(
     }
 }
 
-class LotCreationInputValidator : AppInputValidator() {
+class LotCreationInputValidator : StockInputValidator() {
     override fun validateInput(input: String, resources: Resources): String? {
         val number = try {
             input.toBigDecimal()

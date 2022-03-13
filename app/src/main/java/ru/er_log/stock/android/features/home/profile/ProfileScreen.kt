@@ -1,6 +1,5 @@
 package ru.er_log.stock.android.features.home.profile
 
-import android.util.Log
 import androidx.annotation.DrawableRes
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
@@ -23,7 +22,6 @@ import androidx.compose.ui.Alignment.Companion.TopCenter
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.node.Ref
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -35,19 +33,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import org.koin.androidx.compose.getViewModel
-import ru.er_log.stock.android.BuildConfig
 import ru.er_log.stock.android.R
 import ru.er_log.stock.android.base.utils.toHumanCurrencyFormat
 import ru.er_log.stock.android.base.utils.toHumanFormat
-import ru.er_log.stock.android.compose.components.AppBottomSheetScaffold
-import ru.er_log.stock.android.compose.components.AppButton
-import ru.er_log.stock.android.compose.components.AppCard
-import ru.er_log.stock.android.compose.components.AppSurface
-import ru.er_log.stock.android.compose.theme.AppColors
-import ru.er_log.stock.android.compose.theme.AppTheme
+import ru.er_log.stock.android.compose.components.StockBottomSheetScaffold
+import ru.er_log.stock.android.compose.components.StockButton
+import ru.er_log.stock.android.compose.components.StockCard
+import ru.er_log.stock.android.compose.components.StockSurface
+import ru.er_log.stock.android.compose.theme.StockColors
+import ru.er_log.stock.android.compose.theme.StockTheme
 import ru.er_log.stock.domain.api.v1.exchange.LotCreationRequest
 import ru.er_log.stock.domain.models.auth.UserProfile
-import ru.er_log.stock.domain.models.exchange.Lot
 import java.math.BigDecimal
 import java.text.SimpleDateFormat
 import kotlin.random.Random
@@ -58,7 +54,7 @@ fun ProfileScreen(
     profileViewModel: ProfileViewModel = getViewModel()
 ) {
     val screenHeight = with(LocalConfiguration.current) { screenHeightDp }
-    val sheetPeekHeight = (screenHeight * 0.3f).dp
+    val sheetPeekHeight = (screenHeight * 0.2f).dp
     val sheetMaxHeight = (screenHeight * 0.8f).dp
     val scanFoldState = rememberBottomSheetScaffoldState(
         bottomSheetState = BottomSheetState(initialValue = BottomSheetValue.Collapsed)
@@ -66,7 +62,7 @@ fun ProfileScreen(
 
     val userProfile = profileViewModel.userCard.collectAsState()
 
-    AppBottomSheetScaffold(
+    StockBottomSheetScaffold(
         scaffoldState = scanFoldState,
         sheetContent = {
             BottomSheetLayer(
@@ -118,7 +114,7 @@ private fun AccountLayerProfileInfo(
             painter = painterResource(defaultAvatarFor(profile.userName)),
             contentDescription = "Avatar"
         )
-        AppSurface(
+        StockSurface(
             modifier = Modifier
                 .padding(top = imageSize / 2)
                 .zIndex(1f)
@@ -131,13 +127,13 @@ private fun AccountLayerProfileInfo(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Top
             ) {
-                CompositionLocalProvider(LocalTextStyle provides AppTheme.typography.body1) {
+                CompositionLocalProvider(LocalTextStyle provides StockTheme.typography.body1) {
                     Text(text = profile.userName)
                 }
 
                 Spacer(Modifier.size(4.dp))
 
-                CompositionLocalProvider(LocalTextStyle provides AppTheme.typography.body2) {
+                CompositionLocalProvider(LocalTextStyle provides StockTheme.typography.body2) {
                     Text(text = profile.userEmail)
                 }
             }
@@ -149,7 +145,7 @@ private fun AccountLayerProfileInfo(
 private fun AccountLayerStatistic(
     userCard: () -> UserCard
 ) {
-    CompositionLocalProvider(LocalTextStyle provides AppTheme.typography.subtitle2) {
+    CompositionLocalProvider(LocalTextStyle provides StockTheme.typography.subtitle2) {
         Text(
             modifier = Modifier
                 .fillMaxWidth()
@@ -158,7 +154,7 @@ private fun AccountLayerStatistic(
         )
     }
 
-    AppSurface {
+    StockSurface {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -183,8 +179,8 @@ private fun AccountLayerStatistic(
 
             Text(
                 text = stringResource(R.string.account_profile_statistic_balance_caption),
-                fontSize = AppTheme.typography.caption.fontSize,
-                color = AppTheme.colors.textSecondary
+                fontSize = StockTheme.typography.caption.fontSize,
+                color = StockTheme.colors.textSecondary
             )
 
             Spacer(Modifier.size(16.dp))
@@ -206,8 +202,8 @@ private fun ColumnScope.TransactionStatisticBar(
     )
 
     val colors = arrayOf(
-        AppColors.ordersSecondaryColor, AppColors.ordersColor,
-        AppColors.offersSecondaryColor, AppColors.offersColor
+        StockColors.ordersSecondaryColor, StockColors.ordersColor,
+        StockColors.offersSecondaryColor, StockColors.offersColor
     )
 
     val descriptions = arrayOf(
@@ -253,8 +249,8 @@ private fun ColumnScope.TransactionStatisticBar(
             Spacer(Modifier.size(4.dp))
             Text(
                 text = stringResource(text),
-                fontSize = AppTheme.typography.caption.fontSize,
-                color = AppTheme.colors.textSecondary
+                fontSize = StockTheme.typography.caption.fontSize,
+                color = StockTheme.colors.textSecondary
             )
             Spacer(Modifier.size(4.dp))
         }
@@ -275,7 +271,7 @@ private fun ColumnScope.AccountLayerOperationButtons(
     Row(
         modifier = Modifier.padding(12.dp)
     ) {
-        AppButton(
+        StockButton(
             modifier = Modifier.weight(100f),
             onClick = {
                 creationState.value = orderCreationState
@@ -291,7 +287,7 @@ private fun ColumnScope.AccountLayerOperationButtons(
 
         Spacer(modifier = Modifier.size(12.dp))
 
-        AppButton(
+        StockButton(
             modifier = Modifier.weight(100f),
             onClick = {
                 creationState.value = offerCreationState
@@ -337,7 +333,7 @@ private fun ColumnScope.BottomSheetLayer(
                             .fillMaxWidth()
                             .padding(vertical = 20.dp),
                         text = stringResource(R.string.account_transactions_list_empty),
-                        color = AppTheme.colors.textSecondary,
+                        color = StockTheme.colors.textSecondary,
                         textAlign = TextAlign.Center
                     )
                 }
@@ -363,14 +359,14 @@ private fun BottomSheetTitle(title: String) {
                 .align(TopCenter)
                 .widthIn(max = 80.dp),
             imageVector = Icons.Default.Maximize, contentDescription = "Expand sheet",
-            tint = AppTheme.colors.textSecondary.copy(alpha = 0.7f)
+            tint = StockTheme.colors.textSecondary.copy(alpha = 0.7f)
         )
 
-        CompositionLocalProvider(LocalTextStyle provides AppTheme.typography.subtitle1) {
+        CompositionLocalProvider(LocalTextStyle provides StockTheme.typography.subtitle1) {
             Text(
                 modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
                 text = title,
-                color = AppTheme.colors.textSecondary
+                color = StockTheme.colors.textSecondary
             )
         }
     }
@@ -387,7 +383,7 @@ private fun TransactionListItem(
         visibilityThreshold = 1f
     )
 
-    AppCard(
+    StockCard(
         modifier = Modifier
             .fillMaxWidth()
             .clickable { setExpanded(!cardExpanded) }
@@ -405,10 +401,10 @@ private fun TransactionListItem(
                     Transaction.Type.BUY -> Icons.Default.East
                 }
                 val tint = when {
-                    transaction.inProgress -> AppColors.progressColor
+                    transaction.inProgress -> StockColors.progressColor
                     else -> when (transaction.type) {
-                        Transaction.Type.SELL -> AppColors.offersColor
-                        Transaction.Type.BUY -> AppColors.ordersColor
+                        Transaction.Type.SELL -> StockColors.offersColor
+                        Transaction.Type.BUY -> StockColors.ordersColor
                     }
                 }.copy(alpha = 0.65f)
 
@@ -445,7 +441,7 @@ private fun TransactionListItem(
                         .fillMaxWidth()
                         .padding(bottom = 4.dp)
                 ) {
-                    CompositionLocalProvider(LocalContentColor provides AppTheme.colors.textSecondary) {
+                    CompositionLocalProvider(LocalContentColor provides StockTheme.colors.textSecondary) {
                         Text("price: " + transaction.price)
                         Text("amount: " + transaction.amount)
                         Text("time: $time")

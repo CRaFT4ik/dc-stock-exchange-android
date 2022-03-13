@@ -21,8 +21,8 @@ import androidx.compose.ui.unit.sp
 import ru.er_log.stock.android.R
 import ru.er_log.stock.android.base.utils.autoScale
 import ru.er_log.stock.android.base.utils.toHumanFormat
-import ru.er_log.stock.android.compose.theme.AppColors
-import ru.er_log.stock.android.compose.theme.AppTheme
+import ru.er_log.stock.android.compose.theme.StockColors
+import ru.er_log.stock.android.compose.theme.StockTheme
 import ru.er_log.stock.android.compose.theme.darkColors
 
 @Preview
@@ -36,7 +36,7 @@ private fun OrderBookChartPreview() {
         )
     }
 
-    AppTheme(colors = darkColors()) {
+    StockTheme(colors = darkColors()) {
         OrderBookChart(state = orderBookState)
     }
 }
@@ -220,10 +220,10 @@ private fun DrawScope.drawLegend(
 }
 
 class OrderBookStyle {
-    val ordersColor: Color = AppColors.ordersColor.copy(alpha = 0.3f)
-    val ordersSecondaryColor: Color = AppColors.ordersSecondaryColor.copy(alpha = 0.45f)
-    val offersColor: Color = AppColors.offersColor.copy(alpha = 0.3f)
-    val offersSecondaryColor: Color = AppColors.offersSecondaryColor.copy(alpha = 0.45f)
+    val ordersColor: Color = StockColors.ordersColor.copy(alpha = 0.3f)
+    val ordersSecondaryColor: Color = StockColors.ordersSecondaryColor.copy(alpha = 0.45f)
+    val offersColor: Color = StockColors.offersColor.copy(alpha = 0.3f)
+    val offersSecondaryColor: Color = StockColors.offersSecondaryColor.copy(alpha = 0.45f)
     val primaryColor: Color = Color(0x8FFCFCFC)
     val secondaryColor: Color = Color(0x4CFCFCFC)
     val textSize: TextUnit = 13.sp

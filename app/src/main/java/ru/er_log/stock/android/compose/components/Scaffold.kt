@@ -10,13 +10,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import ru.er_log.stock.android.compose.theme.AppTheme
+import ru.er_log.stock.android.compose.theme.StockTheme
 
 /**
- * Wrap Material [androidx.compose.material.Scaffold] and set [AppTheme] colors.
+ * Wrap Material [androidx.compose.material.Scaffold] and set [StockTheme] colors.
  */
 @Composable
-fun AppScaffold(
+fun StockScaffold(
     modifier: Modifier = Modifier,
     scaffoldState: ScaffoldState = rememberScaffoldState(),
     topBar: @Composable (() -> Unit) = {},
@@ -28,11 +28,11 @@ fun AppScaffold(
     drawerContent: @Composable (ColumnScope.() -> Unit)? = null,
     drawerShape: Shape = MaterialTheme.shapes.large,
     drawerElevation: Dp = DrawerDefaults.Elevation,
-    drawerBackgroundColor: Color = AppTheme.colors.background,
-    drawerContentColor: Color = AppTheme.colors.textPrimary,
-    drawerScrimColor: Color = AppTheme.colors.background,
-    backgroundColor: Color = AppTheme.colors.backgroundSecondary,
-    contentColor: Color = AppTheme.colors.textPrimary,
+    drawerBackgroundColor: Color = StockTheme.colors.background,
+    drawerContentColor: Color = StockTheme.colors.textPrimary,
+    drawerScrimColor: Color = StockTheme.colors.background,
+    backgroundColor: Color = StockTheme.colors.backgroundSecondary,
+    contentColor: Color = StockTheme.colors.textPrimary,
     content: @Composable (PaddingValues) -> Unit
 ) {
     Scaffold(
@@ -58,7 +58,7 @@ fun AppScaffold(
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun AppBottomSheetScaffold(
+fun StockBottomSheetScaffold(
     sheetContent: @Composable ColumnScope.() -> Unit,
     modifier: Modifier = Modifier,
     scaffoldState: BottomSheetScaffoldState = rememberBottomSheetScaffoldState(),
@@ -69,8 +69,8 @@ fun AppBottomSheetScaffold(
     sheetGesturesEnabled: Boolean = true,
     sheetShape: Shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
     sheetElevation: Dp = BottomSheetScaffoldDefaults.SheetElevation,
-    sheetBackgroundColor: Color = AppTheme.colors.surface,
-    sheetContentColor: Color = AppTheme.colors.textPrimary,
+    sheetBackgroundColor: Color = StockTheme.colors.surface,
+    sheetContentColor: Color = StockTheme.colors.textPrimary,
     sheetPeekHeight: Dp = BottomSheetScaffoldDefaults.SheetPeekHeight,
     drawerContent: @Composable (ColumnScope.() -> Unit)? = null,
     drawerGesturesEnabled: Boolean = true,
@@ -79,8 +79,8 @@ fun AppBottomSheetScaffold(
     drawerBackgroundColor: Color = Color.Blue,
     drawerContentColor: Color = Color.Green,
     drawerScrimColor: Color = Color.Red,
-    backgroundColor: Color = AppTheme.colors.backgroundSecondary,
-    contentColor: Color = AppTheme.colors.textSecondary,
+    backgroundColor: Color = StockTheme.colors.backgroundSecondary,
+    contentColor: Color = StockTheme.colors.textSecondary,
     content: @Composable (PaddingValues) -> Unit
 ) {
     BottomSheetScaffold(

@@ -1,18 +1,15 @@
 package ru.er_log.stock.android.features.auth.login
 
-import android.content.Context
 import android.content.res.Resources
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.NavController
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import ru.er_log.stock.android.R
 import ru.er_log.stock.android.base.utils.scoped
-import ru.er_log.stock.android.compose.components.AppInputValidator
+import ru.er_log.stock.android.compose.components.StockInputValidator
 import ru.er_log.stock.android.compose.components.InputState
 import ru.er_log.stock.android.features.auth.login.model.LoginUIState
-import ru.er_log.stock.data.di.inject
 import ru.er_log.stock.domain.api.v1.auth.SignInRequest
 import ru.er_log.stock.domain.usecases.AuthUseCases
 
@@ -45,7 +42,7 @@ class LoginViewModel(
     }
 }
 
-internal class AppPasswordInputValidator : AppInputValidator() {
+internal class StockPasswordInputValidator : StockInputValidator() {
 
     // Minimum eight characters, at least one letter, one number and one special character.
     private val passwordRequiredPattern =
@@ -57,7 +54,7 @@ internal class AppPasswordInputValidator : AppInputValidator() {
     }
 }
 
-internal class AppLoginInputValidator : AppInputValidator() {
+internal class StockLoginInputValidator : StockInputValidator() {
 
     override fun validateInput(input: String, resources: Resources): String? {
         if (input.length <= 3) {

@@ -4,11 +4,11 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 
-object AppTheme {
+object StockTheme {
     /**
-     * Retrieves the current [AppColors] at the call site's position in the hierarchy.
+     * Retrieves the current [StockColors] at the call site's position in the hierarchy.
      */
-    val colors: AppColors
+    val colors: StockColors
         @Composable
         @ReadOnlyComposable
         get() = LocalColors.current
@@ -31,10 +31,10 @@ object AppTheme {
 }
 
 @Composable
-fun AppTheme(
-    colors: AppColors = if (isSystemInDarkTheme()) darkColors() else lightColors(),
-    typography: Typography = AppTheme.typography,
-    shapes: Shapes = AppTheme.shapes,
+fun StockTheme(
+    colors: StockColors = if (isSystemInDarkTheme()) darkColors() else lightColors(),
+    typography: Typography = StockTheme.typography,
+    shapes: Shapes = StockTheme.shapes,
     content: @Composable () -> Unit
 ) {
     // creating a new object for colors to not mutate the initial colors set when updating the values

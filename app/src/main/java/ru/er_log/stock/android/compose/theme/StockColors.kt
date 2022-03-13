@@ -4,7 +4,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.Color
 
 @Stable
-class AppColors(
+class StockColors(
     primary: Color,
     secondary: Color,
     textPrimary: Color,
@@ -43,7 +43,7 @@ class AppColors(
     var isLight by mutableStateOf(isLight)
         internal set
 
-    fun updateColorsFrom(other: AppColors) {
+    fun updateColorsFrom(other: StockColors) {
         primary = other.primary
         secondary = other.secondary
         textPrimary = other.textPrimary
@@ -71,7 +71,7 @@ class AppColors(
         backgroundSecondary: Color = this.backgroundSecondary,
         error: Color = this.error,
         isLight: Boolean = this.isLight
-    ): AppColors = AppColors(
+    ): StockColors = StockColors(
         primary = primary,
         secondary = secondary,
         textPrimary = textPrimary,
@@ -107,7 +107,7 @@ fun lightColors(
     background: Color = Color(0xFF131e2a),
     backgroundSecondary: Color = Color(0xFF0c151d),
     error: Color = Color(0xFFdf6060)
-): AppColors = AppColors(
+): StockColors = StockColors(
     primary = primary,
     secondary = secondary,
     textPrimary = textPrimary,
@@ -134,7 +134,7 @@ fun darkColors(
     background: Color = Color(0xFF131e2a),
     backgroundSecondary: Color = Color(0xFF0c151d),
     error: Color = Color(0xFFdf6060)
-): AppColors = AppColors(
+): StockColors = StockColors(
     primary = primary,
     secondary = secondary,
     textPrimary = textPrimary,

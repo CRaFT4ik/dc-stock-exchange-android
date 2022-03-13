@@ -34,13 +34,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.os.ConfigurationCompat
 import ru.er_log.stock.android.base.utils.Navigator
-import ru.er_log.stock.android.compose.theme.AppTheme
+import ru.er_log.stock.android.compose.theme.StockTheme
 import ru.er_log.stock.android.features.home.homeButtonBar
 
 @Preview
 @Composable
-fun AppBottomBarPreview() {
-    AppBottomBar(
+fun StockBottomBarPreview() {
+    StockBottomBar(
         tabs = homeButtonBar,
         currentRoute = homeButtonBar[0].route,
         actionNavigate = {}
@@ -48,7 +48,7 @@ fun AppBottomBarPreview() {
 }
 
 @Composable
-fun AppBottomBar(
+fun StockBottomBar(
     tabs: Array<AppBottomBarTab>,
     currentRoute: Navigator.NavTarget,
     actionNavigate: (Navigator.NavTarget) -> Unit
@@ -56,21 +56,21 @@ fun AppBottomBar(
     val currentTab = tabs.first { it.route == currentRoute }
     val springSpec = SpringSpec<Float>(stiffness = 800f, dampingRatio = 0.8f)
 
-    AppBottomBarLayout(
+    StockBottomBarLayout(
         selectedIndex = tabs.indexOf(currentTab),
-        indicator = { AppBottomNavIndicator() },
+        indicator = { StockBottomNavIndicator() },
         animSpec = springSpec,
         itemCount = tabs.size,
         modifier = Modifier
-            .background(AppTheme.colors.surface)
+            .background(StockTheme.colors.surface)
     ) {
         tabs.forEach { tab ->
             val selected = tab == currentTab
             val tint by animateColorAsState(
                 if (selected) {
-                    AppTheme.colors.primary
+                    StockTheme.colors.primary
                 } else {
-                    AppTheme.colors.surfaceSecondary
+                    StockTheme.colors.surfaceSecondary
                 }
             )
 
@@ -78,7 +78,7 @@ fun AppBottomBar(
                 ConfigurationCompat.getLocales(LocalConfiguration.current).get(0)
             )
 
-            AppBottomNavigationItem(
+            StockBottomNavigationItem(
                 icon = {
                     Icon(
                         imageVector = tab.icon,
@@ -90,7 +90,7 @@ fun AppBottomBar(
                     Text(
                         text = text,
                         color = tint,
-                        style = AppTheme.typography.button,
+                        style = StockTheme.typography.button,
                         maxLines = 1
                     )
                 },
@@ -105,7 +105,7 @@ fun AppBottomBar(
 }
 
 @Composable
-private fun AppBottomBarLayout(
+private fun StockBottomBarLayout(
     selectedIndex: Int,
     itemCount: Int,
     animSpec: AnimationSpec<Float>,
@@ -163,7 +163,7 @@ private fun AppBottomBarLayout(
 }
 
 @Composable
-private fun AppBottomNavigationItem(
+private fun StockBottomNavigationItem(
     icon: @Composable (BoxScope.() -> Unit),
     text: @Composable (BoxScope.() -> Unit),
     selected: Boolean,
@@ -177,7 +177,7 @@ private fun AppBottomNavigationItem(
     ) {
         // Animate the icon/text positions within the item based on selection
         val animationProgress by animateFloatAsState(if (selected) 1f else 0f, animSpec)
-        AppBottomNavItemLayout(
+        StockBottomNavItemLayout(
             icon = icon,
             text = text,
             animationProgress = animationProgress
@@ -186,7 +186,7 @@ private fun AppBottomNavigationItem(
 }
 
 @Composable
-private fun AppBottomNavItemLayout(
+private fun StockBottomNavItemLayout(
     icon: @Composable BoxScope.() -> Unit,
     text: @Composable BoxScope.() -> Unit,
     @FloatRange(from = 0.0, to = 1.0) animationProgress: Float
@@ -250,8 +250,8 @@ private fun MeasureScope.placeTextAndIcon(
 }
 
 @Composable
-private fun AppBottomNavIndicator(
-    color: Color = AppTheme.colors.surfaceSecondary,
+private fun StockBottomNavIndicator(
+    color: Color = StockTheme.colors.surfaceSecondary,
     shape: Shape = BottomNavIndicatorShape
 ) {
     Spacer(

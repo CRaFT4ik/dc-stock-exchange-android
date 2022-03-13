@@ -42,42 +42,42 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import ru.er_log.stock.android.compose.theme.AppTheme
+import ru.er_log.stock.android.compose.theme.StockTheme
 
 private val textFieldColors: TextFieldColors
     @Composable get() = TextFieldDefaults.textFieldColors(
-        textColor = AppTheme.colors.textPrimary,
-        backgroundColor = AppTheme.colors.surface,
+        textColor = StockTheme.colors.textPrimary,
+        backgroundColor = StockTheme.colors.surface,
         focusedIndicatorColor = Color.Transparent,
         unfocusedIndicatorColor = Color.Transparent,
-        focusedLabelColor = AppTheme.colors.textSecondary,
-        unfocusedLabelColor = AppTheme.colors.textSecondary,
-        cursorColor = AppTheme.colors.textPrimary,
-        errorIndicatorColor = AppTheme.colors.error,
-        errorLabelColor = AppTheme.colors.error,
-        errorCursorColor = AppTheme.colors.error
+        focusedLabelColor = StockTheme.colors.textSecondary,
+        unfocusedLabelColor = StockTheme.colors.textSecondary,
+        cursorColor = StockTheme.colors.textPrimary,
+        errorIndicatorColor = StockTheme.colors.error,
+        errorLabelColor = StockTheme.colors.error,
+        errorCursorColor = StockTheme.colors.error
     )
 
 private val outlinedTextFieldColors: TextFieldColors
     @Composable get() = TextFieldDefaults.outlinedTextFieldColors(
-        textColor = AppTheme.colors.textPrimary,
+        textColor = StockTheme.colors.textPrimary,
         backgroundColor = Color.Transparent,
-        focusedBorderColor = AppTheme.colors.onSurfaceSecondary,
-        unfocusedBorderColor = AppTheme.colors.onSurface,
-        focusedLabelColor = AppTheme.colors.textSecondary,
-        unfocusedLabelColor = AppTheme.colors.textSecondary,
-        cursorColor = AppTheme.colors.textPrimary,
-        errorLabelColor = AppTheme.colors.error,
-        errorCursorColor = AppTheme.colors.error,
-        errorBorderColor = AppTheme.colors.error
+        focusedBorderColor = StockTheme.colors.onSurfaceSecondary,
+        unfocusedBorderColor = StockTheme.colors.onSurface,
+        focusedLabelColor = StockTheme.colors.textSecondary,
+        unfocusedLabelColor = StockTheme.colors.textSecondary,
+        cursorColor = StockTheme.colors.textPrimary,
+        errorLabelColor = StockTheme.colors.error,
+        errorCursorColor = StockTheme.colors.error,
+        errorBorderColor = StockTheme.colors.error
     )
 
 @Composable
-internal fun AppTextField(
+internal fun StockTextField(
     modifier: Modifier = Modifier,
     isOutlined: Boolean = false,
     inputState: InputState = InputState(),
-    inputValidator: AppInputValidator? = null,
+    inputValidator: StockInputValidator? = null,
     inputFilter: InputFilter? = InputFilter.WhitespaceInputFilter(),
     @StringRes label: Int? = null,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
@@ -100,7 +100,7 @@ internal fun AppTextField(
     Column(
         modifier = modifier
     ) {
-        AppTextFieldImpl(
+        StockTextFieldImpl(
             isOutlined = isOutlined,
             modifier = Modifier
                 .fillMaxWidth()
@@ -141,7 +141,7 @@ internal fun AppTextField(
                         Icon(
                             imageVector = if (!isPasswordHidden.value) Icons.Default.Visibility else Icons.Default.VisibilityOff,
                             contentDescription = "Show/Hide password",
-                            tint = AppTheme.colors.surfaceSecondary
+                            tint = StockTheme.colors.surfaceSecondary
                         )
                     }
                 }
@@ -168,8 +168,8 @@ internal fun AppTextField(
                     .padding(vertical = 4.dp),
                 text = errorText ?: "",
                 style = TextStyle(
-                    color = AppTheme.colors.error,
-                    fontSize = AppTheme.typography.caption.fontSize
+                    color = StockTheme.colors.error,
+                    fontSize = StockTheme.typography.caption.fontSize
                 )
             )
         }
@@ -177,7 +177,7 @@ internal fun AppTextField(
 }
 
 @Composable
-private fun AppTextFieldImpl(
+private fun StockTextFieldImpl(
     isOutlined: Boolean,
     value: String,
     onValueChange: (String) -> Unit,
@@ -267,7 +267,7 @@ abstract class InputFilter {
     }
 }
 
-abstract class AppInputValidator {
+abstract class StockInputValidator {
 
     private var updateErrorJob: Job? = null
 

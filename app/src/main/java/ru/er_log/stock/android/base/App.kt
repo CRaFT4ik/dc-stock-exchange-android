@@ -10,7 +10,7 @@ import androidx.navigation.navigation
 import org.koin.androidx.compose.getViewModel
 import ru.er_log.stock.android.base.utils.Navigator
 import ru.er_log.stock.android.base.utils.rememberNavigator
-import ru.er_log.stock.android.compose.theme.AppTheme
+import ru.er_log.stock.android.compose.theme.StockTheme
 import ru.er_log.stock.android.compose.theme.darkColors
 import ru.er_log.stock.android.features.auth.AuthViewModel
 import ru.er_log.stock.android.features.auth.login.ScreenLogin
@@ -23,7 +23,7 @@ fun App(
     val navController = rememberNavController()
     val authNavigator = rememberNavigator(navController)
 
-    AppTheme(colors = darkColors()) {
+    StockTheme(colors = darkColors()) {
         NavHost(
             navController = navController,
             startDestination = Navigator.MainDestinations.AUTH_ROUTE // TODO: add if user logged in check

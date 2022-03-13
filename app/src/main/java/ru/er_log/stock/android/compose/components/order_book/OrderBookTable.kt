@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import ru.er_log.stock.android.R
 import ru.er_log.stock.android.base.utils.autoScale
 import ru.er_log.stock.android.base.utils.toHumanFormat
-import ru.er_log.stock.android.compose.theme.AppTheme
+import ru.er_log.stock.android.compose.theme.StockTheme
 import ru.er_log.stock.android.compose.theme.darkColors
 import ru.er_log.stock.domain.models.exchange.OrderBookItem
 import java.math.BigDecimal
@@ -42,7 +42,7 @@ private fun OrderBookTablePreview() {
         )
     }
 
-    AppTheme(colors = darkColors()) {
+    StockTheme(colors = darkColors()) {
         OrderBookTable(state = orderBookState)
     }
 }

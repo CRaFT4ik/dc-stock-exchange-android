@@ -11,7 +11,7 @@ import ru.er_log.stock.android.compose.components.order_book.OrderBookChart
 import ru.er_log.stock.android.compose.components.order_book.OrderBookPreviewProvider
 import ru.er_log.stock.android.compose.components.order_book.OrderBookState
 import ru.er_log.stock.android.compose.components.order_book.OrderBookTable
-import ru.er_log.stock.android.compose.theme.AppTheme
+import ru.er_log.stock.android.compose.theme.StockTheme
 import ru.er_log.stock.android.compose.theme.darkColors
 
 @Composable
@@ -32,7 +32,7 @@ fun OrderBookScreenPreview() {
         )
     }
 
-    AppTheme(colors = darkColors()) {
+    StockTheme(colors = darkColors()) {
         OrderBookScreen(orderBookState)
     }
 }
@@ -45,13 +45,13 @@ fun OrderBook(
     Column {
         OrderBookChart(
             modifier = modifier
-                .background(AppTheme.colors.surface)
+                .background(StockTheme.colors.surface)
                 .weight(0.4f),
             state = state
         )
         OrderBookTable(
             modifier = modifier
-                .background(AppTheme.colors.background)
+                .background(StockTheme.colors.background)
                 .weight(0.6f),
             state = state
         )

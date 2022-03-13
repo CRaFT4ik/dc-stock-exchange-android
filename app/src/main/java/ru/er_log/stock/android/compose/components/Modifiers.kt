@@ -4,14 +4,14 @@ import androidx.compose.foundation.background
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.graphics.Brush
-import ru.er_log.stock.android.compose.theme.AppTheme
+import ru.er_log.stock.android.compose.theme.StockTheme
 
-internal fun Modifier.appMainBackground() = composed {
+internal fun Modifier.stockMainBackground() = composed {
     this.background(
         brush = Brush.verticalGradient(
             colors = listOf(
-                AppTheme.colors.backgroundSecondary,
-                AppTheme.colors.background
+                StockTheme.colors.backgroundSecondary,
+                StockTheme.colors.background
             )
         )
     )

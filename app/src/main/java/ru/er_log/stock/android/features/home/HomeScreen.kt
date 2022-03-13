@@ -18,9 +18,9 @@ import androidx.navigation.navigation
 import ru.er_log.stock.android.R
 import ru.er_log.stock.android.base.utils.Navigator
 import ru.er_log.stock.android.base.utils.rememberNavigator
-import ru.er_log.stock.android.compose.components.AppBottomBar
+import ru.er_log.stock.android.compose.components.StockBottomBar
 import ru.er_log.stock.android.compose.components.AppBottomBarTab
-import ru.er_log.stock.android.compose.components.AppScaffold
+import ru.er_log.stock.android.compose.components.StockScaffold
 import ru.er_log.stock.android.compose.components.order_book.OrderBookPreviewProvider
 import ru.er_log.stock.android.compose.components.order_book.OrderBookState
 import ru.er_log.stock.android.features.home.order_book.OrderBookScreen
@@ -31,11 +31,11 @@ fun HomeScreen() {
     val navController = rememberNavController()
     val navigator = rememberNavigator(navController)
 
-    AppScaffold(
+    StockScaffold(
         bottomBar = {
             val currentNavTarget = navigator.currentTarget
             if (currentNavTarget != null) {
-                AppBottomBar(
+                StockBottomBar(
                     tabs = homeButtonBar,
                     currentRoute = currentNavTarget,
                     actionNavigate = { navigator.navigateTo(it) }

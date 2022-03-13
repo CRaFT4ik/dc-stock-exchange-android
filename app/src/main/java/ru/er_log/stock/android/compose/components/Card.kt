@@ -12,15 +12,15 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import ru.er_log.stock.android.compose.theme.AppTheme
+import ru.er_log.stock.android.compose.theme.StockTheme
 
 @Preview
 @Composable
-fun AppCardPreview() {
-    AppCard {
+fun StockCardPreview() {
+    StockCard {
         Column {
             Text("Text text text")
-            AppOutlinedButton(onClick = {}) {
+            StockOutlinedButton(onClick = {}) {
                 Text("Test button")
             }
         }
@@ -28,16 +28,16 @@ fun AppCardPreview() {
 }
 
 @Composable
-fun AppCard(
+fun StockCard(
     modifier: Modifier = Modifier,
     shape: Shape = RoundedCornerShape(6.dp),
-    color: Color = AppTheme.colors.surface,
-    contentColor: Color = AppTheme.colors.textPrimary,
+    color: Color = StockTheme.colors.surface,
+    contentColor: Color = StockTheme.colors.textPrimary,
     border: BorderStroke? = null,
     elevation: Dp = 3.dp,
     content: @Composable () -> Unit
 ) {
-    AppSurface(
+    StockSurface(
         modifier = modifier.padding(6.dp),
         shape = shape,
         color = color,
