@@ -18,7 +18,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.ui.util.lerp
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -32,26 +31,27 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.util.lerp
 import androidx.core.os.ConfigurationCompat
-import ru.er_log.stock.android.base.utils.Navigator
+import ru.er_log.stock.android.base.rememberAppState
 import ru.er_log.stock.android.compose.theme.StockTheme
-import ru.er_log.stock.android.features.home.homeButtonBar
 
 @Preview
 @Composable
 fun StockBottomBarPreview() {
+    val appState = rememberAppState()
     StockBottomBar(
-        tabs = homeButtonBar,
-        currentRoute = homeButtonBar[0].route,
+        tabs = appState.bottomBarTabs,
+        currentRoute = appState.bottomBarTabs.first().route,
         actionNavigate = {}
     )
 }
 
 @Composable
 fun StockBottomBar(
-    tabs: Array<AppBottomBarTab>,
-    currentRoute: Navigator.NavTarget,
-    actionNavigate: (Navigator.NavTarget) -> Unit
+    tabs: List<AppBottomBarTab>,
+    currentRoute: String,
+    actionNavigate: (route: String) -> Unit
 ) {
     val currentTab = tabs.first { it.route == currentRoute }
     val springSpec = SpringSpec<Float>(stiffness = 800f, dampingRatio = 0.8f)
@@ -266,7 +266,7 @@ private fun StockBottomNavIndicator(
 data class AppBottomBarTab(
     @StringRes val title: Int,
     val icon: ImageVector,
-    val route: Navigator.NavTarget
+    val route: String
 )
 
 private val BottomNavHeight = 50.dp

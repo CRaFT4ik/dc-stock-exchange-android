@@ -32,7 +32,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.getViewModel
 import ru.er_log.stock.android.R
-import ru.er_log.stock.android.base.utils.Navigator
 import ru.er_log.stock.android.base.utils.onlyFalse
 import ru.er_log.stock.android.compose.components.*
 import ru.er_log.stock.android.compose.theme.StockTheme
@@ -52,8 +51,8 @@ private fun Preview() {
 }
 
 @Composable
-fun ScreenLogin(
-    navigator: Navigator,
+fun LoginScreen(
+    actionLoginSuccess: () -> Unit,
     loginViewModel: LoginViewModel = getViewModel()
 ) {
     val loginState = rememberSaveable { InputState() }
@@ -83,7 +82,7 @@ fun ScreenLogin(
                 is LoginUIState.Result -> Result(
                     result = state,
                     actionBackToLogin = loginViewModel::setInitialUIState,
-                    actionLoginSuccess = { navigator.navigateTo(Navigator.NavTarget.HomeAccount) }
+                    actionLoginSuccess = actionLoginSuccess
                 )
             }
         }
