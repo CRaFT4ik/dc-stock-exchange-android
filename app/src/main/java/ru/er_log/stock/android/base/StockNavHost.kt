@@ -5,21 +5,15 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.PermIdentity
 import androidx.compose.material.icons.outlined.TrendingUp
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.navigation
 import ru.er_log.stock.android.R
-import ru.er_log.stock.android.compose.components.order_book.OrderBookPreviewProvider
-import ru.er_log.stock.android.compose.components.order_book.OrderBookState
 import ru.er_log.stock.android.features.auth.login.LoginScreen
-import ru.er_log.stock.android.features.home.order_book.OrderBookScreen
-import ru.er_log.stock.android.features.home.profile.ProfileScreen
+import ru.er_log.stock.android.features.order_book.OrderBookScreen
+import ru.er_log.stock.android.features.account.ProfileScreen
 
 @Composable
 fun StockNavHost(navController: NavHostController, modifier: Modifier = Modifier) {
@@ -36,15 +30,7 @@ fun StockNavHost(navController: NavHostController, modifier: Modifier = Modifier
         }
 
         composable(HomeDestinations.OrderBook.route) {
-            val orderBookState = remember {
-                val provider = OrderBookPreviewProvider()
-                OrderBookState(
-                    mutableStateOf(provider.provide(10000, 20000)),
-                    mutableStateOf(provider.provide(20000, 30000))
-                )
-            }
-
-            OrderBookScreen(orderBookState)
+            OrderBookScreen()
         }
 
         composable(HomeDestinations.Account.route) {

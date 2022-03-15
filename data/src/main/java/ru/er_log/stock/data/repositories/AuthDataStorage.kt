@@ -1,6 +1,6 @@
 package ru.er_log.stock.data.repositories
 
-import ru.er_log.stock.domain.models.auth.UserProfile
+import ru.er_log.stock.domain.models.`in`.UserInfo
 
 interface AuthDataStorage {
 
@@ -13,7 +13,7 @@ interface AuthDataStorage {
 
     fun fetchAuthToken(): String?
 
-    fun saveUserProfile(userInfo: UserProfile)
+    fun saveUserProfile(userInfo: UserInfo)
 
-    fun fetchUserProfile(): UserProfile?
+    fun fetchUserProfile(): UserInfo?
 }

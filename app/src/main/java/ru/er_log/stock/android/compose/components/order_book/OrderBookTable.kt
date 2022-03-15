@@ -9,7 +9,6 @@ import androidx.compose.material.LocalTextStyle
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -26,7 +25,7 @@ import ru.er_log.stock.android.base.utils.autoScale
 import ru.er_log.stock.android.base.utils.toHumanFormat
 import ru.er_log.stock.android.compose.theme.StockTheme
 import ru.er_log.stock.android.compose.theme.darkColors
-import ru.er_log.stock.domain.models.exchange.OrderBookItem
+import ru.er_log.stock.domain.models.order_book.OrderBookItem
 import java.math.BigDecimal
 import java.util.*
 
@@ -37,8 +36,8 @@ private fun OrderBookTablePreview() {
     val orderBookState = remember {
         val previewProvider = OrderBookPreviewProvider()
         OrderBookState(
-            ordersState = mutableStateOf(previewProvider.provide(20000, 30000)),
-            offersState = mutableStateOf(previewProvider.provide(30000, 40000))
+            orders = previewProvider.provide(20000, 30000),
+            offers = previewProvider.provide(30000, 40000)
         )
     }
 
@@ -59,10 +58,10 @@ internal fun OrderBookTable(
         OrderBookTableHeader(style = style)
         OrderBookTableColumns(
             ordersItems = remember {
-                state.ordersState.value.toSortedSet(OrderBookItem.PriceDescComparator)
+                state.orders.toSortedSet(OrderBookItem.PriceDescComparator)
             },
             ordersMaxAmount = state.ordersMaxAmount,
-            offersItems = state.offersState.value,
+            offersItems = state.offers,
             offersMaxAmount = state.offersMaxAmount,
             style = style
         )

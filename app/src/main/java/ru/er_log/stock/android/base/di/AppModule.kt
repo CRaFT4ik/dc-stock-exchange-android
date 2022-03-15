@@ -6,9 +6,9 @@ import org.koin.dsl.module
 import ru.er_log.stock.android.base.storages.PreferencesStorage
 import ru.er_log.stock.android.features.auth.AuthViewModel
 import ru.er_log.stock.android.features.auth.login.LoginViewModel
-import ru.er_log.stock.android.features.home.exchange.ExchangeViewModel
-import ru.er_log.stock.android.features.home.order_book.OrderBookViewModel
-import ru.er_log.stock.android.features.home.profile.ProfileViewModel
+import ru.er_log.stock.android.features.ExchangeViewModel
+import ru.er_log.stock.android.features.order_book.OrderBookViewModel
+import ru.er_log.stock.android.features.account.ProfileViewModel
 import ru.er_log.stock.data.di.KoinModuleProvider
 import ru.er_log.stock.data.repositories.AuthDataStorage
 

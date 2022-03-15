@@ -1,6 +1,6 @@
 package ru.er_log.stock.android.compose.components.order_book
 
-import ru.er_log.stock.domain.models.exchange.OrderBookItem
+import ru.er_log.stock.domain.models.order_book.OrderBookItem
 import java.math.BigDecimal
 import java.util.*
 import kotlin.random.Random

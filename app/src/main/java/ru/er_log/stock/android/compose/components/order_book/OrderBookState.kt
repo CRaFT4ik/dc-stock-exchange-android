@@ -1,10 +1,7 @@
 package ru.er_log.stock.android.compose.components.order_book
 
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.geometry.Offset
-import ru.er_log.stock.domain.models.exchange.OrderBookItem
+import ru.er_log.stock.domain.models.order_book.OrderBookItem
 import java.math.BigDecimal
 import java.util.*
 
@@ -13,13 +10,10 @@ import java.util.*
  */
 data class OrderBookState(
     // Must be sorted by price ACS.
-    val ordersState: MutableState<SortedSet<OrderBookItem>>,
+    val orders: SortedSet<OrderBookItem> = TreeSet(),
     // Must be sorted by price ACS.
-    val offersState: MutableState<SortedSet<OrderBookItem>>
+    val offers: SortedSet<OrderBookItem> = TreeSet()
 ) {
-    private val orders: SortedSet<OrderBookItem> get() = ordersState.value
-    private val offers: SortedSet<OrderBookItem> get() = offersState.value
-
     private val ordersMin: BigDecimal get() = orders.firstOrNull()?.price ?: BigDecimal.ZERO
     private val ordersMax: BigDecimal get() = orders.lastOrNull()?.price ?: BigDecimal.ZERO
     private val offersMin: BigDecimal get() = offers.firstOrNull()?.price ?: BigDecimal.ZERO
@@ -31,15 +25,13 @@ data class OrderBookState(
 
     private val maxAmount get() = maxOf(ordersMaxAmount, offersMaxAmount)
 
-    val offersMaxAmount by derivedStateOf {
+    val offersMaxAmount =
         offers.fold(BigDecimal.ZERO) { acc, item -> acc + (item.amount * item.price) }
-    }
 
-    val ordersMaxAmount by derivedStateOf {
+    val ordersMaxAmount =
         orders.fold(BigDecimal.ZERO) { acc, item -> acc + (item.amount * item.price) }
-    }
 
-    val amountLines by derivedStateOf {
+    val amountLines = {
         val amountStep = maxAmount / BigDecimal.valueOf(6)
         mutableListOf<BigDecimal>().apply {
             for (i in 1..6) add(amountStep * i.toBigDecimal())

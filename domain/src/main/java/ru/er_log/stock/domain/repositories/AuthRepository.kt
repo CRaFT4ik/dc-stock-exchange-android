@@ -1,11 +1,11 @@
 package ru.er_log.stock.domain.repositories
 
 import kotlinx.coroutines.flow.Flow
-import ru.er_log.stock.domain.api.v1.auth.SignInRequest
-import ru.er_log.stock.domain.models.auth.UserProfile
+import ru.er_log.stock.domain.models.`in`.UserInfo
+import ru.er_log.stock.domain.models.out.SignInData
 
 interface AuthRepository {
-    suspend fun login(request: SignInRequest): Result<UserProfile>
+    suspend fun login(request: SignInData): Result<UserInfo>
 
-    suspend fun observeUserProfile(): Flow<UserProfile?>
+    suspend fun observeUserProfile(): Flow<UserInfo?>
 }

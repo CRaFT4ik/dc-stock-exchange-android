@@ -6,8 +6,8 @@ import org.koin.core.module.Module
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import ru.er_log.stock.data.network.AuthInterceptor
-import ru.er_log.stock.data.network.AuthService
-import ru.er_log.stock.data.network.ExchangeService
+import ru.er_log.stock.data.network.api.v1.auth.AuthService
+import ru.er_log.stock.data.network.api.v1.account.AccountService
 import java.util.concurrent.TimeUnit
 
 internal class NetworkComponent : KoinModuleComponent() {
@@ -38,7 +38,7 @@ internal class NetworkComponent : KoinModuleComponent() {
 
             Retrofit.Builder()
                 .addConverterFactory(moshiConverterFactory)
-                .baseUrl("https://er-log.ru:2053/api/")
+                .baseUrl("https://er-log.ru:2053/api/v1/")
                 .client(get())
                 .build()
         }
@@ -49,7 +49,7 @@ internal class NetworkComponent : KoinModuleComponent() {
             createService(retrofit = get())
         }
 
-        single<ExchangeService> {
+        single<AccountService> {
             createService(retrofit = get())
         }
     }

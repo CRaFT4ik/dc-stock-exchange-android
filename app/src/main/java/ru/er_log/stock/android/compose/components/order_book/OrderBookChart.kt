@@ -20,7 +20,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ru.er_log.stock.android.R
 import ru.er_log.stock.android.base.utils.autoScale
-import ru.er_log.stock.android.base.utils.toHumanFormat
 import ru.er_log.stock.android.compose.theme.StockColors
 import ru.er_log.stock.android.compose.theme.StockTheme
 import ru.er_log.stock.android.compose.theme.darkColors
@@ -31,8 +30,8 @@ private fun OrderBookChartPreview() {
     val orderBookState = remember {
         val previewProvider = OrderBookPreviewProvider()
         OrderBookState(
-            ordersState = mutableStateOf(previewProvider.provide(20000, 30000)),
-            offersState = mutableStateOf(previewProvider.provide(30000, 40000))
+            orders = mutableStateOf(previewProvider.provide(20000, 30000)),
+            offers = mutableStateOf(previewProvider.provide(30000, 40000))
         )
     }
 

@@ -29,6 +29,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.getViewModel
 import ru.er_log.stock.android.R
@@ -36,16 +39,16 @@ import ru.er_log.stock.android.base.utils.onlyFalse
 import ru.er_log.stock.android.compose.components.*
 import ru.er_log.stock.android.compose.theme.StockTheme
 import ru.er_log.stock.android.compose.theme.darkColors
-import ru.er_log.stock.android.features.auth.login.model.LoginUIState
 
 @Preview
 @Composable
 private fun Preview() {
     StockTheme(colors = darkColors()) {
-        InputBox(
-            loginState = InputState(),
-            passwordState = InputState(),
-            actionLogin = { _, _ -> }
+        LoginScreenImpl(
+            actionLogin = { _, _ -> },
+            actionLoginSuccess = {},
+            loginUIState = MutableStateFlow(LoginUIState.Idle),
+            actionBackToLogin = {}
         )
     }
 }
@@ -54,6 +57,21 @@ private fun Preview() {
 fun LoginScreen(
     actionLoginSuccess: () -> Unit,
     loginViewModel: LoginViewModel = getViewModel()
+) {
+    LoginScreenImpl(
+        actionLogin = loginViewModel::login,
+        actionLoginSuccess = actionLoginSuccess,
+        loginUIState = loginViewModel.loginUIState,
+        actionBackToLogin = loginViewModel::setInitialUIState
+    )
+}
+
+@Composable
+fun LoginScreenImpl(
+    actionLogin: (InputState, InputState) -> Unit,
+    actionLoginSuccess: () -> Unit,
+    loginUIState: StateFlow<LoginUIState>,
+    actionBackToLogin: () -> Unit
 ) {
     val loginState = rememberSaveable { InputState() }
     val passwordState = rememberSaveable { InputState() }
@@ -69,19 +87,19 @@ fun LoginScreen(
 
         Crossfade(
             modifier = Modifier.weight(0.5f),
-            targetState = loginViewModel.loginUIState.collectAsState().value,
+            targetState = loginUIState.collectAsState().value,
             animationSpec = tween(800)
         ) { state ->
             when (state) {
                 LoginUIState.Idle -> InputBox(
                     loginState = loginState,
                     passwordState = passwordState,
-                    actionLogin = loginViewModel::login
+                    actionLogin = actionLogin
                 )
                 LoginUIState.Loading -> Progress()
                 is LoginUIState.Result -> Result(
                     result = state,
-                    actionBackToLogin = loginViewModel::setInitialUIState,
+                    actionBackToLogin = actionBackToLogin,
                     actionLoginSuccess = actionLoginSuccess
                 )
             }
@@ -136,7 +154,7 @@ private fun Result(
                     modifier = Modifier.align(Alignment.Center),
                     text = stringResource(
                         R.string.auth_login_greetings,
-                        result.userProfile.userName
+                        result.userInfo.userName
                     ),
                     color = StockTheme.colors.textPrimary,
                     fontSize = StockTheme.typography.h6.fontSize

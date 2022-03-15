@@ -8,17 +8,17 @@ import java.util.*
 
 class JsonHelpers {
     class PlatformJsonHelpers {
-        object BigDecimalJsonAdapter {
+        class BigDecimalJsonAdapter {
             @FromJson fun fromJson(string: String) = string.toBigDecimal()
             @ToJson fun toJson(value: BigDecimal) = value.toString()
         }
 
-        object BigIntegerJsonAdapter {
+        class BigIntegerJsonAdapter {
             @FromJson fun fromJson(string: String) = string.toBigInteger()
             @ToJson fun toJson(value: BigInteger) = value.toString()
         }
 
-        object DateJsonAdapter {
+        class DateJsonAdapter {
             @FromJson fun fromJson(date: Long) = Date(date)
             @ToJson fun toJson(date: Date) = date.time
         }

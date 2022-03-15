@@ -4,11 +4,10 @@ import android.content.Context
 import android.content.SharedPreferences
 import com.squareup.moshi.Moshi
 import ru.er_log.stock.android.R
-import ru.er_log.stock.data.network.JsonHelpers
 import ru.er_log.stock.data.repositories.AuthDataStorage
 import ru.er_log.stock.data.repositories.AuthDataStorage.Companion.KEY_AUTH_TOKEN
 import ru.er_log.stock.data.repositories.AuthDataStorage.Companion.KEY_USER_PROFILE
-import ru.er_log.stock.domain.models.auth.UserProfile
+import ru.er_log.stock.domain.models.`in`.UserInfo
 import java.io.IOException
 
 class PreferencesStorage(
@@ -29,9 +28,9 @@ class PreferencesStorage(
         return prefs.getString(KEY_AUTH_TOKEN, null)
     }
 
-    override fun saveUserProfile(userInfo: UserProfile) {
+    override fun saveUserProfile(userInfo: UserInfo) {
         prefs.apply {
-            val adapter = moshi.adapter(UserProfile::class.java)
+            val adapter = moshi.adapter(UserInfo::class.java)
             val json = adapter.toJson(userInfo)
 
             val editor = edit()
@@ -40,9 +39,9 @@ class PreferencesStorage(
         }
     }
 
-    override fun fetchUserProfile(): UserProfile? = prefs.run {
+    override fun fetchUserProfile(): UserInfo? = prefs.run {
         val json = getString(KEY_USER_PROFILE, null)
-        val adapter = moshi.adapter(UserProfile::class.java)
+        val adapter = moshi.adapter(UserInfo::class.java)
 
         if (json != null) try {
             adapter.fromJson(json)
