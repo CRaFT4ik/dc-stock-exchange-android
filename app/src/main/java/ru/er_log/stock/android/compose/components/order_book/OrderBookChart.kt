@@ -20,23 +20,29 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ru.er_log.stock.android.R
 import ru.er_log.stock.android.base.utils.autoScale
+import ru.er_log.stock.android.base.utils.toHumanFormat
 import ru.er_log.stock.android.compose.theme.StockColors
 import ru.er_log.stock.android.compose.theme.StockTheme
 import ru.er_log.stock.android.compose.theme.darkColors
+import ru.er_log.stock.domain.models.`in`.OrderBook
+import java.util.*
 
 @Preview
 @Composable
-private fun OrderBookChartPreview() {
-    val orderBookState = remember {
-        val previewProvider = OrderBookPreviewProvider()
-        OrderBookState(
-            orders = mutableStateOf(previewProvider.provide(20000, 30000)),
-            offers = mutableStateOf(previewProvider.provide(30000, 40000))
-        )
-    }
-
+private fun Preview() {
     StockTheme(colors = darkColors()) {
-        OrderBookChart(state = orderBookState)
+        OrderBookChart(state = OrderBookPreviewProvider().provideState())
+    }
+}
+
+@Preview
+@Composable
+private fun EmptyDataPreview() {
+    StockTheme(colors = darkColors()) {
+        OrderBookChart(
+            state = OrderBookPreviewProvider()
+                .provideState(TreeSet(), TreeSet())
+        )
     }
 }
 

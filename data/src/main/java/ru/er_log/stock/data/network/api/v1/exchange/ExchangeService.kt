@@ -14,8 +14,8 @@ internal interface ExchangeService {
     ): OrderBookDto
 
     @POST("exchange/order")
-    suspend fun createOrder(@Body request: Lot)
+    suspend fun createOrder(@Body body: LotDto)
 
     @POST("exchange/offer")
-    suspend fun createOffer(@Body request: Lot)
+    suspend fun createOffer(@Body body: LotDto)
 }

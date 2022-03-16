@@ -1,7 +1,7 @@
 package ru.er_log.stock.android.compose.components.order_book
 
 import androidx.compose.ui.geometry.Offset
-import ru.er_log.stock.domain.models.order_book.OrderBookItem
+import ru.er_log.stock.domain.models.`in`.OrderBook
 import java.math.BigDecimal
 import java.util.*
 
@@ -9,11 +9,12 @@ import java.util.*
  * State for order book chart.
  */
 data class OrderBookState(
-    // Must be sorted by price ACS.
-    val orders: SortedSet<OrderBookItem> = TreeSet(),
-    // Must be sorted by price ACS.
-    val offers: SortedSet<OrderBookItem> = TreeSet()
+    private val orderBook: OrderBook = OrderBook(TreeSet(), TreeSet())
 ) {
+    // Each must be sorted by price ACS.
+    val orders: SortedSet<OrderBook.Item> get() = orderBook.orders
+    val offers: SortedSet<OrderBook.Item> get() = orderBook.offers
+
     private val ordersMin: BigDecimal get() = orders.firstOrNull()?.price ?: BigDecimal.ZERO
     private val ordersMax: BigDecimal get() = orders.lastOrNull()?.price ?: BigDecimal.ZERO
     private val offersMin: BigDecimal get() = offers.firstOrNull()?.price ?: BigDecimal.ZERO
@@ -23,7 +24,10 @@ data class OrderBookState(
     val priceMax: BigDecimal get() = offersMax
     val priceAvg: BigDecimal get() = (ordersMax + offersMin) / BigDecimal.valueOf(2)
 
-    private val maxAmount get() = maxOf(ordersMaxAmount, offersMaxAmount)
+    private val maxAmount: BigDecimal? get() = run {
+        val max = maxOf(ordersMaxAmount, offersMaxAmount)
+        return if (max > BigDecimal.ZERO) max else null
+    }
 
     val offersMaxAmount =
         offers.fold(BigDecimal.ZERO) { acc, item -> acc + (item.amount * item.price) }
@@ -31,15 +35,20 @@ data class OrderBookState(
     val ordersMaxAmount =
         orders.fold(BigDecimal.ZERO) { acc, item -> acc + (item.amount * item.price) }
 
-    val amountLines = {
-        val amountStep = maxAmount / BigDecimal.valueOf(6)
+    val amountLines = run {
+        val amountStep = maxAmount?.let { it / BigDecimal.valueOf(6) } ?: BigDecimal.ZERO
         mutableListOf<BigDecimal>().apply {
-            for (i in 1..6) add(amountStep * i.toBigDecimal())
+            if (amountStep > BigDecimal.ZERO) {
+                for (i in 0 until 6) add(amountStep * i.toBigDecimal())
+            }
         }
     }
 
-    fun amountYOffset(chartHeight: Float, amount: BigDecimal): Float =
-        (chartHeight.toBigDecimal() * amount / maxAmount).toFloat()
+    fun amountYOffset(chartHeight: Float, amount: BigDecimal): Float {
+        return maxAmount?.let {
+            (chartHeight.toBigDecimal() * amount / it).toFloat()
+        } ?: 0f
+    }
 
     fun chartOrders(
         chartWidth: Int,
@@ -72,7 +81,7 @@ data class OrderBookState(
     )
 
     private fun chart(
-        items: SortedSet<OrderBookItem>,
+        items: SortedSet<OrderBook.Item>,
         priceRange: ClosedRange<BigDecimal>,
         chartWidth: Int,
         chartHeight: Int,
@@ -86,8 +95,8 @@ data class OrderBookState(
         var yAccAmount: BigDecimal = BigDecimal.ZERO
 
         var prevItem = when (reversed) {
-            true -> OrderBookItem(priceMax, BigDecimal.ZERO)
-            else -> OrderBookItem(BigDecimal.ZERO, BigDecimal.ZERO)
+            true -> OrderBook.Item(priceMax, BigDecimal.ZERO)
+            else -> OrderBook.Item(BigDecimal.ZERO, BigDecimal.ZERO)
         }
 
         for (x in range) {
@@ -96,7 +105,7 @@ data class OrderBookState(
 
             if (xPrice !in priceRange) continue
 
-            val nextItem = OrderBookItem(xPrice, BigDecimal.ZERO)
+            val nextItem = OrderBook.Item(xPrice, BigDecimal.ZERO)
             val amountPartSet = when (reversed) {
                 true -> items.subSet(nextItem, prevItem)
                 else -> items.subSet(prevItem, nextItem)
@@ -111,7 +120,7 @@ data class OrderBookState(
                 }
             }
 
-            val y = chartHeight.toBigDecimal() * yAccAmount / maxAmount
+            val y = maxAmount?.let { chartHeight.toBigDecimal() * yAccAmount / it } ?: BigDecimal.ZERO
             result.add(Offset(xOffset + x.toFloat(), yOffset + chartHeight - y.toFloat()))
 
             prevItem = nextItem

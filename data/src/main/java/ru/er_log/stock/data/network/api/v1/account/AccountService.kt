@@ -7,8 +7,8 @@ internal interface AccountService {
 
     @GET("account/transactions")
     suspend fun fetchTransactions(
-        @Query("offset") offset: Int,
-        @Query("limit") limit: Int
+        @Query("limit") limit: Int,
+        @Query("offset") offset: Int
     ): List<TransactionDto>
 
     @GET("account/profile")

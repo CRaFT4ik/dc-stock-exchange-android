@@ -8,16 +8,9 @@ internal data class LotDto(
     @Json(name = "price")
     val price: BigDecimal,
     @Json(name = "amount")
-    val amount: BigDecimal,
-    @Json(name = "timestampCreated")
-    val timestampCreated: Long,
-    @Json(name = "owner")
-    val owner: Owner
-) {
-    internal data class Owner(
-        @Json(name = "name")
-        val name: String
-    )
-}
+    val amount: BigDecimal
+)
 
 internal fun LotDto.map(): Lot = Lot(price, amount)
+
+internal fun Lot.map(): LotDto = LotDto(price, amount)

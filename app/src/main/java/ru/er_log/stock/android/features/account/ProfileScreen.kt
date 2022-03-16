@@ -11,7 +11,10 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.filled.East
+import androidx.compose.material.icons.filled.ExpandMore
+import androidx.compose.material.icons.filled.Maximize
+import androidx.compose.material.icons.filled.West
 import androidx.compose.material.icons.outlined.HelpOutline
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -21,7 +24,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -32,6 +34,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
+import kotlinx.coroutines.flow.StateFlow
 import org.koin.androidx.compose.getViewModel
 import ru.er_log.stock.android.R
 import ru.er_log.stock.android.base.utils.toHumanCurrencyFormat
@@ -42,19 +45,33 @@ import ru.er_log.stock.android.compose.components.StockCard
 import ru.er_log.stock.android.compose.components.StockSurface
 import ru.er_log.stock.android.compose.theme.StockColors
 import ru.er_log.stock.android.compose.theme.StockTheme
+import ru.er_log.stock.domain.models.`in`.Lot
 import ru.er_log.stock.domain.models.`in`.Transaction
 import ru.er_log.stock.domain.models.`in`.UserCard
-import ru.er_log.stock.data.network.api.v1.exchange.LotCreationRequest
-import ru.er_log.stock.domain.models.`in`.Lot
 import ru.er_log.stock.domain.models.`in`.UserInfo
 import java.math.BigDecimal
 import java.text.SimpleDateFormat
 import kotlin.random.Random
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun ProfileScreen(
     profileViewModel: ProfileViewModel = getViewModel()
+) {
+    ProfileScreenImpl(
+        userCardFlow = profileViewModel.userCard,
+        userOperationsFlow = profileViewModel.transactions,
+        onCreateOrder = profileViewModel::onCreateOrder,
+        onCreateOffer = profileViewModel::onCreateOffer
+    )
+}
+
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+fun ProfileScreenImpl(
+    userCardFlow: StateFlow<UserCard?>,
+    userOperationsFlow: StateFlow<List<Transaction>>,
+    onCreateOrder: (Lot) -> Unit,
+    onCreateOffer: (Lot) -> Unit,
 ) {
     val screenHeight = with(LocalConfiguration.current) { screenHeightDp }
     val sheetPeekHeight = (screenHeight * 0.2f).dp
@@ -63,21 +80,28 @@ fun ProfileScreen(
         bottomSheetState = BottomSheetState(initialValue = BottomSheetValue.Collapsed)
     )
 
-    val userProfile = profileViewModel.userCard.collectAsState()
-
     StockBottomSheetScaffold(
         scaffoldState = scanFoldState,
         sheetContent = {
             BottomSheetLayer(
                 modifier = Modifier.heightIn(max = sheetMaxHeight),
-                operations = profileViewModel.transactions.collectAsState()
+                operations = userOperationsFlow.collectAsState()
             )
         },
         sheetPeekHeight = sheetPeekHeight
     ) { paddings ->
+        val userProfile = userCardFlow.collectAsState()
         AccountLayer(
             modifier = Modifier.padding(paddings),
-            userCard = { userProfile.value }
+            userCard = {
+                userProfile.value ?: UserCard(
+                    UserInfo("...", "..."),
+                    BigDecimal.ZERO,
+                    UserCard.TransactionStatistics(0, 0, 0, 0)
+                )
+            },
+            onCreateOrder = onCreateOrder,
+            onCreateOffer = onCreateOffer
         )
     }
 }
@@ -85,7 +109,9 @@ fun ProfileScreen(
 @Composable
 private fun AccountLayer(
     modifier: Modifier = Modifier,
-    userCard: () -> UserCard
+    userCard: () -> UserCard,
+    onCreateOrder: (Lot) -> Unit,
+    onCreateOffer: (Lot) -> Unit,
 ) {
     Column(
         modifier = modifier
@@ -97,7 +123,7 @@ private fun AccountLayer(
     ) {
         AccountLayerProfileInfo(userCard)
         AccountLayerStatistic(userCard)
-        AccountLayerOperationButtons()
+        AccountLayerOperationButtons(onCreateOrder = onCreateOrder, onCreateOffer = onCreateOffer)
     }
 }
 
@@ -262,13 +288,13 @@ private fun ColumnScope.TransactionStatisticBar(
 
 @Composable
 private fun ColumnScope.AccountLayerOperationButtons(
-    onCreateOrder: (LotCreationRequest) -> Unit = {},
-    onCreateOffer: (LotCreationRequest) -> Unit = {},
+    onCreateOrder: (Lot) -> Unit,
+    onCreateOffer: (Lot) -> Unit,
     orderCreationState: LotCreationState = rememberLotCreationDialogState(),
     offerCreationState: LotCreationState = rememberLotCreationDialogState()
 ) {
     val (dialogVisible, shouldShowDialog) = remember { mutableStateOf(false) }
-    val onCreateAction = remember { mutableStateOf<(LotCreationRequest) -> Unit>({}) }
+    val onCreateAction = remember { mutableStateOf<(Lot) -> Unit>({}) }
     val creationState = remember { mutableStateOf(orderCreationState) }
 
     Row(
@@ -485,7 +511,9 @@ private fun AccountLayerPreview() {
         ordersCompleted = 2000,
     )
     AccountLayer(
-        userCard = { UserCard(profile, balance, statistics) }
+        userCard = { UserCard(profile, balance, statistics) },
+        onCreateOrder = {},
+        onCreateOffer = {}
     )
 }
 

@@ -21,8 +21,9 @@ dependencies {
     kaptTest "com.squareup.moshi:moshi-kotlin-codegen:1.12.0"
     implementation "com.squareup.moshi:moshi-kotlin:1.12.0"
     implementation "com.squareup.retrofit2:converter-moshi:2.9.0"
-    implementation "com.squareup.okhttp3:okhttp-urlconnection:4.9.1"
-    implementation "com.squareup.okhttp3:logging-interceptor:4.9.1"
+    implementation "com.squareup.okhttp3:okhttp-tls:4.9.1"
+    implementation "com.squareup.okhttp3:okhttp-urlconnection:4.9.3"
+    implementation "com.squareup.okhttp3:logging-interceptor:4.9.3"
 
     // Koin for Kotlin apps
     api "io.insert-koin:koin-core:3.1.5"

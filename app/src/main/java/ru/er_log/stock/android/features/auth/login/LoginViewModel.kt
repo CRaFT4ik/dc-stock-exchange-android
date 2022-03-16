@@ -9,8 +9,8 @@ import ru.er_log.stock.android.R
 import ru.er_log.stock.android.base.utils.scoped
 import ru.er_log.stock.android.compose.components.StockInputValidator
 import ru.er_log.stock.android.compose.components.InputState
-import ru.er_log.stock.data.network.api.v1.auth.SignInRequestDto
 import ru.er_log.stock.domain.models.`in`.UserInfo
+import ru.er_log.stock.domain.models.out.SignInRequest
 import ru.er_log.stock.domain.usecases.AuthUseCases
 
 class LoginViewModel(
@@ -26,7 +26,7 @@ class LoginViewModel(
 
         scoped {
             _loginUIState.value = LoginUIState.Loading
-            val request = SignInRequestDto(username, password)
+            val request = SignInRequest(username, password)
 
             authUseCases.signIn(request, viewModelScope) {
                 it.onSuccess { v -> _loginUIState.value = LoginUIState.Result.Success(v) }

@@ -1,12 +1,25 @@
 package ru.er_log.stock.domain.models.`in`
 
+import java.math.BigDecimal
+import java.util.*
+import kotlin.Comparator
+
 data class OrderBook(
-    val orders: List<Item>,
-    val offers: List<Item>
+    val orders: SortedSet<Item>,
+    val offers: SortedSet<Item>
 ) {
-    data class Item(val lot: Lot) {
-        val price get() = lot.price
-        val amount get() = lot.amount
+    data class Item(
+        val price: BigDecimal,
+        val amount: BigDecimal
+    ) : Comparable<Item> {
+        override fun equals(other: Any?): Boolean {
+            if (other == null || other !is Item) return false
+            return price.compareTo(other.price) == 0
+        }
+
+        override fun hashCode(): Int {
+            return price.hashCode()
+        }
 
         object PriceAscComparator : Comparator<Item> {
             override fun compare(item1: Item?, item2: Item?): Int {
@@ -26,13 +39,8 @@ data class OrderBook(
             }
         }
 
-        override fun equals(other: Any?): Boolean {
-            if (other == null || other !is Item) return false
-            return price.compareTo(other.price) == 0
-        }
-
-        override fun hashCode(): Int {
-            return price.hashCode()
+        override fun compareTo(other: Item): Int {
+            return price.compareTo(other.price)
         }
     }
 }

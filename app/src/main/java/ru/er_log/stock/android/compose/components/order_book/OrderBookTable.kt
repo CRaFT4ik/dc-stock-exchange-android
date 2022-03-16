@@ -25,24 +25,26 @@ import ru.er_log.stock.android.base.utils.autoScale
 import ru.er_log.stock.android.base.utils.toHumanFormat
 import ru.er_log.stock.android.compose.theme.StockTheme
 import ru.er_log.stock.android.compose.theme.darkColors
-import ru.er_log.stock.domain.models.order_book.OrderBookItem
+import ru.er_log.stock.domain.models.`in`.OrderBook
 import java.math.BigDecimal
 import java.util.*
 
+@Preview
+@Composable
+private fun Preview() {
+    StockTheme(colors = darkColors()) {
+        OrderBookTable(state = OrderBookPreviewProvider().provideState())
+    }
+}
 
 @Preview
 @Composable
-private fun OrderBookTablePreview() {
-    val orderBookState = remember {
-        val previewProvider = OrderBookPreviewProvider()
-        OrderBookState(
-            orders = previewProvider.provide(20000, 30000),
-            offers = previewProvider.provide(30000, 40000)
-        )
-    }
-
+private fun EmptyDataPreview() {
     StockTheme(colors = darkColors()) {
-        OrderBookTable(state = orderBookState)
+        OrderBookTable(
+            state = OrderBookPreviewProvider()
+                .provideState(TreeSet(), TreeSet())
+        )
     }
 }
 
@@ -58,7 +60,7 @@ internal fun OrderBookTable(
         OrderBookTableHeader(style = style)
         OrderBookTableColumns(
             ordersItems = remember {
-                state.orders.toSortedSet(OrderBookItem.PriceDescComparator)
+                state.orders.toSortedSet(OrderBook.Item.PriceDescComparator)
             },
             ordersMaxAmount = state.ordersMaxAmount,
             offersItems = state.offers,
@@ -103,13 +105,13 @@ private fun OrderBookTableHeader(style: OrderBookStyle) {
 @Composable
 private fun OrderBookTableColumns(
     modifier: Modifier = Modifier,
-    ordersItems: SortedSet<OrderBookItem>,
+    ordersItems: SortedSet<OrderBook.Item>,
     ordersMaxAmount: BigDecimal,
-    offersItems: SortedSet<OrderBookItem>,
+    offersItems: SortedSet<OrderBook.Item>,
     offersMaxAmount: BigDecimal,
     style: OrderBookStyle
 ) {
-    fun SortedSet<OrderBookItem>.toCountedList(): List<OrderBookCountedItem> {
+    fun SortedSet<OrderBook.Item>.toCountedList(): List<OrderBookCountedItem> {
         return mutableListOf<OrderBookCountedItem>().also { list ->
             fold(BigDecimal.ZERO) { acc, item ->
                 val countedItem = OrderBookCountedItem(acc, item).also { list.add(it) }
@@ -224,7 +226,7 @@ private fun OrderBookTableListItem(
 
 private data class OrderBookCountedItem(
     val prevAmount: BigDecimal,
-    val orderBookItem: OrderBookItem
+    val orderBookItem: OrderBook.Item
 ) {
     val totalAmount: BigDecimal
         get() = prevAmount + orderBookItem.price * orderBookItem.amount

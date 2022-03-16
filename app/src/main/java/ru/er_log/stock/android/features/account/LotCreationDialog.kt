@@ -27,7 +27,7 @@ import ru.er_log.stock.android.R
 import ru.er_log.stock.android.base.utils.onlyFalse
 import ru.er_log.stock.android.compose.components.*
 import ru.er_log.stock.android.compose.theme.StockTheme
-import ru.er_log.stock.data.network.api.v1.exchange.LotCreationRequest
+import ru.er_log.stock.domain.models.`in`.Lot
 import java.math.BigDecimal
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -35,7 +35,7 @@ import java.math.BigDecimal
 fun LotCreationDialog(
     state: LotCreationState = rememberLotCreationDialogState(),
     onDismissRequest: () -> Unit,
-    onCreateAction: (LotCreationRequest) -> Unit
+    onCreateAction: (Lot) -> Unit
 ) {
     Dialog(
         onDismissRequest = onDismissRequest,
@@ -57,7 +57,7 @@ fun LotCreationDialog(
 private fun DialogContent(
     state: LotCreationState = rememberLotCreationDialogState(),
     onDismissRequest: () -> Unit,
-    onCreateAction: (LotCreationRequest) -> Unit
+    onCreateAction: (Lot) -> Unit
 ) {
     StockSurface(
         modifier = Modifier.padding(24.dp),
@@ -108,7 +108,7 @@ private fun DialogContent(
                     enabled = isFieldsOkay.value,
                     modifier = Modifier.weight(6f),
                     onClick = {
-                        val lotCreationRequest = LotCreationRequest(
+                        val lotCreationRequest = Lot(
                             price = state.priceInputState.input.value.toBigDecimal(),
                             amount = state.amountInputState.input.value.toBigDecimal()
                         )
