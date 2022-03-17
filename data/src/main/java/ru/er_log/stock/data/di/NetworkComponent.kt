@@ -8,9 +8,11 @@ import org.koin.core.module.Module
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import ru.er_log.stock.data.network.AuthInterceptor
+import ru.er_log.stock.data.network.Authenticator
 import ru.er_log.stock.data.network.api.v1.account.AccountService
 import ru.er_log.stock.data.network.api.v1.auth.AuthService
 import ru.er_log.stock.data.network.api.v1.exchange.ExchangeService
+import ru.er_log.stock.data.storages.database.daos.UserDao
 import java.util.concurrent.TimeUnit
 import javax.net.ssl.HostnameVerifier
 
@@ -47,7 +49,8 @@ internal class NetworkComponent : KoinModuleComponent() {
                 .hostnameVerifier(hostnameVerifier)
                 .readTimeout(10, TimeUnit.SECONDS)
                 .connectTimeout(10, TimeUnit.SECONDS)
-                .addInterceptor(AuthInterceptor(authDataStorage = get()))
+                .authenticator(Authenticator(get()))
+                .addInterceptor(AuthInterceptor(get()))
                 .addInterceptor(loggingInterceptor)
                 .build()
         }

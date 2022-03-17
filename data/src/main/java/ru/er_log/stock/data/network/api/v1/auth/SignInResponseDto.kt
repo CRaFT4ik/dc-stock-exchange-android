@@ -9,7 +9,7 @@ internal data class SignInResponseDto(
     @Json(name = "token")
     val token: String,
     @Json(name = "id")
-    val userId: Int,
+    val userId: Long,
     @Json(name = "roles")
     val roles: List<String>,
     @Json(name = "username")

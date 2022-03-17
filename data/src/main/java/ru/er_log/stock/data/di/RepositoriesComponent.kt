@@ -16,8 +16,9 @@ internal class RepositoriesComponent : KoinModuleComponent() {
 
         single<AuthRepository> {
             AuthRepositoryImpl(
+                userDao = get(),
                 authService = get(),
-                authStorage = get(),
+                authStore = get(),
                 dispatcher = reposDispatcher
             )
         }

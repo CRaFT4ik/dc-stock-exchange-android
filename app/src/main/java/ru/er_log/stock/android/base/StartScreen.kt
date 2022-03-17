@@ -13,9 +13,10 @@ import ru.er_log.stock.android.compose.theme.darkColors
 import ru.er_log.stock.android.features.auth.AuthViewModel
 
 @Composable
-fun App(
+fun StartScreen(
     authViewModel: AuthViewModel = getViewModel()
 ) {
+    androidx.core.splashscreen.SplashScreen
     StockTheme(colors = darkColors()) {
         val appState = rememberAppState()
         StockScaffold(

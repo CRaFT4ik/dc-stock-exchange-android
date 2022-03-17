@@ -1,7 +1,6 @@
 package ru.er_log.stock.domain.usecases
 
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
 import ru.er_log.stock.domain.models.`in`.UserInfo
 import ru.er_log.stock.domain.models.out.SignInRequest
 import ru.er_log.stock.domain.repositories.AuthRepository
@@ -20,11 +19,8 @@ class AuthUseCases(private val authRepository: AuthRepository) {
 
     private inner class SignInUseCase : UseCaseValue<SignInRequest, UserInfo>() {
         override suspend fun run(params: SignInRequest): Result<UserInfo> {
-            val response = authRepository.login(params).getOrElse {
-                return Result.failure(it)
-            }
-
-            authRepository.saveAuthData(response.authData)
+            val response = authRepository.login(params)
+                .getOrElse { return Result.failure(it) }
             return Result.success(response.userInfo)
         }
     }
