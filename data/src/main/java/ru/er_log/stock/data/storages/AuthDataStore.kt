@@ -4,7 +4,9 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.longPreferencesKey
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.map
 
 internal class AuthDataStore(
     private val dataStore: DataStore<Preferences>
@@ -13,23 +15,15 @@ internal class AuthDataStore(
         private val LAST_LOGGED_IN_USER_ID = longPreferencesKey("LAST_LOGGED_IN_USER_ID")
     }
 
-    suspend fun saveLoggedInUserId(userId: Long) {
+    suspend fun saveLoggedInUserId(userId: Long?) {
         dataStore.edit {
-            it[LAST_LOGGED_IN_USER_ID] = userId
+            it[LAST_LOGGED_IN_USER_ID] = userId ?: -1L
         }
     }
 
-    fun fetchLoggedInUserIdFlow(): Flow<Long?> {
-        return dataStore.data.map { it[LAST_LOGGED_IN_USER_ID] }
+    fun getLoggedInUserId(): Flow<Long?> {
+        return dataStore.data.map {
+            it[LAST_LOGGED_IN_USER_ID]?.let { v -> if (v == -1L) null else v }
+        }
     }
-
-    suspend fun fetchLoggedInUserId(): Long? {
-        return fetchLoggedInUserIdFlow().lastOrNull()
-    }
-}
-
-private suspend fun <T> Flow<T>.lastOrNull(): T? {
-    var result: T? = null
-    catch { return@catch }.collectLatest { result = it; return@collectLatest }
-    return result
 }

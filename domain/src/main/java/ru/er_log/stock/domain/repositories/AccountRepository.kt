@@ -5,7 +5,7 @@ import ru.er_log.stock.domain.models.`in`.UserCard
 
 interface AccountRepository {
 
-    suspend fun fetchTransactions(limit: Int, offset: Int): Result<List<Transaction>>
+    suspend fun getTransactions(limit: Int, offset: Int): Result<List<Transaction>>
 
-    suspend fun fetchUserCard(): Result<UserCard>
+    suspend fun getUserCard(): Result<UserCard>
 }

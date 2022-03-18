@@ -12,6 +12,9 @@ abstract class UserDao : BaseDao<User>() {
 //    @Query("UPDATE User FROM user")
 //    fun updateAuthToken(authToken: String, userId: Int)
 
+    @Query("SELECT * FROM user WHERE user.id = :userId")
+    abstract fun findUserById(userId: Long): User?
+
     @Query("SELECT * FROM user WHERE user.username LIKE :username")
     abstract fun findUsersByName(username: String): List<User>
 

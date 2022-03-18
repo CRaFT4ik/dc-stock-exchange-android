@@ -39,7 +39,7 @@ data class OrderBookState(
         val amountStep = maxAmount?.let { it / BigDecimal.valueOf(6) } ?: BigDecimal.ZERO
         mutableListOf<BigDecimal>().apply {
             if (amountStep > BigDecimal.ZERO) {
-                for (i in 0 until 6) add(amountStep * i.toBigDecimal())
+                for (i in 1..6) add(amountStep * i.toBigDecimal())
             }
         }
     }

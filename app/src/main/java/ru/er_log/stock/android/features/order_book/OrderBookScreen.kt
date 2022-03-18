@@ -4,6 +4,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import org.koin.androidx.compose.getViewModel
@@ -26,7 +28,8 @@ fun OrderBookScreenPreview() {
 fun OrderBookScreen(
     orderBookViewModel: OrderBookViewModel = getViewModel()
 ) {
-    val orderBookState = orderBookViewModel.orderBookState.collectAsState(OrderBookState())
+    val scope = rememberCoroutineScope()
+    val orderBookState = remember { orderBookViewModel.orderBookState(scope) }.collectAsState()
     OrderBookScreenImpl(state = orderBookState.value)
 }
 

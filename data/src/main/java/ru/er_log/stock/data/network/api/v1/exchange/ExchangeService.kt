@@ -9,7 +9,7 @@ import ru.er_log.stock.domain.models.`in`.Lot
 internal interface ExchangeService {
 
     @GET("exchange/order_book")
-    suspend fun fetchOrdersBook(
+    suspend fun getOrdersBook(
         @Query("limit") limit: Int
     ): OrderBookDto
 

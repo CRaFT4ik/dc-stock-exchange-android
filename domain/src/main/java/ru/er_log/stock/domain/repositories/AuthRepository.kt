@@ -9,7 +9,9 @@ import ru.er_log.stock.domain.models.out.SignInRequest
 interface AuthRepository {
     suspend fun login(request: SignInRequest): Result<SignInResponse>
 
-    suspend fun observeUserLoginState(): Flow<Boolean>
+    suspend fun logout()
 
-    suspend fun fetchAuthToken(): String?
+    suspend fun getLoggedInUserInfo(): Flow<UserInfo?>
+
+    suspend fun getAuthToken(): String?
 }

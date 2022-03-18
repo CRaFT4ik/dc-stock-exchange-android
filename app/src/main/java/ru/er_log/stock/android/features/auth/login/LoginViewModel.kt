@@ -1,6 +1,7 @@
 package ru.er_log.stock.android.features.auth.login
 
 import android.content.res.Resources
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,8 +18,8 @@ class LoginViewModel(
     private val authUseCases: AuthUseCases
 ) : ViewModel() {
 
-    private val _loginUIState = MutableStateFlow<LoginUIState>(LoginUIState.Idle)
-    val loginUIState = _loginUIState.asStateFlow()
+    private val _loginUIState = MutableStateFlow<LoginUIState>(LoginUIState.Loading)
+    val loginUIState = _loginUIState.observeLoginState().asStateFlow()
 
     fun login(usernameState: InputState, passwordState: InputState) {
         val username = usernameState.input.value
@@ -37,6 +38,28 @@ class LoginViewModel(
 
     fun setInitialUIState() {
         _loginUIState.value = LoginUIState.Idle
+    }
+
+    override fun onCleared() {
+        Log.d("CRTag", "onCleared: " + this::class.simpleName)
+        super.onCleared()
+    }
+
+    /**
+     * Checks the user login status and operates the UI state based on this.
+     */
+    private fun MutableStateFlow<LoginUIState>.observeLoginState() = apply {
+        authUseCases.observeLoginState(Unit, viewModelScope) { result ->
+            result.onSuccess { userInfo ->
+                value = when (userInfo) {
+                    null -> LoginUIState.Idle
+                    else -> LoginUIState.Result.Success(userInfo)
+                }
+            }
+            result.onFailure {
+                value = LoginUIState.Idle
+            }
+        }
     }
 }
 

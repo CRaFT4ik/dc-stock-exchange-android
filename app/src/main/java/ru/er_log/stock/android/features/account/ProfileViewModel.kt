@@ -19,14 +19,14 @@ class ProfileViewModel(
     private val _transactions: MutableStateFlow<List<Transaction>> = MutableStateFlow(listOf())
     val transactions = _transactions.apply {
         val page = 0
-        accountUseCases.fetchOperations(page, viewModelScope) {
+        accountUseCases.getOperations(page, viewModelScope) {
             it.onSuccess { v -> emit(v) }
         }
     }.asStateFlow()
 
     private val _userCard = MutableStateFlow<UserCard?>(null)
     val userCard: StateFlow<UserCard?> = _userCard.apply {
-        accountUseCases.fetchUserCard(Unit, viewModelScope) {
+        accountUseCases.getUserCard(Unit, viewModelScope) {
             it.onSuccess { v -> emit(v) }
         }
     }.asStateFlow()

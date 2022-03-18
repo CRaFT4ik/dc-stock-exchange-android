@@ -5,7 +5,7 @@ import ru.er_log.stock.domain.models.`in`.OrderBook
 
 interface ExchangeRepository {
 
-    suspend fun fetchOrderBook(limit: Int): OrderBook
+    suspend fun getOrderBook(limit: Int): OrderBook
 
     suspend fun createOrder(lot: Lot)
 

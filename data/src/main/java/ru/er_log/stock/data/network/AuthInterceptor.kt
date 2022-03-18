@@ -15,8 +15,13 @@ class AuthInterceptor : Interceptor {
         val requestBuilder = chain.request().newBuilder()
 
         runBlocking {
-            authRepository.fetchAuthToken()?.let { token ->
-                requestBuilder.addAuthToken(token)
+            try {
+                authRepository.getAuthToken()?.let { token ->
+                    requestBuilder.addAuthToken(token)
+                }
+            } catch (t: Throwable) {
+                t.printStackTrace()
+                throw t
             }
         }
 

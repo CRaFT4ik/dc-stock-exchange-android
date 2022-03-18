@@ -42,6 +42,15 @@ class UserDaoTest {
         assertThat(byName[0], equalTo(user))
     }
 
+    @Test
+    fun getAuthTokenTest() {
+        val user: User = provideUser("test_user")
+        userDao.insert(user)
+
+        val token = userDao.getAuthToken(user.id)
+        assertThat(byName[0], equalTo(user))
+    }
+
     private fun provideUser(name: String): User {
         return User(1, name, "email", "123")
     }

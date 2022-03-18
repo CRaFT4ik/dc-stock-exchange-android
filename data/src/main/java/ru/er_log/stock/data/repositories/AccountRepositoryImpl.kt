@@ -14,15 +14,15 @@ internal class AccountRepositoryImpl(
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : AccountRepository {
 
-    override suspend fun fetchTransactions(limit: Int, offset: Int) = withContext(dispatcher) {
-        when (val response = makeRequest { accountService.fetchTransactions(limit, offset) }) {
+    override suspend fun getTransactions(limit: Int, offset: Int) = withContext(dispatcher) {
+        when (val response = makeRequest { accountService.getTransactions(limit, offset) }) {
             is NetworkResult.Failure -> Result.failure(Exception(response.errorMessage, response.t))
             is NetworkResult.Success -> Result.success(response.value.map())
         }
     }
 
-    override suspend fun fetchUserCard() = withContext(dispatcher) {
-        when (val response = makeRequest { accountService.fetchProfile() }) {
+    override suspend fun getUserCard() = withContext(dispatcher) {
+        when (val response = makeRequest { accountService.getProfile() }) {
             is NetworkResult.Failure -> Result.failure(Exception(response.errorMessage, response.t))
             is NetworkResult.Success -> Result.success(response.value.map())
         }

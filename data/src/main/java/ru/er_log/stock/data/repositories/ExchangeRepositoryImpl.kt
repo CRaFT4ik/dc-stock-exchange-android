@@ -15,8 +15,8 @@ internal class ExchangeRepositoryImpl(
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ExchangeRepository {
 
-    override suspend fun fetchOrderBook(limit: Int) = withContext(dispatcher) {
-        when (val response = makeRequest { exchangeService.fetchOrdersBook(limit) }) {
+    override suspend fun getOrderBook(limit: Int) = withContext(dispatcher) {
+        when (val response = makeRequest { exchangeService.getOrdersBook(limit) }) {
             is NetworkResult.Failure -> throw Exception(response.errorMessage, response.t)
             is NetworkResult.Success -> response.value.map()
         }

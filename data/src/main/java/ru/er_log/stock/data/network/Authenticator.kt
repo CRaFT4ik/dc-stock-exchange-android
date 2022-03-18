@@ -14,7 +14,7 @@ class Authenticator : Authenticator {
     @Synchronized
     override fun authenticate(route: Route?, response: Response): Request? {
         // TODO: 1. Check if another request not already updated the token
-        //       2. Fetch updated token or sync. refresh and save token (depends on p.1)
+        //       2. Get updated token or sync. refresh and save token (depends on p.1)
         // return response.request.newBuilder().addToken("").build()
         return null
     }

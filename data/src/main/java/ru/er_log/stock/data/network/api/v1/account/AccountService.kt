@@ -6,11 +6,11 @@ import retrofit2.http.Query
 internal interface AccountService {
 
     @GET("account/transactions")
-    suspend fun fetchTransactions(
+    suspend fun getTransactions(
         @Query("limit") limit: Int,
         @Query("offset") offset: Int
     ): List<TransactionDto>
 
     @GET("account/profile")
-    suspend fun fetchProfile(): UserCardDto
+    suspend fun getProfile(): UserCardDto
 }
