@@ -2,32 +2,33 @@ package ru.er_log.stock.data.storages.database.daos
 
 import androidx.room.*
 
-interface BaseDao<T> {
+@Dao
+abstract class BaseDao<T> {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insert(obj: T): Long
+    abstract fun insert(obj: T): Long
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insert(obj: List<T>): List<Long>
+    abstract fun insert(obj: List<T>): List<Long>
 
     @Update
-    fun update(obj: T)
+    abstract fun update(obj: T)
 
     @Update
-    fun update(obj: List<T>)
+    abstract fun update(obj: List<T>)
 
     @Delete
-    fun delete(obj: T)
+    abstract fun delete(obj: T)
 
     @Transaction
-    fun upsert(obj: T) {
+    open fun upsert(obj: T) {
         if (insert(obj) == -1L) {
             update(obj)
         }
     }
 
     @Transaction
-    fun upsert(objList: List<T>) {
+    open fun upsert(objList: List<T>) {
         val insertResult = insert(objList)
         val updateList: MutableList<T> = ArrayList()
         for (i in insertResult.indices) {
