@@ -30,10 +30,10 @@ data class OrderBookState(
     }
 
     val offersMaxAmount =
-        offers.fold(BigDecimal.ZERO) { acc, item -> acc + (item.amount * item.price) }
+        offers.fold(BigDecimal.ZERO) { acc, item -> acc + item.amount }
 
     val ordersMaxAmount =
-        orders.fold(BigDecimal.ZERO) { acc, item -> acc + (item.amount * item.price) }
+        orders.fold(BigDecimal.ZERO) { acc, item -> acc + item.amount }
 
     val amountLines = run {
         val amountStep = maxAmount?.let { it / BigDecimal.valueOf(6) } ?: BigDecimal.ZERO
@@ -111,12 +111,12 @@ data class OrderBookState(
                 else -> items.subSet(prevItem, nextItem)
             }
 
-            yAccAmount = amountPartSet.fold(yAccAmount) { acc, item -> acc + (item.amount * item.price) }
+            yAccAmount = amountPartSet.fold(yAccAmount) { acc, item -> acc + item.amount }
             // Because SortedList.subSet excludes second value.
             if (x == range.last) {
                 when (reversed) {
-                    true -> items.firstOrNull()?.let { yAccAmount += it.price * it.amount }
-                    else -> items.lastOrNull()?.let { yAccAmount += it.price * it.amount }
+                    true -> items.firstOrNull()?.let { yAccAmount += it.amount }
+                    else -> items.lastOrNull()?.let { yAccAmount += it.amount }
                 }
             }
 

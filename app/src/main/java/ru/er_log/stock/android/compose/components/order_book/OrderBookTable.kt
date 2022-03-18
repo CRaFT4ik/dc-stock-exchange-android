@@ -59,9 +59,7 @@ internal fun OrderBookTable(
     ) {
         OrderBookTableHeader(style = style)
         OrderBookTableColumns(
-            ordersItems = remember {
-                state.orders.toSortedSet(OrderBook.Item.PriceDescComparator)
-            },
+            ordersItems = state.orders.toSortedSet(OrderBook.Item.PriceDescComparator),
             ordersMaxAmount = state.ordersMaxAmount,
             offersItems = state.offers,
             offersMaxAmount = state.offersMaxAmount,
@@ -120,7 +118,7 @@ private fun OrderBookTableColumns(
         }
     }
 
-    val itemsList = remember {
+    val itemsList = run {
         val ordersIterator = ordersItems.toCountedList().iterator()
         val offersIterator = offersItems.toCountedList().iterator()
         mutableListOf<Pair<OrderBookCountedItem, OrderBookCountedItem>>().apply {
@@ -229,5 +227,5 @@ private data class OrderBookCountedItem(
     val orderBookItem: OrderBook.Item
 ) {
     val totalAmount: BigDecimal
-        get() = prevAmount + orderBookItem.price * orderBookItem.amount
+        get() = prevAmount + orderBookItem.amount
 }
