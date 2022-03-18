@@ -49,8 +49,8 @@ internal class NetworkComponent : KoinModuleComponent() {
                 .hostnameVerifier(hostnameVerifier)
                 .readTimeout(10, TimeUnit.SECONDS)
                 .connectTimeout(10, TimeUnit.SECONDS)
-                .authenticator(Authenticator(get()))
-                .addInterceptor(AuthInterceptor(get()))
+                .authenticator(Authenticator())
+                .addInterceptor(AuthInterceptor())
                 .addInterceptor(loggingInterceptor)
                 .build()
         }

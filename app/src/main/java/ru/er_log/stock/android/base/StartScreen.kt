@@ -16,7 +16,6 @@ import ru.er_log.stock.android.features.auth.AuthViewModel
 fun StartScreen(
     authViewModel: AuthViewModel = getViewModel()
 ) {
-    androidx.core.splashscreen.SplashScreen
     StockTheme(colors = darkColors()) {
         val appState = rememberAppState()
         StockScaffold(

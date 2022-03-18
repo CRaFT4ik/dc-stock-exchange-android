@@ -4,9 +4,12 @@ import okhttp3.Authenticator
 import okhttp3.Request
 import okhttp3.Response
 import okhttp3.Route
+import ru.er_log.stock.data.di.inject
 import ru.er_log.stock.domain.repositories.AuthRepository
 
-class Authenticator(private val authRepository: AuthRepository) : Authenticator {
+class Authenticator : Authenticator {
+
+    private val authRepository: AuthRepository by lazy { inject() }
 
     @Synchronized
     override fun authenticate(route: Route?, response: Response): Request? {

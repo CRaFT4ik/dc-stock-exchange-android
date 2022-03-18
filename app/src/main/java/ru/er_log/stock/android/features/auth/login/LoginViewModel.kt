@@ -7,8 +7,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import ru.er_log.stock.android.R
 import ru.er_log.stock.android.base.utils.scoped
-import ru.er_log.stock.android.compose.components.StockInputValidator
 import ru.er_log.stock.android.compose.components.InputState
+import ru.er_log.stock.android.compose.components.StockInputValidator
 import ru.er_log.stock.domain.models.`in`.UserInfo
 import ru.er_log.stock.domain.models.out.SignInRequest
 import ru.er_log.stock.domain.usecases.AuthUseCases
@@ -30,9 +30,7 @@ class LoginViewModel(
 
             authUseCases.signIn(request, viewModelScope) {
                 it.onSuccess { v -> _loginUIState.value = LoginUIState.Result.Success(v) }
-                it.onFailure { v ->
-                    _loginUIState.value = LoginUIState.Result.Failure(v.message)
-                }
+                it.onFailure { v -> _loginUIState.value = LoginUIState.Result.Failure(v.message) }
             }
         }
     }

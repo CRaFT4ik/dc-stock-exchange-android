@@ -4,9 +4,12 @@ import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Request
 import okhttp3.Response
+import ru.er_log.stock.data.di.inject
 import ru.er_log.stock.domain.repositories.AuthRepository
 
-class AuthInterceptor(private val authRepository: AuthRepository) : Interceptor {
+class AuthInterceptor : Interceptor {
+
+    private val authRepository: AuthRepository by lazy { inject() }
 
     override fun intercept(chain: Interceptor.Chain): Response {
         val requestBuilder = chain.request().newBuilder()
