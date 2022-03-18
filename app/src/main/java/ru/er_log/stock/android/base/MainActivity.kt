@@ -10,25 +10,25 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if (savedInstanceState != null) {
-            val splashScreen = installSplashScreen()
-
-            splashScreen.setOnExitAnimationListener { splashScreenViewProvider ->
-                // Get icon instance and start a fade out animation
-                splashScreenViewProvider.iconView
-                    .animate()
-                    .setDuration(300L)
-                    .alpha(0f)
-                    .withEndAction {
-                        // After the fade out, remove the splash and set content view
-                        splashScreenViewProvider.remove()
+//        if (savedInstanceState != null) {
+//            val splashScreen = installSplashScreen()
+//
+//            splashScreen.setOnExitAnimationListener { splashScreenViewProvider ->
+//                // Get icon instance and start a fade out animation
+//                splashScreenViewProvider.iconView
+//                    .animate()
+//                    .setDuration(300L)
+//                    .alpha(0f)
+//                    .withEndAction {
+//                        // After the fade out, remove the splash and set content view
+//                        splashScreenViewProvider.remove()
                         setContent{
                             StartScreen()
                         }
-                    }.start()
-            }
-        } else {
-            setContent { StartScreen() }
-        }
+//                    }.start()
+//            }
+//        } else {
+//            setContent { StartScreen() }
+//        }
     }
 }

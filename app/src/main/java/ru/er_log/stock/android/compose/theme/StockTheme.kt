@@ -1,8 +1,11 @@
 package ru.er_log.stock.android.compose.theme
 
+import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.*
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.*
+import androidx.compose.ui.graphics.Color
 
 object StockTheme {
     /**
@@ -42,7 +45,8 @@ fun StockTheme(
     CompositionLocalProvider(
         LocalColors provides rememberedColors,
         LocalShapes provides shapes,
-        LocalTypography provides typography
+        LocalTypography provides typography,
+        LocalIndication provides rememberRipple(color = StockTheme.colors.backgroundSecondary)
     ) {
         content()
     }

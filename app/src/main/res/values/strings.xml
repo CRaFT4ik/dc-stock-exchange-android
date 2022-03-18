@@ -25,6 +25,11 @@
     <string name="account_profile_statistic_balance_completed_offers">offers</string>
     <string name="account_transactions_list_title">Transactions list</string>
     <string name="account_transactions_list_empty">You have not made any trades yet</string>
+    <string name="account_transaction_detail_total">Total cost: %1$s</string>
+    <string name="account_transaction_detail_price">Price: %1$s</string>
+    <string name="account_transaction_detail_amount">Amount: %1$s</string>
+    <string name="account_action_create_order">Buy</string>
+    <string name="account_action_make_offer">Sell</string>
 
     <!-- Lot creation form -->
     <string name="lot_creation_form_price">Price</string>
@@ -42,5 +47,5 @@
     <string name="ok">Ok</string>
     <string name="submit">Submit</string>
     <string name="cancel">Cancel</string>
-    <string name="abstract_currency">%1$s c.u.</string>
+    <string name="abstract_currency">$ %1$s</string>
 </resources>

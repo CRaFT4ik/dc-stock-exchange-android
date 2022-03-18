@@ -6,17 +6,21 @@ import ru.er_log.stock.domain.repositories.AccountRepository
 
 class AccountUseCases(private val accountRepository: AccountRepository) {
 
-    val getOperations: UseCase<Int, List<Transaction>> by lazy { GetOperationsUseCase() }
-    val getUserCard: UseCase<Unit, UserCard> by lazy { GetUserCardUseCase() }
+    val getOperations: UseCase<Int, List<Transaction>> by lazy { ObserveOperationsUseCase() }
+    val getUserCard: UseCase<Unit, UserCard> by lazy { ObserveUserCardUseCase() }
 
-    private inner class GetOperationsUseCase : UseCaseValue<Int, List<Transaction>>() {
+    private inner class ObserveOperationsUseCase : UseCaseRepeatable<Int, List<Transaction>>(
+        delayMs = 10000
+    ) {
         override suspend fun run(pageIndex: Int): Result<List<Transaction>> {
             val pageSize = 50
             return accountRepository.getTransactions(pageSize, offset = pageIndex * pageSize)
         }
     }
 
-    private inner class GetUserCardUseCase : UseCaseValue<Unit, UserCard>() {
+    private inner class ObserveUserCardUseCase : UseCaseRepeatable<Unit, UserCard>(
+        delayMs = 10000
+    ) {
         override suspend fun run(params: Unit): Result<UserCard> {
             return accountRepository.getUserCard()
         }

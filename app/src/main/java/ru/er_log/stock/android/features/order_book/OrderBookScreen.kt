@@ -20,7 +20,8 @@ import ru.er_log.stock.android.compose.theme.darkColors
 @Composable
 fun OrderBookScreenPreview() {
     StockTheme(colors = darkColors()) {
-        OrderBookScreenImpl(state = OrderBookPreviewProvider().provideState())
+        val state = OrderBookPreviewProvider().provideState()
+        OrderBookScreenImpl(state = { state })
     }
 }
 
@@ -30,13 +31,13 @@ fun OrderBookScreen(
 ) {
     val scope = rememberCoroutineScope()
     val orderBookState = remember { orderBookViewModel.orderBookState(scope) }.collectAsState()
-    OrderBookScreenImpl(state = orderBookState.value)
+    OrderBookScreenImpl(state = { orderBookState.value })
 }
 
 @Composable
 private fun OrderBookScreenImpl(
     modifier: Modifier = Modifier,
-    state: OrderBookState
+    state: () -> OrderBookState
 ) {
     Column {
         OrderBookChart(

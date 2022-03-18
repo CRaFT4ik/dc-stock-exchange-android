@@ -20,7 +20,7 @@ internal class NetworkComponent : KoinModuleComponent() {
 
     companion object {
         const val devHost = "192.168.0.100"
-        const val remoteHost = "192.168.0.100"
+        const val remoteHost = "er-log.ru"
         const val remotePort = "2053"
     }
 

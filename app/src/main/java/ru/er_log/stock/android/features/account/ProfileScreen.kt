@@ -3,10 +3,13 @@ package ru.er_log.stock.android.features.account
 import androidx.annotation.DrawableRes
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -19,6 +22,7 @@ import androidx.compose.material.icons.outlined.HelpOutline
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterVertically
+import androidx.compose.ui.Alignment.Companion.End
 import androidx.compose.ui.Alignment.Companion.TopCenter
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -34,11 +38,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.koin.androidx.compose.getViewModel
 import ru.er_log.stock.android.R
+import ru.er_log.stock.android.base.utils.toCurrencyFormat
 import ru.er_log.stock.android.base.utils.toHumanCurrencyFormat
-import ru.er_log.stock.android.base.utils.toHumanFormat
 import ru.er_log.stock.android.compose.components.StockBottomSheetScaffold
 import ru.er_log.stock.android.compose.components.StockButton
 import ru.er_log.stock.android.compose.components.StockCard
@@ -57,19 +62,23 @@ import kotlin.random.Random
 fun ProfileScreen(
     profileViewModel: ProfileViewModel = getViewModel()
 ) {
+    val scope = rememberCoroutineScope()
+    val userCardState = profileViewModel.userCard(scope).collectAsState()
+    val userOperationsState = profileViewModel.transactions(scope).collectAsState()
+
     ProfileScreenImpl(
-        userCardFlow = profileViewModel.userCard,
-        userOperationsFlow = profileViewModel.transactions,
+        userCard = { userCardState.value },
+        userOperations = { userOperationsState.value },
         onCreateOrder = profileViewModel::onCreateOrder,
         onCreateOffer = profileViewModel::onCreateOffer
     )
 }
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterialApi::class, ExperimentalAnimationApi::class)
 @Composable
 fun ProfileScreenImpl(
-    userCardFlow: StateFlow<UserCard?>,
-    userOperationsFlow: StateFlow<List<Transaction>>,
+    userCard: () -> UserCard,
+    userOperations: () -> List<Transaction>,
     onCreateOrder: (Lot) -> Unit,
     onCreateOffer: (Lot) -> Unit,
 ) {
@@ -84,22 +93,17 @@ fun ProfileScreenImpl(
         scaffoldState = scanFoldState,
         sheetContent = {
             BottomSheetLayer(
-                modifier = Modifier.heightIn(max = sheetMaxHeight),
-                operations = userOperationsFlow.collectAsState()
+                modifier = Modifier
+                    .heightIn(max = sheetMaxHeight)
+                    .fillMaxHeight(),
+                operations = userOperations
             )
         },
         sheetPeekHeight = sheetPeekHeight
     ) { paddings ->
-        val userProfile = userCardFlow.collectAsState()
         AccountLayer(
             modifier = Modifier.padding(paddings),
-            userCard = {
-                userProfile.value ?: UserCard(
-                    UserInfo("...", "..."),
-                    BigDecimal.ZERO,
-                    UserCard.TransactionStatistics(0, 0, 0, 0)
-                )
-            },
+            userCard = userCard,
             onCreateOrder = onCreateOrder,
             onCreateOffer = onCreateOffer
         )
@@ -121,17 +125,22 @@ private fun AccountLayer(
             .padding(top = 30.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        AccountLayerProfileInfo(userCard)
-        AccountLayerStatistic(userCard)
+        Crossfade(targetState = userCard()) {
+            Column {
+                AccountLayerProfileInfo(it)
+                AccountLayerStatistic(it)
+            }
+        }
+
         AccountLayerOperationButtons(onCreateOrder = onCreateOrder, onCreateOffer = onCreateOffer)
     }
 }
 
 @Composable
 private fun AccountLayerProfileInfo(
-    userCard: () -> UserCard
+    userCard: UserCard
 ) {
-    val profile = userCard().userInfo
+    val profile = userCard.userInfo
     val imageSize = 128.dp
 
     Box(contentAlignment = TopCenter) {
@@ -172,7 +181,7 @@ private fun AccountLayerProfileInfo(
 
 @Composable
 private fun AccountLayerStatistic(
-    userCard: () -> UserCard
+    userCard: UserCard
 ) {
     CompositionLocalProvider(LocalTextStyle provides StockTheme.typography.subtitle2) {
         Text(
@@ -198,12 +207,7 @@ private fun AccountLayerStatistic(
                     )
                 },
             ) {
-                Text(
-                    stringResource(
-                        R.string.abstract_currency,
-                        userCard().userBalance.toHumanCurrencyFormat()
-                    )
-                )
+                Text(userCard.userBalance.toHumanCurrencyFormat())
             }
 
             Text(
@@ -213,16 +217,15 @@ private fun AccountLayerStatistic(
             )
 
             Spacer(Modifier.size(16.dp))
-            TransactionStatisticBar(state = { userCard().statistics })
+            TransactionStatisticBar(userCard.statistics)
         }
     }
 }
 
 @Composable
 private fun ColumnScope.TransactionStatisticBar(
-    state: () -> UserCard.TransactionStatistics
+    statistics: UserCard.TransactionStatistics
 ) {
-    val statistics = state.invoke()
     val barHeight = 12.dp
 
     val weights = arrayOf(
@@ -249,8 +252,9 @@ private fun ColumnScope.TransactionStatisticBar(
         weights.forEachIndexed { i, weight ->
             Box(
                 modifier = Modifier
+                    .animateContentSize()
                     .fillMaxHeight()
-                    .weight(maxOf(weight, 1).toFloat(), fill = true)
+                    .weight(maxOf(weight, 1).toFloat() + 1f, fill = true)
                     .background(color = colors[i])
             )
         }
@@ -311,7 +315,7 @@ private fun ColumnScope.AccountLayerOperationButtons(
                 shouldShowDialog(true)
             }
         ) {
-            Text("Create order")
+            Text(stringResource(R.string.account_action_create_order))
         }
 
         Spacer(modifier = Modifier.size(12.dp))
@@ -327,7 +331,7 @@ private fun ColumnScope.AccountLayerOperationButtons(
                 shouldShowDialog(true)
             }
         ) {
-            Text("Make offer")
+            Text(stringResource(R.string.account_action_make_offer))
         }
     }
 
@@ -340,22 +344,29 @@ private fun ColumnScope.AccountLayerOperationButtons(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun ColumnScope.BottomSheetLayer(
     modifier: Modifier = Modifier,
-    operations: State<List<Transaction>>
+    operations: () -> List<Transaction>
 ) {
     Column(
-        modifier = modifier.padding(top = 12.dp, start = 6.dp, end = 6.dp)
+        modifier = modifier
+            .border(
+                1.dp,
+                StockTheme.colors.backgroundSecondary.copy(alpha = 0.3f),
+                RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)
+            )
+            .padding(top = 12.dp, start = 6.dp, end = 6.dp),
     ) {
         BottomSheetTitle(
             title = stringResource(R.string.account_transactions_list_title)
         )
 
-        Crossfade(
-            targetState = operations.value.isEmpty()
-        ) { listIsEmpty ->
-            when (listIsEmpty) {
+        val isOperationsEmpty by remember { derivedStateOf { operations().isEmpty() } }
+        val operationsSize by remember { derivedStateOf { operations().size } }
+        Crossfade(targetState = isOperationsEmpty) { isEmpty ->
+            when (isEmpty) {
                 true -> {
                     Text(
                         modifier = Modifier
@@ -367,11 +378,23 @@ private fun ColumnScope.BottomSheetLayer(
                     )
                 }
                 else -> {
-                    LazyColumn {
-                        operations.value.forEach {
-                            item(it.uid) {
-                                TransactionListItem(it)
+                    val listState = rememberLazyListState()
+
+                    LazyColumn(state = listState) {
+                        operations().forEach { transaction ->
+                            item(transaction.uid) {
+                                TransactionListItem(
+                                    modifier = Modifier.animateItemPlacement(),
+                                    transaction = transaction
+                                )
                             }
+                        }
+                    }
+                    
+                    LaunchedEffect(key1 = operationsSize) {
+                        if (listState.firstVisibleItemIndex < 3) {
+                            delay(200)
+                            listState.animateScrollToItem(0)
                         }
                     }
                 }
@@ -393,7 +416,7 @@ private fun BottomSheetTitle(title: String) {
 
         CompositionLocalProvider(LocalTextStyle provides StockTheme.typography.subtitle1) {
             Text(
-                modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
+                modifier = Modifier.padding(start = 12.dp, end = 12.dp, top = 6.dp, bottom = 10.dp),
                 text = title,
                 color = StockTheme.colors.textSecondary
             )
@@ -403,25 +426,34 @@ private fun BottomSheetTitle(title: String) {
 
 @Composable
 private fun TransactionListItem(
+    modifier: Modifier = Modifier,
     transaction: Transaction
 ) {
-    val total = remember { (transaction.lot.amount * transaction.lot.price).toHumanFormat() }
+    val total = remember {
+        (transaction.lot.amount * transaction.lot.price).toHumanCurrencyFormat()
+    }
     val (cardExpanded, setExpanded) = remember { mutableStateOf(false) }
     val expandIconRotateState = animateFloatAsState(
         targetValue = if (cardExpanded) -180f else 0f,
         visibilityThreshold = 1f
     )
 
+    val shape = RoundedCornerShape(6.dp)
     StockCard(
-        modifier = Modifier
+        shape = shape,
+        modifier = modifier
             .fillMaxWidth()
+            .border(1.dp, StockTheme.colors.background.copy(alpha = 0.3f), shape)
             .clickable { setExpanded(!cardExpanded) }
     ) {
         Column(
-            modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
+            modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
+            verticalArrangement = Arrangement.Center
         ) {
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .heightIn(min = 40.dp)
+                    .fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = CenterVertically
             ) {
@@ -449,7 +481,12 @@ private fun TransactionListItem(
                 Row(
                     verticalAlignment = CenterVertically
                 ) {
-                    Text(stringResource(R.string.abstract_currency, total))
+                    val sign = when (transaction.type) {
+                        Transaction.Type.ORDER -> "+"
+                        Transaction.Type.OFFER -> "-"
+                        else -> ""
+                    }
+                    Text("$sign ${transaction.lot.amount}")
 
                     Spacer(modifier = Modifier.width(4.dp))
 
@@ -463,9 +500,7 @@ private fun TransactionListItem(
             }
 
             AnimatedVisibility(visible = cardExpanded) {
-                val time = remember {
-                    SimpleDateFormat.getDateTimeInstance().format(transaction.timestamp)
-                }
+                val time = SimpleDateFormat.getDateTimeInstance().format(transaction.timestamp)
 
                 Column(
                     modifier = Modifier
@@ -473,9 +508,25 @@ private fun TransactionListItem(
                         .padding(bottom = 4.dp)
                 ) {
                     CompositionLocalProvider(LocalContentColor provides StockTheme.colors.textSecondary) {
-                        Text("price: " + transaction.lot.price)
-                        Text("amount: " + transaction.lot.amount)
-                        Text("time: $time")
+                        Text(
+                            stringResource(
+                                R.string.account_transaction_detail_amount,
+                                transaction.lot.amount
+                            )
+                        )
+                        Text(
+                            stringResource(
+                                R.string.account_transaction_detail_price,
+                                transaction.lot.price.toHumanCurrencyFormat()
+                            )
+                        )
+                        Text(
+                            stringResource(
+                                R.string.account_transaction_detail_total,
+                                total
+                            )
+                        )
+                        Text(modifier = Modifier.align(End), text = time)
                     }
                 }
             }
@@ -521,12 +572,23 @@ private fun AccountLayerPreview() {
 @Composable
 private fun OperationsLayerPreview() {
     val operations: List<Transaction> = mutableListOf<Transaction>().apply {
-        repeat(20) { add(randomTransaction()) }
+        repeat(5) { add(randomTransaction()) }
     }
+    val items = remember { mutableStateOf(operations) }
 
     Column {
+        LaunchedEffect(this::class) {
+            while (true) {
+                delay(2000)
+                val newList = items.value.toMutableList()
+                newList.add(0, randomTransaction())
+                items.component2().invoke(newList)
+            }
+        }
+
         BottomSheetLayer(
-            operations = remember { mutableStateOf(operations) }
+            modifier = Modifier.fillMaxHeight(),
+            operations = { items.value }
         )
     }
 }
@@ -536,7 +598,7 @@ private fun OperationsLayerPreview() {
 private fun OperationsLayerEmptyPreview() {
     Column {
         BottomSheetLayer(
-            operations = remember { mutableStateOf(emptyList()) }
+            operations = { emptyList() }
         )
     }
 }

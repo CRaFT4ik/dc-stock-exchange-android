@@ -6,11 +6,11 @@ import ru.er_log.stock.domain.repositories.ExchangeRepository
 
 class ExchangeUseCases(private val exchangeRepository: ExchangeRepository) {
 
-    val getOrderBook: UseCase<Int, OrderBook> by lazy { GetOrderBookUseCase() }
+    val getOrderBook: UseCase<Int, OrderBook> by lazy { ObserveOrderBookUseCase() }
     val createOrder: UseCase<Lot, Unit> by lazy { CreateOrderUseCase() }
     val createOffer: UseCase<Lot, Unit> by lazy { CreateOfferUseCase() }
 
-    private inner class GetOrderBookUseCase : UseCaseRepeatable<Int, OrderBook>(delayMs = 10000) {
+    private inner class ObserveOrderBookUseCase : UseCaseRepeatable<Int, OrderBook>(delayMs = 10000) {
         override suspend fun run(limit: Int): Result<OrderBook> {
             return Result.success(exchangeRepository.getOrderBook(limit))
         }

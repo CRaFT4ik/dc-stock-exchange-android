@@ -1,6 +1,7 @@
 package ru.er_log.stock.android.compose.components.order_book
 
 import android.graphics.Rect
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -21,6 +22,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import ru.er_log.stock.android.R
+import ru.er_log.stock.android.base.utils.LogCompositions
 import ru.er_log.stock.android.base.utils.autoScale
 import ru.er_log.stock.android.base.utils.toHumanFormat
 import ru.er_log.stock.android.compose.theme.StockTheme
@@ -33,7 +35,10 @@ import java.util.*
 @Composable
 private fun Preview() {
     StockTheme(colors = darkColors()) {
-        OrderBookTable(state = OrderBookPreviewProvider().provideState())
+        val state = OrderBookPreviewProvider().provideState(TreeSet(), TreeSet())
+        OrderBookTable(
+            state = { state }
+        )
     }
 }
 
@@ -41,9 +46,9 @@ private fun Preview() {
 @Composable
 private fun EmptyDataPreview() {
     StockTheme(colors = darkColors()) {
+        val state = OrderBookPreviewProvider().provideState(TreeSet(), TreeSet())
         OrderBookTable(
-            state = OrderBookPreviewProvider()
-                .provideState(TreeSet(), TreeSet())
+            state = { state }
         )
     }
 }
@@ -51,20 +56,22 @@ private fun EmptyDataPreview() {
 @Composable
 internal fun OrderBookTable(
     modifier: Modifier = Modifier,
-    state: OrderBookState,
+    state: () -> OrderBookState,
     style: OrderBookStyle = OrderBookStyle()
 ) {
     Column(
         modifier = modifier.fillMaxSize()
     ) {
         OrderBookTableHeader(style = style)
-        OrderBookTableColumns(
-            ordersItems = state.orders.toSortedSet(OrderBook.Item.PriceDescComparator),
-            ordersMaxAmount = state.ordersMaxAmount,
-            offersItems = state.offers,
-            offersMaxAmount = state.offersMaxAmount,
-            style = style
-        )
+        Crossfade(targetState = state()) { tableState ->
+            OrderBookTableColumns(
+                ordersItems = tableState.orders.toSortedSet(OrderBook.Item.PriceDescComparator),
+                ordersMaxAmount = tableState.ordersMaxAmount,
+                offersItems = tableState.offers,
+                offersMaxAmount = tableState.offersMaxAmount,
+                style = style
+            )
+        }
     }
 }
 

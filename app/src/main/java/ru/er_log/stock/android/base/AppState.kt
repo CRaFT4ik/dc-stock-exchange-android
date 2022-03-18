@@ -1,6 +1,9 @@
 package ru.er_log.stock.android.base
 
 import android.content.res.Resources
+import androidx.compose.material.BackdropScaffoldState
+import androidx.compose.material.ScaffoldState
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.Stable
@@ -19,15 +22,17 @@ import ru.er_log.stock.android.compose.components.AppBottomBarTab
 
 @Composable
 fun rememberAppState(
+    scaffoldState: ScaffoldState = rememberScaffoldState(),
     navController: NavHostController = rememberNavController()
 ): AppState {
-    return remember(navController) {
-        AppState(navController)
+    return remember(scaffoldState, navController) {
+        AppState(scaffoldState, navController)
     }
 }
 
 @Stable
 class AppState(
+    val scaffoldState: ScaffoldState,
     val navController: NavHostController
 ) {
     val currentRoute: String?

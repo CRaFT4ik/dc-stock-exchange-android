@@ -8,7 +8,7 @@ import java.math.BigDecimal
 internal data class UserCardDto(
     val userInfo: UserInfoDto,
     val userBalance: BigDecimal,
-    val statistics: TransactionStatisticsDto
+    val transactionStatistics: TransactionStatisticsDto
 ) : Mappable<UserCard> {
 
     internal data class UserInfoDto(
@@ -30,6 +30,6 @@ internal data class UserCardDto(
     }
 
     override fun map(): UserCard {
-        return UserCard(userInfo.map(), userBalance, statistics.map())
+        return UserCard(userInfo.map(), userBalance, transactionStatistics.map())
     }
 }

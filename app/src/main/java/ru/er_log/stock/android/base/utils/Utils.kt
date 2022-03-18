@@ -13,6 +13,8 @@ import ru.er_log.stock.android.BuildConfig
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.text.DecimalFormat
+import java.text.DecimalFormatSymbols
+import java.util.*
 
 
 fun ViewModel.scoped(action: () -> Unit) {
@@ -60,15 +62,22 @@ fun BigDecimal.autoScale(): BigDecimal {
 }
 
 fun BigDecimal.toHumanCurrencyFormat(): String {
-    val decimalFormat = DecimalFormat("###,###,###,##0.00")
-    return decimalFormat.format(this).replace(',', ' ')
+    val decimalFormat = DecimalFormat(
+        "###,###,###,##0.00",
+        DecimalFormatSymbols.getInstance(Locale.ENGLISH)
+    )
+    return "$ " + decimalFormat.format(this).replace(',', ' ')
+}
+
+fun BigDecimal.toCurrencyFormat(): String {
+    return "$ ${this.stripTrailingZeros().toPlainString()}"
 }
 
 @Composable
 inline fun LogCompositions(tag: String) {
     if (BuildConfig.DEBUG) {
         val ref = remember { Ref<Int>().apply { value = 0 } }
-        SideEffect { ref.value?.apply { inc() }}
+        SideEffect { ref.value?.apply { inc() } }
         Log.d(tag, "Compositions: ${ref.value}")
     }
 }

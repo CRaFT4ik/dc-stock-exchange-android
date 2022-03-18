@@ -7,6 +7,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.tooling.preview.Preview
@@ -38,7 +39,7 @@ fun StockCard(
     content: @Composable () -> Unit
 ) {
     StockSurface(
-        modifier = modifier.padding(6.dp),
+        modifier = Modifier.padding(6.dp).then(modifier),
         shape = shape,
         color = color,
         contentColor = contentColor,

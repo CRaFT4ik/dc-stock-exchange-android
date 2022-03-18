@@ -1,6 +1,7 @@
 package ru.er_log.stock.android.compose.components.order_book
 
 import android.graphics.Rect
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
@@ -31,7 +32,8 @@ import java.util.*
 @Composable
 private fun Preview() {
     StockTheme(colors = darkColors()) {
-        OrderBookChart(state = OrderBookPreviewProvider().provideState())
+        val state = OrderBookPreviewProvider().provideState()
+        OrderBookChart(state = { state })
     }
 }
 
@@ -39,15 +41,27 @@ private fun Preview() {
 @Composable
 private fun EmptyDataPreview() {
     StockTheme(colors = darkColors()) {
-        OrderBookChart(
-            state = OrderBookPreviewProvider()
-                .provideState(TreeSet(), TreeSet())
-        )
+        val state = OrderBookPreviewProvider().provideState(TreeSet(), TreeSet())
+        OrderBookChart(state = { state })
     }
 }
 
 @Composable
 internal fun OrderBookChart(
+    modifier: Modifier = Modifier,
+    state: () -> OrderBookState,
+    style: OrderBookStyle = OrderBookStyle()
+) {
+    Crossfade(
+        modifier = modifier,
+        targetState = state()
+    ) { chartState ->
+        OrderBookChartImpl(Modifier, chartState, style)
+    }
+}
+
+@Composable
+internal fun OrderBookChartImpl(
     modifier: Modifier = Modifier,
     state: OrderBookState,
     style: OrderBookStyle = OrderBookStyle()
