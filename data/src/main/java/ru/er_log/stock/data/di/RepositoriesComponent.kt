@@ -2,8 +2,10 @@ package ru.er_log.stock.data.di
 
 import kotlinx.coroutines.Dispatchers
 import org.koin.core.module.Module
+import ru.er_log.stock.data.repositories.AccountRepositoryImpl
 import ru.er_log.stock.data.repositories.AuthRepositoryImpl
 import ru.er_log.stock.data.repositories.ExchangeRepositoryImpl
+import ru.er_log.stock.domain.repositories.AccountRepository
 import ru.er_log.stock.domain.repositories.AuthRepository
 import ru.er_log.stock.domain.repositories.ExchangeRepository
 
@@ -14,10 +16,15 @@ internal class RepositoriesComponent : KoinModuleComponent() {
 
         single<AuthRepository> {
             AuthRepositoryImpl(
+                userDao = get(),
                 authService = get(),
-                authStorage = get(),
+                authStore = get(),
                 dispatcher = reposDispatcher
             )
+        }
+
+        single<AccountRepository> {
+            AccountRepositoryImpl(accountService = get(), dispatcher = reposDispatcher)
         }
 
         single<ExchangeRepository> {

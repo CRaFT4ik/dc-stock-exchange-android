@@ -11,10 +11,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import ru.er_log.stock.android.compose.theme.AppTheme
+import ru.er_log.stock.android.compose.theme.StockTheme
 
 @Composable
-private fun ProgressIndicatorDialog() {
+private fun StockProgressIndicatorDialog() {
     Dialog(
         onDismissRequest = {},
         properties = DialogProperties(
@@ -25,10 +25,10 @@ private fun ProgressIndicatorDialog() {
         Box(
             modifier = Modifier
                 .clip(shape = RoundedCornerShape(4.dp))
-                .background(AppTheme.colors.background)
+                .background(StockTheme.colors.background)
                 .padding(10.dp)
         ) {
-            CircularProgressIndicator(color = AppTheme.colors.primary)
+            CircularProgressIndicator(color = StockTheme.colors.primary)
         }
     }
 }

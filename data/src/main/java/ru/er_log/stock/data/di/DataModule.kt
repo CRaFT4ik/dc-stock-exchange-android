@@ -7,6 +7,7 @@ class DataModule : KoinModuleProvider {
 
     private val components: List<KoinModuleComponent> = listOf(
         RepositoriesComponent(),
+        StoragesComponent(),
         NetworkComponent(),
         SerializerComponent()
     )

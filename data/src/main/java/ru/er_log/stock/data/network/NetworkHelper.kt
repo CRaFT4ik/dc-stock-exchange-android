@@ -8,7 +8,7 @@ import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import retrofit2.Response
 import ru.er_log.stock.data.di.inject
-import ru.er_log.stock.domain.api.ErrorResponse
+import ru.er_log.stock.data.network.api.ErrorResponse
 import java.io.IOException
 
 private val networkCoroutineDispatcher = Dispatchers.IO

@@ -1,11 +1,7 @@
 plugins {
-    id 'java-library'
-    id 'kotlin'
-    id 'kotlin-kapt'
-}
-
-kapt {
-    generateStubs true
+    id 'com.android.library' // to use platform-specific data-storages
+    id 'kotlin-android'
+    id 'com.google.devtools.ksp' version "1.6.10-1.0.4"
 }
 
 java {
@@ -13,18 +9,81 @@ java {
     targetCompatibility = JavaVersion.VERSION_11
 }
 
+android {
+    compileSdk 31
+
+    defaultConfig {
+        minSdk 21
+        targetSdk 31
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+    kotlinOptions {
+        jvmTarget = '11'
+    }
+}
+
+ksp {
+    arg("room.schemaLocation","$projectDir/db-schemas".toString())
+}
+
 dependencies {
     api project(":domain")
-    implementation "com.squareup.retrofit2:retrofit:2.9.0"
 
-    kapt "com.squareup.moshi:moshi-kotlin-codegen:1.12.0"
-    kaptTest "com.squareup.moshi:moshi-kotlin-codegen:1.12.0"
-    implementation "com.squareup.moshi:moshi-kotlin:1.12.0"
-    implementation "com.squareup.retrofit2:converter-moshi:2.9.0"
-    implementation "com.squareup.okhttp3:okhttp-urlconnection:4.9.1"
-    implementation "com.squareup.okhttp3:logging-interceptor:4.9.1"
+    // -----------------------------------
+    // Koin DI
+    // -----------------------------------
 
-    // Koin for Kotlin apps
     api "io.insert-koin:koin-core:3.1.5"
     testApi "io.insert-koin:koin-test:3.1.5"
+
+    // --------------------------------------
+    // Networking (Retrofit + OkHttp + Moshi)
+    // --------------------------------------
+
+    ksp "com.squareup.moshi:moshi-kotlin-codegen:1.12.0"
+    kspTest "com.squareup.moshi:moshi-kotlin-codegen:1.12.0"
+    implementation "com.squareup.moshi:moshi-kotlin:1.12.0"
+
+    implementation "com.squareup.retrofit2:retrofit:2.9.0"
+    implementation "com.squareup.retrofit2:converter-moshi:2.9.0"
+
+    implementation "com.squareup.okhttp3:okhttp-tls:4.9.3"
+    implementation "com.squareup.okhttp3:okhttp-urlconnection:4.9.3"
+    implementation "com.squareup.okhttp3:logging-interceptor:4.9.3"
+
+    // -----------------------------------
+    // Room Database
+    // -----------------------------------
+
+    implementation "androidx.room:room-runtime:2.4.2"
+    annotationProcessor "androidx.room:room-compiler:2.4.2"
+    // To use Kotlin Symbolic Processing (KSP)
+    ksp "androidx.room:room-compiler:2.4.2"
+    // Kotlin Extensions and Coroutines support for Room
+    implementation "androidx.room:room-ktx:2.4.2"
+
+    // -----------------------------------
+    // Jetpack Datastore
+    // -----------------------------------
+
+    implementation "androidx.datastore:datastore-preferences:1.0.0"
+
+    // -----------------------------------
+    // Testing
+    // -----------------------------------
+
+    testApi "junit:junit:4.13.2"
+    androidTestApi "androidx.test.ext:junit:1.1.3"
+    androidTestApi "androidx.test.espresso:espresso-core:3.4.0"
 }
