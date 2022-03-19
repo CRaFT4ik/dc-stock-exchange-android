@@ -32,6 +32,7 @@
     <string name="account_action_make_offer">Sell</string>
 
     <!-- Lot creation form -->
+    <string name="lot_creation_form_title">New lot creation form</string>
     <string name="lot_creation_form_price">Price</string>
     <string name="lot_creation_form_amount">Amount</string>
     <string name="lot_creation_form_error_use_only_positive_digits">Please, use only positive numbers</string>

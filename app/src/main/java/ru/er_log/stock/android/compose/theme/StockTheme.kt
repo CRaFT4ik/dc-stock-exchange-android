@@ -45,8 +45,7 @@ fun StockTheme(
     CompositionLocalProvider(
         LocalColors provides rememberedColors,
         LocalShapes provides shapes,
-        LocalTypography provides typography,
-        LocalIndication provides rememberRipple(color = StockTheme.colors.backgroundSecondary)
+        LocalTypography provides typography
     ) {
         content()
     }

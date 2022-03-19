@@ -124,7 +124,7 @@ private fun AccountLayer(
     ) {
         Box {
             SettingsIconButton(
-                modifier = Modifier.align(TopEnd)
+                modifier = Modifier.align(TopEnd).padding(end = 6.dp)
             )
 
             Crossfade(targetState = userCard()) {

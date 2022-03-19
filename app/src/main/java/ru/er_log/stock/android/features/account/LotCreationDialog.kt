@@ -30,7 +30,7 @@ import java.math.BigDecimal
 
 @Composable
 fun LotCreationDialog(
-    title: String? = null,
+    title: String? = stringResource(R.string.lot_creation_form_title),
     state: LotCreationState = rememberLotCreationDialogState(),
     onDismissRequest: () -> Unit,
     onCreateAction: (Lot) -> Unit
