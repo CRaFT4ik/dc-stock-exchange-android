@@ -35,11 +35,11 @@ fun StockCard(
     color: Color = StockTheme.colors.surface,
     contentColor: Color = StockTheme.colors.textPrimary,
     border: BorderStroke? = null,
-    elevation: Dp = 3.dp,
+    elevation: Dp = 2.dp,
     content: @Composable () -> Unit
 ) {
     StockSurface(
-        modifier = Modifier.padding(6.dp).then(modifier),
+        modifier = modifier,
         shape = shape,
         color = color,
         contentColor = contentColor,

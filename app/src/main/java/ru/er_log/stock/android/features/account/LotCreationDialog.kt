@@ -3,7 +3,6 @@ package ru.er_log.stock.android.features.account
 import android.content.res.Resources
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
@@ -26,24 +25,19 @@ import androidx.compose.ui.window.DialogProperties
 import ru.er_log.stock.android.R
 import ru.er_log.stock.android.base.utils.onlyFalse
 import ru.er_log.stock.android.compose.components.*
-import ru.er_log.stock.android.compose.theme.StockTheme
 import ru.er_log.stock.domain.models.`in`.Lot
 import java.math.BigDecimal
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun LotCreationDialog(
+    title: String? = null,
     state: LotCreationState = rememberLotCreationDialogState(),
     onDismissRequest: () -> Unit,
     onCreateAction: (Lot) -> Unit
 ) {
-    Dialog(
-        onDismissRequest = onDismissRequest,
-        properties = DialogProperties(
-            dismissOnBackPress = true,
-            dismissOnClickOutside = false,
-            usePlatformDefaultWidth = false
-        )
+    StockDialog(
+        title = title,
+        onDismissRequest = onDismissRequest
     ) {
         DialogContent(
             state = state,
@@ -59,72 +53,61 @@ private fun DialogContent(
     onDismissRequest: () -> Unit,
     onCreateAction: (Lot) -> Unit
 ) {
-    StockSurface(
-        modifier = Modifier.padding(24.dp),
-        color = StockTheme.colors.surface,
-        shape = RoundedCornerShape(6.dp)
+    val inputValidator = remember { LotCreationInputValidator() }
+
+    val isFieldsOkay = derivedStateOf {
+        state.priceInputState.hasError.onlyFalse() && state.amountInputState.hasError.onlyFalse()
+    }
+
+    Column(
+        modifier = Modifier.verticalScroll(rememberScrollState())
     ) {
-        val elemModifier = Modifier.padding(horizontal = 6.dp, vertical = 3.dp)
-        val inputValidator = remember { LotCreationInputValidator() }
-
-        val isFieldsOkay = derivedStateOf {
-            state.priceInputState.hasError.onlyFalse() && state.amountInputState.hasError.onlyFalse()
-        }
-
-        Column(
-            modifier = Modifier
-                .padding(horizontal = 8.dp)
-                .verticalScroll(rememberScrollState())
+        StockTextField(
+            isOutlined = true,
+            inputState = state.priceInputState,
+            inputValidator = inputValidator,
+            label = R.string.lot_creation_form_price,
+            keyboardOptions = KeyboardOptions(
+                imeAction = ImeAction.Next,
+                keyboardType = KeyboardType.Number
+            ),
+        )
+        Spacer(Modifier.size(3.dp))
+        StockTextField(
+            isOutlined = true,
+            inputState = state.amountInputState,
+            inputValidator = inputValidator,
+            label = R.string.lot_creation_form_amount,
+            keyboardOptions = KeyboardOptions(
+                imeAction = ImeAction.Done,
+                keyboardType = KeyboardType.Number
+            )
+        )
+        Spacer(Modifier.size(9.dp))
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            StockTextField(
-                isOutlined = true,
-                inputState = state.priceInputState,
-                inputValidator = inputValidator,
-                modifier = elemModifier,
-                label = R.string.lot_creation_form_price,
-                keyboardOptions = KeyboardOptions(
-                    imeAction = ImeAction.Next,
-                    keyboardType = KeyboardType.Number
-                ),
-            )
-
-            StockTextField(
-                isOutlined = true,
-                inputState = state.amountInputState,
-                inputValidator = inputValidator,
-                modifier = elemModifier,
-                label = R.string.lot_creation_form_amount,
-                keyboardOptions = KeyboardOptions(
-                    imeAction = ImeAction.Done,
-                    keyboardType = KeyboardType.Number
-                )
-            )
-
-            Row(
-                modifier = elemModifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
+            StockOutlinedButton(
+                enabled = isFieldsOkay.value,
+                modifier = Modifier.weight(6f),
+                onClick = {
+                    val lotCreationRequest = Lot(
+                        price = state.priceInputState.input.value.toBigDecimal(),
+                        amount = state.amountInputState.input.value.toBigDecimal()
+                    )
+                    onCreateAction(lotCreationRequest)
+                }
             ) {
-                StockOutlinedButton(
-                    enabled = isFieldsOkay.value,
-                    modifier = Modifier.weight(6f),
-                    onClick = {
-                        val lotCreationRequest = Lot(
-                            price = state.priceInputState.input.value.toBigDecimal(),
-                            amount = state.amountInputState.input.value.toBigDecimal()
-                        )
-                        onCreateAction(lotCreationRequest)
-                    }
-                ) {
-                    Text(stringResource(R.string.submit))
-                }
+                Text(stringResource(R.string.submit))
+            }
 
-                Spacer(modifier = Modifier.weight(5f))
+            Spacer(modifier = Modifier.weight(5f))
 
-                StockTextButton(
-                    onClick = { onDismissRequest() }
-                ) {
-                    Text(stringResource(R.string.cancel))
-                }
+            StockTextButton(
+                onClick = { onDismissRequest() }
+            ) {
+                Text(stringResource(R.string.cancel))
             }
         }
     }

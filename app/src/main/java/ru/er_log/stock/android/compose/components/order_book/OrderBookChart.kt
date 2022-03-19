@@ -240,11 +240,11 @@ private fun DrawScope.drawLegend(
 
 class OrderBookStyle {
     val ordersColor: Color = StockColors.ordersColor.copy(alpha = 0.3f)
-    val ordersSecondaryColor: Color = StockColors.ordersSecondaryColor.copy(alpha = 0.45f)
+    val ordersSecondaryColor: Color = StockColors.ordersSecondaryColor.copy(alpha = 0.55f)
     val offersColor: Color = StockColors.offersColor.copy(alpha = 0.3f)
-    val offersSecondaryColor: Color = StockColors.offersSecondaryColor.copy(alpha = 0.45f)
-    val primaryColor: Color = Color(0x8FFCFCFC)
-    val secondaryColor: Color = Color(0x4CFCFCFC)
+    val offersSecondaryColor: Color = StockColors.offersSecondaryColor.copy(alpha = 0.55f)
+    val primaryColor: Color = Color(0xFF9fa0a4)
+    val secondaryColor: Color = Color(0xFF6a6d75)
     val textSize: TextUnit = 13.sp
 }
 

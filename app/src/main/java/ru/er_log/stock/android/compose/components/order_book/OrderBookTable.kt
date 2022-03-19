@@ -10,7 +10,6 @@ import androidx.compose.material.LocalTextStyle
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
@@ -22,7 +21,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import ru.er_log.stock.android.R
-import ru.er_log.stock.android.base.utils.LogCompositions
 import ru.er_log.stock.android.base.utils.autoScale
 import ru.er_log.stock.android.base.utils.toHumanFormat
 import ru.er_log.stock.android.compose.theme.StockTheme

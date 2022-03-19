@@ -48,7 +48,7 @@ private fun OrderBookScreenImpl(
         )
         OrderBookTable(
             modifier = modifier
-                .background(StockTheme.colors.background)
+                .background(StockTheme.colors.background.copy(alpha = 0.3f))
                 .weight(0.6f),
             state = state
         )

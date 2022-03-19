@@ -70,7 +70,7 @@ fun StockBottomBar(
                 if (selected) {
                     StockTheme.colors.primary
                 } else {
-                    StockTheme.colors.surfaceSecondary
+                    StockTheme.colors.onSurface
                 }
             )
 
@@ -251,7 +251,7 @@ private fun MeasureScope.placeTextAndIcon(
 
 @Composable
 private fun StockBottomNavIndicator(
-    color: Color = StockTheme.colors.surfaceSecondary,
+    color: Color = StockTheme.colors.onSurface,
     shape: Shape = BottomNavIndicatorShape
 ) {
     Spacer(

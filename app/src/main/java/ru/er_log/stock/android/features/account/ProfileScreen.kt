@@ -14,16 +14,14 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.East
-import androidx.compose.material.icons.filled.ExpandMore
-import androidx.compose.material.icons.filled.Maximize
-import androidx.compose.material.icons.filled.West
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.HelpOutline
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Alignment.Companion.End
 import androidx.compose.ui.Alignment.Companion.TopCenter
+import androidx.compose.ui.Alignment.Companion.TopEnd
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
@@ -39,10 +37,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import org.koin.androidx.compose.getViewModel
 import ru.er_log.stock.android.R
-import ru.er_log.stock.android.base.utils.toCurrencyFormat
 import ru.er_log.stock.android.base.utils.toHumanCurrencyFormat
 import ru.er_log.stock.android.compose.components.StockBottomSheetScaffold
 import ru.er_log.stock.android.compose.components.StockButton
@@ -50,6 +46,7 @@ import ru.er_log.stock.android.compose.components.StockCard
 import ru.er_log.stock.android.compose.components.StockSurface
 import ru.er_log.stock.android.compose.theme.StockColors
 import ru.er_log.stock.android.compose.theme.StockTheme
+import ru.er_log.stock.android.features.settings.SettingsDialogScreen
 import ru.er_log.stock.domain.models.`in`.Lot
 import ru.er_log.stock.domain.models.`in`.Transaction
 import ru.er_log.stock.domain.models.`in`.UserCard
@@ -115,7 +112,7 @@ private fun AccountLayer(
     modifier: Modifier = Modifier,
     userCard: () -> UserCard,
     onCreateOrder: (Lot) -> Unit,
-    onCreateOffer: (Lot) -> Unit,
+    onCreateOffer: (Lot) -> Unit
 ) {
     Column(
         modifier = modifier
@@ -125,10 +122,16 @@ private fun AccountLayer(
             .padding(top = 30.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Crossfade(targetState = userCard()) {
-            Column {
-                AccountLayerProfileInfo(it)
-                AccountLayerStatistic(it)
+        Box {
+            SettingsIconButton(
+                modifier = Modifier.align(TopEnd)
+            )
+
+            Crossfade(targetState = userCard()) {
+                Column {
+                    AccountLayerProfileInfo(it)
+                    AccountLayerStatistic(it)
+                }
             }
         }
 
@@ -146,6 +149,7 @@ private fun AccountLayerProfileInfo(
     Box(contentAlignment = TopCenter) {
         Image(
             modifier = Modifier
+                .align(TopCenter)
                 .size(imageSize)
                 .clip(CircleShape)
                 .zIndex(2f),
@@ -154,6 +158,7 @@ private fun AccountLayerProfileInfo(
         )
         StockSurface(
             modifier = Modifier
+                .align(TopCenter)
                 .padding(top = imageSize / 2)
                 .zIndex(1f)
                 .wrapContentHeight()
@@ -176,6 +181,21 @@ private fun AccountLayerProfileInfo(
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun SettingsIconButton(
+    modifier: Modifier = Modifier
+) {
+    val (dialogVisible, shouldShowDialog) = remember { mutableStateOf(false) }
+
+    IconButton(modifier = modifier, onClick = { shouldShowDialog(true) }) {
+        Icon(imageVector = Icons.Default.Settings, contentDescription = "Settings")
+    }
+
+    if (dialogVisible) {
+        SettingsDialogScreen(onDismissRequest = { shouldShowDialog(false) })
     }
 }
 
@@ -223,19 +243,19 @@ private fun AccountLayerStatistic(
 }
 
 @Composable
-private fun ColumnScope.TransactionStatisticBar(
+private fun TransactionStatisticBar(
     statistics: UserCard.TransactionStatistics
 ) {
     val barHeight = 12.dp
 
     val weights = arrayOf(
         statistics.ordersCompleted, statistics.ordersActive,
-        statistics.ordersCompleted, statistics.offersActive
+        statistics.offersCompleted, statistics.offersActive
     )
 
     val colors = arrayOf(
-        StockColors.ordersSecondaryColor, StockColors.ordersColor,
-        StockColors.offersSecondaryColor, StockColors.offersColor
+        StockColors.ordersColor, StockColors.ordersSecondaryColor,
+        StockColors.offersColor, StockColors.offersSecondaryColor
     )
 
     val descriptions = arrayOf(
@@ -291,7 +311,7 @@ private fun ColumnScope.TransactionStatisticBar(
 }
 
 @Composable
-private fun ColumnScope.AccountLayerOperationButtons(
+private fun AccountLayerOperationButtons(
     onCreateOrder: (Lot) -> Unit,
     onCreateOffer: (Lot) -> Unit,
     orderCreationState: LotCreationState = rememberLotCreationDialogState(),
@@ -346,7 +366,7 @@ private fun ColumnScope.AccountLayerOperationButtons(
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun ColumnScope.BottomSheetLayer(
+private fun BottomSheetLayer(
     modifier: Modifier = Modifier,
     operations: () -> List<Transaction>
 ) {
@@ -390,7 +410,7 @@ private fun ColumnScope.BottomSheetLayer(
                             }
                         }
                     }
-                    
+
                     LaunchedEffect(key1 = operationsSize) {
                         if (listState.firstVisibleItemIndex < 3) {
                             delay(200)
@@ -442,6 +462,7 @@ private fun TransactionListItem(
     StockCard(
         shape = shape,
         modifier = modifier
+            .padding(4.dp)
             .fillMaxWidth()
             .border(1.dp, StockTheme.colors.background.copy(alpha = 0.3f), shape)
             .clickable { setExpanded(!cardExpanded) }
@@ -587,9 +608,8 @@ private fun OperationsLayerPreview() {
         }
 
         BottomSheetLayer(
-            modifier = Modifier.fillMaxHeight(),
-            operations = { items.value }
-        )
+            modifier = Modifier.fillMaxHeight()
+        ) { items.value }
     }
 }
 
@@ -597,9 +617,7 @@ private fun OperationsLayerPreview() {
 @Composable
 private fun OperationsLayerEmptyPreview() {
     Column {
-        BottomSheetLayer(
-            operations = { emptyList() }
-        )
+        BottomSheetLayer { emptyList() }
     }
 }
 
