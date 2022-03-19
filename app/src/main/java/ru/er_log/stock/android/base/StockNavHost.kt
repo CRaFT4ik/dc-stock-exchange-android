@@ -1,19 +1,23 @@
 package ru.er_log.stock.android.base
 
+import android.util.Log
 import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.PermIdentity
 import androidx.compose.material.icons.outlined.TrendingUp
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import ru.er_log.stock.android.R
+import ru.er_log.stock.android.features.account.ProfileScreen
 import ru.er_log.stock.android.features.auth.login.LoginScreen
 import ru.er_log.stock.android.features.order_book.OrderBookScreen
-import ru.er_log.stock.android.features.account.ProfileScreen
+import ru.er_log.stock.data.di.inject
+import ru.er_log.stock.domain.usecases.AuthUseCases
 
 @Composable
 fun StockNavHost(navController: NavHostController, modifier: Modifier = Modifier) {
@@ -35,6 +39,18 @@ fun StockNavHost(navController: NavHostController, modifier: Modifier = Modifier
 
         composable(HomeDestinations.Account.route) {
             ProfileScreen()
+        }
+    }
+
+    // Globally observing login state. It works, but it should be framed in some other way.
+    LaunchedEffect(key1 = navController) {
+        inject<AuthUseCases>().observeLoginState(Unit, this) {
+            it.onSuccess { userInfo ->
+                if (userInfo == null) {
+                    while (navController.popBackStack()) {}
+                    navController.navigate(AuthDestinations.Login.route)
+                }
+            }
         }
     }
 }
