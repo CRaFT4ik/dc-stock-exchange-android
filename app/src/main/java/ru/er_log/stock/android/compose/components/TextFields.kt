@@ -11,6 +11,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.shape.ZeroCornerSize
 import androidx.compose.foundation.text.KeyboardActions
@@ -48,10 +49,10 @@ private val textFieldColors: TextFieldColors
     @Composable get() = TextFieldDefaults.textFieldColors(
         textColor = StockTheme.colors.textPrimary,
         backgroundColor = StockTheme.colors.surface,
-        focusedIndicatorColor = Color.Transparent,
         unfocusedIndicatorColor = Color.Transparent,
-        focusedLabelColor = StockTheme.colors.textSecondary,
+        focusedIndicatorColor = Color.Transparent,
         unfocusedLabelColor = StockTheme.colors.textSecondary,
+        focusedLabelColor = StockTheme.colors.textSecondary,
         cursorColor = StockTheme.colors.textPrimary,
         errorIndicatorColor = StockTheme.colors.error,
         errorLabelColor = StockTheme.colors.error,
@@ -62,10 +63,10 @@ private val outlinedTextFieldColors: TextFieldColors
     @Composable get() = TextFieldDefaults.outlinedTextFieldColors(
         textColor = StockTheme.colors.textPrimary,
         backgroundColor = Color.Transparent,
-        focusedBorderColor = StockTheme.colors.onSurfaceSecondary,
         unfocusedBorderColor = StockTheme.colors.onSurface,
-        focusedLabelColor = StockTheme.colors.textSecondary,
+        focusedBorderColor = StockTheme.colors.onSurfaceSecondary,
         unfocusedLabelColor = StockTheme.colors.textSecondary,
+        focusedLabelColor = StockTheme.colors.textSecondary,
         cursorColor = StockTheme.colors.textPrimary,
         errorLabelColor = StockTheme.colors.error,
         errorCursorColor = StockTheme.colors.error,

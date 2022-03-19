@@ -4,14 +4,27 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import ru.er_log.stock.android.features.splash.SplashViewModel
+import ru.er_log.stock.data.di.inject
 
 class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
+        val splashViewModel: SplashViewModel = inject()
+
+        val splashScreen = installSplashScreen()
+        splashScreen.setKeepOnScreenCondition {
+            splashViewModel.isLoading.value
+        }
+
         super.onCreate(savedInstanceState)
 
-//        if (savedInstanceState != null) {
-//            val splashScreen = installSplashScreen()
+        setContent {
+            StartScreen(
+                isLightTheme = splashViewModel.isLightTheme.value
+            )
+        }
 //
 //            splashScreen.setOnExitAnimationListener { splashScreenViewProvider ->
 //                // Get icon instance and start a fade out animation
@@ -22,13 +35,5 @@ class MainActivity : ComponentActivity() {
 //                    .withEndAction {
 //                        // After the fade out, remove the splash and set content view
 //                        splashScreenViewProvider.remove()
-                        setContent{
-                            StartScreen()
-                        }
-//                    }.start()
-//            }
-//        } else {
-//            setContent { StartScreen() }
-//        }
     }
 }

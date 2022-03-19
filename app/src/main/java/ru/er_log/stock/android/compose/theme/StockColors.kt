@@ -30,9 +30,9 @@ class StockColors(
         private set
     var surfaceSecondary by mutableStateOf(surfaceSecondary)
         private set
-    var onSurface by mutableStateOf(surfaceSecondary)
+    var onSurface by mutableStateOf(onSurface)
         private set
-    var onSurfaceSecondary by mutableStateOf(surfaceSecondary)
+    var onSurfaceSecondary by mutableStateOf(onSurfaceSecondary)
         private set
     var background by mutableStateOf(background)
         private set
@@ -96,17 +96,17 @@ class StockColors(
 }
 
 fun lightColors(
-    primary: Color = Color(0xFF0B66AC),
-    secondary: Color = Color(0xFFF15033),
-    textPrimary: Color = Color(0xFFC5C5C5),
-    textSecondary: Color = Color(0x4DC4C4C4),
-    surface: Color = Color(0xFF192839),
-    surfaceSecondary: Color = Color(0xFF243A53),
-    onSurface: Color = Color(0xFF345479),
-    onSurfaceSecondary: Color = Color(0xFF29425F),
-    background: Color = Color(0xFF131e2a),
-    backgroundSecondary: Color = Color(0xFF0c151d),
-    error: Color = Color(0xFFdf6060)
+    primary: Color = Color(0xFF8FAEC0),
+    secondary: Color = Color(0xFFC7BEAC),
+    textPrimary: Color = Color(0xFF404344),
+    textSecondary: Color = Color(0xFF999999),
+    surface: Color = Color(0xFFFFFCFE),
+    surfaceSecondary: Color = Color(0xFFECECEC),
+    onSurface: Color = Color(0xFFD3D3D3),
+    onSurfaceSecondary: Color = Color(0xFFD3D3D3),
+    background: Color = Color(0xFFCCCCCC),
+    backgroundSecondary: Color = Color(0xFFf7f5f7),
+    error: Color = Color(0xFFDF6060)
 ): StockColors = StockColors(
     primary = primary,
     secondary = secondary,
@@ -128,12 +128,12 @@ fun darkColors(
     textPrimary: Color = Color(0xFFC5C5C5),
     textSecondary: Color = Color(0xFF29425F),
     surface: Color = Color(0xFF192839),
-    surfaceSecondary: Color = Color(0xFF243a53),
+    surfaceSecondary: Color = Color(0xFF243A53),
     onSurface: Color = Color(0xFF345479),
     onSurfaceSecondary: Color = Color(0xFF29425F),
-    background: Color = Color(0xFF131e2a),
-    backgroundSecondary: Color = Color(0xFF0c151d),
-    error: Color = Color(0xFFdf6060)
+    background: Color = Color(0xFF131E2A),
+    backgroundSecondary: Color = Color(0xFF0C151D),
+    error: Color = Color(0xFFDF6060)
 ): StockColors = StockColors(
     primary = primary,
     secondary = secondary,

@@ -77,7 +77,7 @@ dependencies {
     // Jetpack Datastore
     // -----------------------------------
 
-    implementation "androidx.datastore:datastore-preferences:1.0.0"
+    api "androidx.datastore:datastore-preferences:1.0.0"
 
     // -----------------------------------
     // Testing

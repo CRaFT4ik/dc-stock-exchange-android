@@ -23,7 +23,7 @@ fun StockButton(
             contentColor = StockTheme.colors.textPrimary,
             backgroundColor = StockTheme.colors.surface,
             disabledContentColor = StockTheme.colors.textSecondary,
-            disabledBackgroundColor = StockTheme.colors.background
+            disabledBackgroundColor = StockTheme.colors.background.copy(alpha = 0.45f)
         ),
         shape = RoundedCornerShape(4.dp),
         border = if (!enabled) BorderStroke(1.dp, color = StockTheme.colors.surface) else null,
@@ -46,12 +46,12 @@ fun StockOutlinedButton(
         modifier = modifier,
         colors = ButtonDefaults.outlinedButtonColors(
             contentColor = StockTheme.colors.primary,
-            backgroundColor = StockTheme.colors.surface.copy(alpha = 0.15f),
+            backgroundColor = StockTheme.colors.surface.copy(alpha = 0.4f),
             disabledContentColor = StockTheme.colors.textSecondary,
         ),
         border = BorderStroke(
             ButtonDefaults.OutlinedBorderSize,
-            if (enabled) StockTheme.colors.primary else StockTheme.colors.textSecondary
+            if (enabled) StockTheme.colors.primary else StockTheme.colors.onSurface
         ),
         shape = RoundedCornerShape(4.dp),
         enabled = enabled
