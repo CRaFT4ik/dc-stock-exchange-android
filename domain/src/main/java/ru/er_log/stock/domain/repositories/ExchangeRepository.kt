@@ -1,17 +1,13 @@
 package ru.er_log.stock.domain.repositories
 
-import kotlinx.coroutines.flow.Flow
-import ru.er_log.stock.domain.boundaries.requests.LotCreationRequest
-import ru.er_log.stock.domain.models.ActiveLots
-import ru.er_log.stock.domain.models.Deal
+import ru.er_log.stock.domain.models.`in`.Lot
+import ru.er_log.stock.domain.models.`in`.OrderBook
 
 interface ExchangeRepository {
 
-    fun fetchActiveLots(): Flow<ActiveLots>
+    suspend fun getOrderBook(limit: Int): OrderBook
 
-    fun fetchDeals(): Flow<List<Deal>>
+    suspend fun createOrder(lot: Lot)
 
-    fun createPurchaseLot(request: LotCreationRequest): Flow<Unit>
-
-    fun createSaleLot(request: LotCreationRequest): Flow<Unit>
+    suspend fun createOffer(lot: Lot)
 }

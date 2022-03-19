@@ -5,27 +5,20 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
-    <application android:name=".ui.CurrentApplication"
+    <application
+        android:name=".base.StockApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Dcstockexchangeandroid">
+        android:theme="@style/Theme.AppTheme">
         <activity
-            android:name=".ui.exchange.ExchangeActivity"
-            android:exported="false"
-            android:label="@string/title_activity_account"
-            android:theme="@style/Theme.Dcstockexchangeandroid.NoActionBar" />
-        <activity
-            android:name=".ui.auth.AuthActivity"
-            android:label="@string/title_activity_auth"
-            android:exported="false" />
-        <activity
-            android:name=".ui.MainActivity"
+            android:name=".base.MainActivity"
             android:exported="true"
             android:noHistory="true"
-            android:label="@string/app_name">
+            android:theme="@style/Theme.AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

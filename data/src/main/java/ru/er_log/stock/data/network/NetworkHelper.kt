@@ -1,14 +1,18 @@
 package ru.er_log.stock.data.network
 
+import com.squareup.moshi.Moshi
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import retrofit2.Response
-import ru.er_log.stock.domain.boundaries.responses.ErrorResponse
+import ru.er_log.stock.data.di.inject
+import ru.er_log.stock.data.network.api.ErrorResponse
 import java.io.IOException
 
-private val networkCoroutineContext = Dispatchers.IO + Job()
+private val networkCoroutineDispatcher = Dispatchers.IO
+private val networkCoroutineContext = Job()
 
 /**
  * Выполняет сетевой вызов [networkCall] и возвращает результат [R],
@@ -19,9 +23,14 @@ private val networkCoroutineContext = Dispatchers.IO + Job()
  *
  * @param R тип результата в случае успешного выполнения сетевого запроса
  * @param networkCall сетевой вызов, результат которого принимает тип [R]
+ * @param moshi десериализатор
  * @return результат сетевого вызова
  */
-suspend fun <R> makeRequest(networkCall: suspend () -> R): NetworkResult<R> = withContext(networkCoroutineContext) {
+suspend fun <R> makeRequest(
+    dispatcher: CoroutineDispatcher = networkCoroutineDispatcher,
+    moshi: Moshi = inject(),
+    networkCall: suspend () -> R
+): NetworkResult<R> = withContext(dispatcher + networkCoroutineContext) {
     try {
         val result = networkCall.invoke()
         if (result is Response<*> && !result.isSuccessful) throw HttpException(result)
@@ -33,7 +42,7 @@ suspend fun <R> makeRequest(networkCall: suspend () -> R): NetworkResult<R> = wi
         val errorRaw = t.response()?.errorBody()
         val errorRawText = (try { errorRaw?.string() } catch (_: IOException) { null }) ?: "Неизвестная ошибка: " + t.localizedMessage
 
-        val adapter = JsonHelpers.moshiCleanInstance.adapter(ErrorResponse::class.java)
+        val adapter = moshi.adapter(ErrorResponse::class.java)
         val errorResponse = try { adapter.fromJson(errorRawText) } catch (_: IOException) { null }
 
         NetworkResult.Failure.GenericError(t, code, errorResponse?.parsed ?: errorRawText)

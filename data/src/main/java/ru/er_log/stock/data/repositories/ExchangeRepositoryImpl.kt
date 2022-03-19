@@ -1,44 +1,38 @@
 package ru.er_log.stock.data.repositories
 
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-import ru.er_log.stock.data.network.ExchangeService
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import ru.er_log.stock.data.network.NetworkResult
+import ru.er_log.stock.data.network.api.v1.exchange.ExchangeService
+import ru.er_log.stock.data.network.api.v1.exchange.map
 import ru.er_log.stock.data.network.makeRequest
-import ru.er_log.stock.domain.boundaries.requests.LotCreationRequest
-import ru.er_log.stock.domain.models.ActiveLots
-import ru.er_log.stock.domain.models.Deal
+import ru.er_log.stock.domain.models.`in`.Lot
 import ru.er_log.stock.domain.repositories.ExchangeRepository
 
 internal class ExchangeRepositoryImpl(
-    private val api: ExchangeService
+    private val exchangeService: ExchangeService,
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ExchangeRepository {
 
-    override fun fetchActiveLots(): Flow<ActiveLots> = flow {
-        when (val response = makeRequest { api.fetchActiveLots() }) {
+    override suspend fun getOrderBook(limit: Int) = withContext(dispatcher) {
+        when (val response = makeRequest { exchangeService.getOrdersBook(limit) }) {
             is NetworkResult.Failure -> throw Exception(response.errorMessage, response.t)
-            is NetworkResult.Success -> emit(response.value.map())
+            is NetworkResult.Success -> response.value.map()
         }
     }
 
-    override fun fetchDeals(): Flow<List<Deal>> = flow {
-        when (val response = makeRequest { api.fetchDeals() }) {
+    override suspend fun createOrder(lot: Lot) {
+        when (val response = makeRequest { exchangeService.createOrder(lot.map()) }) {
             is NetworkResult.Failure -> throw Exception(response.errorMessage, response.t)
-            is NetworkResult.Success -> emit(response.value.map())
+            is NetworkResult.Success -> {}
         }
     }
 
-    override fun createPurchaseLot(request: LotCreationRequest): Flow<Unit> = flow {
-        when (val response = makeRequest { api.createPurchaseLot(request) }) {
+    override suspend fun createOffer(lot: Lot) {
+        when (val response = makeRequest { exchangeService.createOffer(lot.map()) }) {
             is NetworkResult.Failure -> throw Exception(response.errorMessage, response.t)
-            is NetworkResult.Success -> emit(Unit)
-        }
-    }
-
-    override fun createSaleLot(request: LotCreationRequest): Flow<Unit> = flow {
-        when (val response = makeRequest { api.createSaleLot(request) }) {
-            is NetworkResult.Failure -> throw Exception(response.errorMessage, response.t)
-            is NetworkResult.Success -> emit(Unit)
+            is NetworkResult.Success -> {}
         }
     }
 }
