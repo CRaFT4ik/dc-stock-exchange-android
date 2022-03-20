@@ -13,9 +13,20 @@ class MainActivity : ComponentActivity() {
 
         val splashViewModel: SplashViewModel = inject()
 
-        val splashScreen = installSplashScreen()
-        splashScreen.setKeepOnScreenCondition {
-            splashViewModel.isLoading.value
+        installSplashScreen().apply {
+            setKeepOnScreenCondition {
+                splashViewModel.isLoading.value
+            }
+            setOnExitAnimationListener { splashScreenViewProvider ->
+                // Get icon instance and start a fade out animation
+                splashScreenViewProvider.iconView
+                    .animate()
+                    .setDuration(350L)
+                    .alpha(0f)
+                    .withEndAction {
+                        splashScreenViewProvider.remove()
+                    }
+            }
         }
 
         super.onCreate(savedInstanceState)
@@ -25,15 +36,5 @@ class MainActivity : ComponentActivity() {
                 isLightTheme = splashViewModel.isLightTheme.value
             )
         }
-//
-//            splashScreen.setOnExitAnimationListener { splashScreenViewProvider ->
-//                // Get icon instance and start a fade out animation
-//                splashScreenViewProvider.iconView
-//                    .animate()
-//                    .setDuration(300L)
-//                    .alpha(0f)
-//                    .withEndAction {
-//                        // After the fade out, remove the splash and set content view
-//                        splashScreenViewProvider.remove()
     }
 }

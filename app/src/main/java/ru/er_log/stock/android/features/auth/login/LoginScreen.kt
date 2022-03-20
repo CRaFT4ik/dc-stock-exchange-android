@@ -31,7 +31,6 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.getViewModel
 import ru.er_log.stock.android.R
@@ -197,7 +196,11 @@ private fun LogoBox(
             .fillMaxHeight(),
         contentAlignment = Alignment.Center
     ) {
-        Image(painter = painterResource(logoResId), contentDescription = "Logo")
+        Image(
+            modifier = Modifier.size(180.dp),
+            painter = painterResource(logoResId),
+            contentDescription = "Logo"
+        )
     }
 }
 

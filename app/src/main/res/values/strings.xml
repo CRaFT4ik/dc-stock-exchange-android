@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Stock exchange client</string>
+    <string name="app_name">Stock Exchange</string>
 
     <!-- Navigation labels -->
     <string name="nav_home_order_book">Order book</string>
