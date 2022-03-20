@@ -53,6 +53,7 @@ import ru.er_log.stock.domain.models.`in`.UserCard
 import ru.er_log.stock.domain.models.`in`.UserInfo
 import java.math.BigDecimal
 import java.text.SimpleDateFormat
+import kotlin.math.absoluteValue
 import kotlin.random.Random
 
 @Composable
@@ -568,7 +569,7 @@ private fun defaultAvatarFor(userName: String): Int {
         R.drawable.ic_avatar_8,
         R.drawable.ic_avatar_9
     )
-    return avatars[userName.hashCode() % avatars.size]
+    return avatars[userName.hashCode().absoluteValue % avatars.size]
 }
 
 @Preview

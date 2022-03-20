@@ -9,6 +9,7 @@ class AuthUseCases(private val authRepository: AuthRepository) {
 
     val signUp: UseCase<Unit, Unit> by lazy { SignUpUseCase() }
     val signIn: UseCase<SignInRequest, UserInfo> by lazy { SignInUseCase() }
+    val signInDemo: UseCase<Unit, UserInfo> by lazy { SignInDemoUseCase() }
     val signOut: UseCase<Unit, Unit> by lazy { SignOutUseCase() }
     val observeLoginState: UseCase<Unit, UserInfo?> by lazy { ObserveLoggedInUser() }
 
@@ -21,6 +22,14 @@ class AuthUseCases(private val authRepository: AuthRepository) {
     private inner class SignInUseCase : UseCaseValue<SignInRequest, UserInfo>() {
         override suspend fun run(params: SignInRequest): Result<UserInfo> {
             val response = authRepository.login(params)
+                .getOrElse { return Result.failure(it) }
+            return Result.success(response.userInfo)
+        }
+    }
+
+    private inner class SignInDemoUseCase : UseCaseValue<Unit, UserInfo>() {
+        override suspend fun run(params: Unit): Result<UserInfo> {
+            val response = authRepository.loginDemo()
                 .getOrElse { return Result.failure(it) }
             return Result.success(response.userInfo)
         }

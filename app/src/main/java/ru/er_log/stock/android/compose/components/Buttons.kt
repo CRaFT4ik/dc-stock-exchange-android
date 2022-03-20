@@ -6,6 +6,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import ru.er_log.stock.android.compose.theme.StockTheme
 
@@ -74,9 +75,9 @@ fun StockTextButton(
         content = content,
         colors = ButtonDefaults.buttonColors(
             contentColor = StockTheme.colors.textPrimary,
-            backgroundColor = StockTheme.colors.surface,
+            backgroundColor = Color.Transparent,
             disabledContentColor = StockTheme.colors.textSecondary,
-            disabledBackgroundColor = StockTheme.colors.surfaceSecondary
+            disabledBackgroundColor = Color.Transparent
         )
     )
 }

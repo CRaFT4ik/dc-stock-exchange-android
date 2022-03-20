@@ -7,8 +7,10 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
@@ -31,7 +33,6 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.getViewModel
 import ru.er_log.stock.android.R
@@ -48,7 +49,8 @@ private fun Preview() {
             actionLogin = { _, _ -> },
             actionLoginSuccess = {},
             loginUIState = MutableStateFlow(LoginUIState.Idle),
-            actionBackToLogin = {}
+            actionBackToLogin = {},
+            actionDemo = {}
         )
     }
 }
@@ -62,7 +64,8 @@ fun LoginScreen(
         actionLogin = loginViewModel::login,
         actionLoginSuccess = actionLoginSuccess,
         loginUIState = loginViewModel.loginUIState,
-        actionBackToLogin = loginViewModel::setInitialUIState
+        actionBackToLogin = loginViewModel::setInitialUIState,
+        actionDemo = loginViewModel::loginDemo
     )
 }
 
@@ -71,7 +74,8 @@ fun LoginScreenImpl(
     actionLogin: (InputState, InputState) -> Unit,
     actionLoginSuccess: () -> Unit,
     loginUIState: StateFlow<LoginUIState>,
-    actionBackToLogin: () -> Unit
+    actionBackToLogin: () -> Unit,
+    actionDemo: () -> Unit
 ) {
     val loginState = rememberSaveable { InputState() }
     val passwordState = rememberSaveable { InputState() }
@@ -81,7 +85,7 @@ fun LoginScreenImpl(
             .fillMaxSize()
             .stockMainBackground()
             .padding(24.dp)
-
+            .verticalScroll(rememberScrollState())
     ) {
         LogoBox(Modifier.weight(0.5f))
 
@@ -94,7 +98,8 @@ fun LoginScreenImpl(
                 LoginUIState.Idle -> InputBox(
                     loginState = loginState,
                     passwordState = passwordState,
-                    actionLogin = actionLogin
+                    actionLogin = actionLogin,
+                    actionDemo = actionDemo
                 )
                 LoginUIState.Loading -> Progress()
                 is LoginUIState.Result -> Result(
@@ -197,7 +202,11 @@ private fun LogoBox(
             .fillMaxHeight(),
         contentAlignment = Alignment.Center
     ) {
-        Image(painter = painterResource(logoResId), contentDescription = "Logo")
+        Image(
+            modifier = Modifier.size(180.dp),
+            painter = painterResource(logoResId),
+            contentDescription = "Logo"
+        )
     }
 }
 
@@ -206,7 +215,8 @@ private fun InputBox(
     modifier: Modifier = Modifier,
     loginState: InputState,
     passwordState: InputState,
-    actionLogin: (InputState, InputState) -> Unit
+    actionLogin: (InputState, InputState) -> Unit,
+    actionDemo: () -> Unit
 ) {
     Column(
         modifier = modifier
@@ -277,5 +287,19 @@ private fun InputBox(
             text = stringResource(R.string.auth_action_forgot_the_password),
             textAlign = TextAlign.Center
         )
+
+        Spacer(Modifier.weight(100f, true))
+        StockTextButton(
+            onClick = actionDemo,
+            modifier = Modifier.align(Alignment.End)
+        ) {
+            Text(stringResource(R.string.auth_action_demo_access))
+        }
+//        StockOutlinedButton(
+//            modifier = Modifier.align(Alignment.End),
+//            onClick = actionDemo
+//        ) {
+//            Text(stringResource(R.string.auth_action_demo_access))
+//        }
     }
 }

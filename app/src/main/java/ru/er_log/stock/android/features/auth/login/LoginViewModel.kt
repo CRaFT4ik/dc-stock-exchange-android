@@ -36,6 +36,13 @@ class LoginViewModel(
         }
     }
 
+    fun loginDemo() {
+        authUseCases.signInDemo(Unit, viewModelScope) {
+            it.onSuccess { v -> _loginUIState.value = LoginUIState.Result.Success(v) }
+            it.onFailure { v -> _loginUIState.value = LoginUIState.Result.Failure(v.message) }
+        }
+    }
+
     fun setInitialUIState() {
         _loginUIState.value = LoginUIState.Idle
     }
