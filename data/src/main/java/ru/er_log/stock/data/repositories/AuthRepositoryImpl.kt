@@ -14,6 +14,7 @@ import ru.er_log.stock.data.network.makeRequest
 import ru.er_log.stock.data.storages.AuthDataStore
 import ru.er_log.stock.data.storages.database.daos.UserDao
 import ru.er_log.stock.data.storages.database.enities.User
+import ru.er_log.stock.domain.models.`in`.SignInResponse
 import ru.er_log.stock.domain.models.`in`.UserInfo
 import ru.er_log.stock.domain.models.out.SignInRequest
 import ru.er_log.stock.domain.repositories.AuthRepository
@@ -27,6 +28,25 @@ internal class AuthRepositoryImpl(
 
     override suspend fun login(request: SignInRequest) = withContext(dispatcher) {
         when (val response = makeRequest { authService.signIn(request.map()) }) {
+            is NetworkResult.Failure -> Result.failure(Exception(response.errorMessage, response.t))
+            is NetworkResult.Success -> {
+                val signInData = response.value
+                userDao.upsert(
+                    User(
+                        id = signInData.userId,
+                        username = signInData.userName,
+                        email = signInData.userEmail,
+                        authToken = signInData.token
+                    )
+                )
+                authStore.saveLoggedInUserId(signInData.userId)
+                Result.success(response.value.map())
+            }
+        }
+    }
+
+    override suspend fun loginDemo() = withContext(dispatcher) {
+        when (val response = makeRequest { authService.signInDemo() }) {
             is NetworkResult.Failure -> Result.failure(Exception(response.errorMessage, response.t))
             is NetworkResult.Success -> {
                 val signInData = response.value

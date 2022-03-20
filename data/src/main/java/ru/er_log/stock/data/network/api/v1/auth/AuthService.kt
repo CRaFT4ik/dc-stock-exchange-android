@@ -7,4 +7,7 @@ internal interface AuthService {
 
     @POST("auth/signin")
     suspend fun signIn(@Body body: SignInRequestDto): SignInResponseDto
+
+    @POST("auth/demo")
+    suspend fun signInDemo(): SignInResponseDto
 }

@@ -12,6 +12,7 @@
     <string name="auth_action_forgot_the_password_unsupported">Sorry, this action is unsupported now. Please, use demo account instead.</string>
     <string name="auth_action_sign_in">Sign In</string>
     <string name="auth_action_register">Register</string>
+    <string name="auth_action_demo_access">Demo access ➞</string>
     <string name="auth_login_error_wrong_password">Invalid password</string>
     <string name="auth_login_error_login_failed">Login failed</string>
     <string name="auth_login_greetings">Welcome back, %1$s!</string>
