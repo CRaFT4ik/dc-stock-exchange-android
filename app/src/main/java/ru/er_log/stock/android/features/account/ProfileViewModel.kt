@@ -34,7 +34,7 @@ class ProfileViewModel(
 
     fun userCard(scope: CoroutineScope) = _userCard.apply {
         accountUseCases.getUserCard(Unit, viewModelScope) {
-            it.onSuccess { v -> emit(v) }
+            it.onSuccess { v -> delay(200); emit(v) }
             it.onFailure { v -> StockMessage.appErrors.emit(v) }
         }
     }.asStateFlow()
@@ -42,7 +42,7 @@ class ProfileViewModel(
     fun transactions(scope: CoroutineScope) = _transactions.apply {
         val page = 0
         accountUseCases.getOperations(page, scope) {
-            it.onSuccess { v -> emit(v) }
+            it.onSuccess { v -> delay(200); emit(v) }
             it.onFailure { v -> StockMessage.appErrors.emit(v) }
         }
     }.asStateFlow()

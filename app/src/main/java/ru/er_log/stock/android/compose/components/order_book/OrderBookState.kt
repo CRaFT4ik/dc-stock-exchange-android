@@ -22,7 +22,7 @@ data class OrderBookState(
 
     val priceMin: BigDecimal get() = ordersMin
     val priceMax: BigDecimal get() = offersMax
-    val priceAvg: BigDecimal get() = (ordersMax + offersMin) / BigDecimal.valueOf(2)
+    val priceAvg: BigDecimal get() = (priceMin + priceMax) / BigDecimal.valueOf(2)
 
     private val maxAmount: BigDecimal? get() = run {
         val max = maxOf(ordersMaxAmount, offersMaxAmount)

@@ -10,7 +10,7 @@ class AccountUseCases(private val accountRepository: AccountRepository) {
     val getUserCard: UseCase<Unit, UserCard> by lazy { ObserveUserCardUseCase() }
 
     private inner class ObserveOperationsUseCase : UseCaseRepeatable<Int, List<Transaction>>(
-        delayMs = 10000
+        delayMs = 3000
     ) {
         override suspend fun run(pageIndex: Int): Result<List<Transaction>> {
             val pageSize = 50

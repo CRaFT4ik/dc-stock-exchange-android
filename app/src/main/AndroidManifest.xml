@@ -17,6 +17,7 @@
             android:name=".base.MainActivity"
             android:exported="true"
             android:noHistory="true"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.StockSplashScreenTheme"
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan">
             <intent-filter>
