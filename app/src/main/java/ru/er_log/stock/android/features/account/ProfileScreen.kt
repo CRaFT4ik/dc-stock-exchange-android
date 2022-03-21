@@ -125,7 +125,9 @@ private fun AccountLayer(
     ) {
         Box {
             SettingsIconButton(
-                modifier = Modifier.align(TopEnd).padding(end = 6.dp)
+                modifier = Modifier
+                    .align(TopEnd)
+                    .padding(end = 6.dp)
             )
 
             Crossfade(targetState = userCard()) {
@@ -412,9 +414,9 @@ private fun BottomSheetLayer(
                         }
                     }
 
-                    LaunchedEffect(key1 = operationsSize) {
-                        if (listState.firstVisibleItemIndex < 3) {
-                            delay(200)
+                    val visibleIndex = listState.firstVisibleItemIndex
+                    LaunchedEffect(key1 = visibleIndex) {
+                        if (visibleIndex < 3) {
                             listState.animateScrollToItem(0)
                         }
                     }

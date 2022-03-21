@@ -45,16 +45,17 @@ fun StartScreen(
             )
         }
 
-        LaunchedEffect(StockMessage) {
-            StockMessage.appErrors.collect {
-                it.message?.let { errorText ->
-                    appState.scaffoldState.snackbarHostState.showSnackbar(
-                        errorText,
-                        "OK",
-                        SnackbarDuration.Indefinite
-                    )
-                }
-            }
-        }
+//      TODO: provide correct way to handle common errors
+//        LaunchedEffect(StockMessage) {
+//            StockMessage.appErrors.collect {
+//                it.message?.let { errorText ->
+//                    appState.scaffoldState.snackbarHostState.showSnackbar(
+//                        errorText,
+//                        "OK",
+//                        SnackbarDuration.Indefinite
+//                    )
+//                }
+//            }
+//        }
     }
 }
